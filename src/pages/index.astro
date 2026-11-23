@@ -16,11 +16,13 @@ const members = await getCollection('members');
 const featured = projects.filter((p) => p.data.featured);
 const strip = (featured.length >= 3 ? featured : projects).slice(0, 8);
 
+// Only count sprints and showcases that have already happened (counted when the site is built).
+const happened = milestones.filter((m) => m.data.date <= new Date());
 const stats = [
   { n: projects.length, label: 'Projects built' },
   { n: members.filter((m) => m.data.status === 'current').length, label: 'Core members' },
-  { n: milestones.filter((m) => m.data.type === 'sprint').length, label: 'Sprints run' },
-  { n: milestones.filter((m) => m.data.type === 'showcase').length, label: 'Showcases' },
+  { n: happened.filter((m) => m.data.type === 'sprint').length, label: 'Sprints run' },
+  { n: happened.filter((m) => m.data.type === 'showcase').length, label: 'Showcases' },
 ];
 
 /* Hero headline: each letter is its own span so it can animate in. */
