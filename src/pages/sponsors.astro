@@ -28,18 +28,17 @@ const contact = site.socials.email ? `mailto:${site.socials.email}` : '/join/#co
   noindex={!site.features.showSponsors}
 >
   <PageHeader
-    eyebrow="Sponsors & funding"
     title='Fuel the <span class="grad">next build.</span>'
     sub="Every dollar goes straight into parts, tools and competition entries for students building real robots."
   >
-    <a href={contact} class="btn btn-primary header-cta" data-magnetic>Become a sponsor <Icon name="arrow" size={18} /></a>
+    <a href={contact} class="btn btn-primary header-cta">Become a sponsor <Icon name="arrow" size={18} /></a>
   </PageHeader>
 
   <section class="container">
     <div class="uses" data-reveal-group>
       {
         uses.map((u) => (
-          <div class="use" data-glow>
+          <div class="use">
             <span class="use-icon">
               <Icon name={u.icon} size={26} />
             </span>
@@ -52,7 +51,7 @@ const contact = site.socials.email ? `mailto:${site.socials.email}` : '/join/#co
   </section>
 
   <section class="section container">
-    <SectionHeading eyebrow="Thank you" title='Our <span class="grad">supporters</span>' />
+    <SectionHeading title='Our supporters' />
     {
       sponsors.length > 0 ? (
         <ul class="logos" data-reveal-group>
@@ -66,7 +65,7 @@ const contact = site.socials.email ? `mailto:${site.socials.email}` : '/join/#co
           ))}
         </ul>
       ) : (
-        <a href={contact} class="empty" data-reveal data-glow>
+        <a href={contact} class="empty" data-reveal>
           <span class="empty-icon">
             <Icon name="plus" size={30} />
           </span>
@@ -96,7 +95,7 @@ const contact = site.socials.email ? `mailto:${site.socials.email}` : '/join/#co
     padding: clamp(26px, 3vw, 36px);
     border-radius: var(--radius-lg);
     border: 1px solid var(--border);
-    background: color-mix(in srgb, var(--surface) 72%, transparent);
+    background: var(--surface);
     overflow: hidden;
   }
   .use-icon {
@@ -106,8 +105,8 @@ const contact = site.socials.email ? `mailto:${site.socials.email}` : '/join/#co
     place-items: center;
     border-radius: 18px;
     color: var(--green);
-    background: rgba(61, 220, 151, 0.1);
-    border: 1px solid rgba(61, 220, 151, 0.3);
+    background: #dcf1e5;
+    border: 1px solid var(--green);
   }
   .use h3 {
     font-size: 24px;
@@ -131,7 +130,7 @@ const contact = site.socials.email ? `mailto:${site.socials.email}` : '/join/#co
     padding: 24px;
     border-radius: var(--radius);
     border: 1px solid var(--border);
-    background: color-mix(in srgb, var(--surface) 72%, transparent);
+    background: var(--surface);
     font-family: var(--font-display);
     font-weight: 700;
   }
@@ -169,11 +168,23 @@ const contact = site.socials.email ? `mailto:${site.socials.email}` : '/join/#co
     place-items: center;
     border-radius: 50%;
     background: var(--green);
-    color: #04140c;
+    color: #fff;
   }
   @media (max-width: 900px) {
     .uses {
       grid-template-columns: 1fr;
     }
+  }
+/* Plain numbered list (no cards, no icons) */
+  .use {
+    background: none;
+    border: 0;
+    border-top: 1.5px solid var(--text);
+    border-radius: 0;
+    padding: 16px 0 0;
+    box-shadow: none;
+  }
+  .use-icon {
+    display: none;
   }
 </style>

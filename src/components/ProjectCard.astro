@@ -1,8 +1,8 @@
 ---
 /**
- * A tile on the Projects page bento grid.
- * The whole card links to the project page; media buttons (Drive photos,
- * videos…) sit on top and open in a new tab.
+ * A project on the Projects page: photo on top, text underneath.
+ * The title link covers the whole card; media buttons (Drive photos,
+ * videos…) open in a new tab.
  */
 import type { CollectionEntry } from 'astro:content';
 import ProjectMedia from './ProjectMedia.astro';
@@ -22,18 +22,16 @@ const d = project.data;
   data-year={d.academicYear}
   data-cats={d.categories.map((c) => c.toLowerCase()).join('|')}
 >
-  <article class="pc" data-tilt>
+  <article class="pc">
     <div class="pc-media"><ProjectMedia project={project} /></div>
-    <div class="pc-shade" aria-hidden="true"></div>
-    <div class="pc-glare" aria-hidden="true"></div>
-    <div class="pc-top">
-      <span class={`chip status status-${d.status}`}>{statusLabel[d.status]}</span>
-      <span class="chip">{yearLabel(d.academicYear)}</span>
-    </div>
     <div class="pc-body">
+      <p class="pc-meta">
+        <span class={`status status-${d.status}`}>{statusLabel[d.status]}</span>
+        <span>{yearLabel(d.academicYear)}</span>
+        {d.team.length > 0 && <span>{d.team.length === 1 ? d.team[0] : `Team of ${d.team.length}`}</span>}
+      </p>
       <h3><a href={`/projects/${project.id}/`} class="pc-link">{d.title}</a></h3>
-      <p>{d.tagline}</p>
-      <div class="pc-tags">{d.categories.map((c) => <span class="tag">{c}</span>)}</div>
+      <p class="pc-tagline">{d.tagline}</p>
       {
         d.media.length > 0 && (
           <ul class="pc-mlinks" aria-label={`${d.title} photos and videos`}>
@@ -56,82 +54,63 @@ const d = project.data;
   .pc-wrap {
     min-height: 0;
   }
-  .size-wide {
-    grid-column: span 2;
-  }
-  .size-tall {
-    grid-row: span 2;
-  }
+  .size-wide,
   .size-large {
     grid-column: span 2;
-    grid-row: span 2;
   }
   .pc {
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     height: 100%;
-    min-height: 280px;
     border-radius: var(--radius-lg);
     overflow: hidden;
     border: 1px solid var(--border);
     background: var(--surface);
-    isolation: isolate;
     transition:
-      border-color 0.3s,
-      box-shadow 0.4s,
-      transform 0.35s var(--ease-out);
+      border-color 0.2s,
+      transform 0.2s;
   }
   .pc:hover {
-    border-color: color-mix(in srgb, var(--orange) 50%, var(--border));
-    box-shadow: 0 30px 80px -30px rgba(255, 122, 26, 0.5);
+    border-color: var(--text);
+    transform: translateY(-2px);
   }
   .pc:focus-within {
-    outline: 2px solid var(--orange-glow);
+    outline: 2px solid var(--orange);
     outline-offset: 3px;
   }
   .pc-media {
-    position: absolute;
-    inset: 0;
-    z-index: -2;
-    transition: transform 0.9s var(--ease-out);
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: var(--surface-2);
   }
-  .pc:hover .pc-media {
-    transform: scale(1.07);
-  }
-  .pc-shade {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: linear-gradient(180deg, rgba(7, 8, 11, 0.1) 30%, rgba(7, 8, 11, 0.92) 100%);
-  }
-  .pc-glare {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    pointer-events: none;
-    background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.14), transparent 42%);
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  .pc:hover .pc-glare {
-    opacity: 1;
-  }
-  .pc-top {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    padding: 18px;
+  .size-wide .pc-media,
+  .size-large .pc-media {
+    aspect-ratio: 16 / 9;
   }
   .pc-body {
-    padding: 22px 24px 24px;
+    display: grid;
+    gap: 8px;
+    padding: 18px 20px 20px;
   }
-  .pc-body h3 {
-    font-size: clamp(20px, 1.9vw, 26px);
-    margin-bottom: 8px;
+  .pc-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 14px;
+    font-size: 14px;
+    color: var(--muted);
   }
-  /* Stretch the title link over the whole card */
+  .pc-meta .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+  }
+  .pc h3 {
+    font-size: clamp(20px, 1.8vw, 24px);
+  }
+  /* The title link covers the whole card */
   .pc-link::after {
     content: '';
     position: absolute;
@@ -141,79 +120,40 @@ const d = project.data;
   .pc-link:focus-visible {
     outline: none;
   }
-  .size-large .pc-body h3 {
-    font-size: clamp(26px, 3vw, 40px);
-  }
-  .pc-body p {
-    color: #b9bfcb;
-    font-size: 15px;
+  .pc-tagline {
+    color: var(--muted);
+    font-size: 16px;
     line-height: 1.5;
-    max-width: 48ch;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-    overflow: hidden;
-  }
-  .pc-tags {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-top: 14px;
-  }
-  .size-normal .pc-tags,
-  .size-tall .pc-tags {
-    display: none;
   }
   .pc-mlinks {
     position: relative;
-    z-index: 3;
+    z-index: 2;
     list-style: none;
     padding: 0;
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    margin-top: 14px;
+    margin-top: 6px;
   }
   .pc-mlinks a {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 7px 12px;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text);
-    background: rgba(7, 8, 11, 0.6);
-    border: 1px solid var(--border-strong);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    transition:
-      background 0.2s,
-      border-color 0.2s,
-      color 0.2s;
+    padding: 6px 11px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--blue-glow);
+    background: #e6eefb;
+    transition: background 0.2s;
   }
   .pc-mlinks a:hover {
-    background: var(--blue);
-    border-color: var(--blue);
-    color: #fff;
-  }
-  .pc-mlinks :global(svg) {
-    flex-shrink: 0;
-  }
-  @media (max-width: 1000px) {
-    .size-tall {
-      grid-row: span 1;
-    }
+    background: #d3e1f8;
   }
   @media (max-width: 640px) {
     .size-wide,
     .size-large {
       grid-column: span 1;
-      grid-row: span 1;
-    }
-    .pc {
-      min-height: 340px;
     }
   }
 </style>

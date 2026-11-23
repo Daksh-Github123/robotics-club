@@ -1,7 +1,7 @@
 ---
-/** Big header used at the top of every sub-page. `title` may contain <span class="grad">…</span>. */
+/** Header at the top of every sub-page. `title` may contain one <span class="grad">…</span> highlight. */
 interface Props {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   sub?: string;
 }
@@ -9,8 +9,8 @@ const { eyebrow, title, sub } = Astro.props;
 ---
 
 <header class="page-header container">
-  <p class="eyebrow" data-reveal>{eyebrow}</p>
-  <h1 class="display" data-reveal set:html={title} />
-  {sub && <p class="lede" data-reveal>{sub}</p>}
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  <h1 class="display" set:html={title} />
+  {sub && <p class="lede">{sub}</p>}
   <slot />
 </header>

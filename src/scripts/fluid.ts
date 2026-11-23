@@ -24,7 +24,8 @@ const CONFIG = {
 // Site palette, in 0–1 RGB (keep in sync with tokens.css)
 const ORANGE: [number, number, number] = [1.0, 0.478, 0.102];
 const BLUE: [number, number, number] = [0.184, 0.482, 1.0];
-const BG: [number, number, number] = [7 / 255, 8 / 255, 11 / 255];
+// Paper background (keep in sync with --bg in tokens.css)
+const BG: [number, number, number] = [245 / 255, 241 / 255, 234 / 255];
 
 type FBO = {
   tex: WebGLTexture;
@@ -163,10 +164,13 @@ void main () {
 uniform sampler2D uTexture;
 uniform vec3 bg;
 void main () {
+  // Light theme: blend the ink colour onto the paper instead of adding light.
   vec3 c = texture(uTexture, vUv).rgb;
-  c = vec3(1.0) - exp(-c * 1.5); // soft tone-map so bright ink never blows out
+  float m = max(max(c.r, c.g), c.b);
+  float a = 1.0 - exp(-m * 2.2);
+  vec3 hue = c / max(m, 0.0001);
   float vignette = smoothstep(1.25, 0.35, length(vUv - 0.5) * 1.4);
-  fragColor = vec4(bg + c * (0.55 + 0.45 * vignette), 1.0);
+  fragColor = vec4(mix(bg, hue * 0.88, a * 0.45 * (0.6 + 0.4 * vignette)), 1.0);
 }`,
 };
 
@@ -422,8 +426,10 @@ export function initFluid(canvas: HTMLCanvasElement): boolean {
     ];
   }
   function onMove(clientX: number, clientY: number) {
-    const x = clientX / window.innerWidth;
-    const y = 1 - clientY / window.innerHeight;
+    // Position relative to the canvas, so it also works when the mist only covers the hero
+    const r = canvas.getBoundingClientRect();
+    const x = (clientX - r.left) / r.width;
+    const y = 1 - (clientY - r.top) / r.height;
     if (!pointer.ready) {
       pointer.px = x;
       pointer.py = y;

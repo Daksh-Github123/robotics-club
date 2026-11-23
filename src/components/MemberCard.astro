@@ -13,7 +13,7 @@ const d = member.data;
 
 <article
   class:list={['mc', { 'mc-big': big, 'mc-alumni': d.status === 'alumni', 'mc-faculty': d.status === 'faculty' }]}
-  data-tilt
+ 
 >
   <div class="mc-avatar">
     {d.photo ? <img src={d.photo} alt={d.name} loading="lazy" /> : <span>{initials(d.name)}</span>}
@@ -40,9 +40,7 @@ const d = member.data;
     padding: 26px;
     border-radius: var(--radius-lg);
     border: 1px solid var(--border);
-    background: color-mix(in srgb, var(--surface) 72%, transparent);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: var(--surface);
     transition:
       border-color 0.3s,
       box-shadow 0.4s,
@@ -50,7 +48,7 @@ const d = member.data;
   }
   .mc:hover {
     border-color: color-mix(in srgb, var(--orange) 45%, var(--border));
-    box-shadow: 0 30px 70px -36px rgba(255, 122, 26, 0.6);
+    box-shadow: 0 12px 28px -18px rgba(26, 22, 17, 0.35);
   }
   .mc-avatar {
     position: relative;
@@ -58,7 +56,7 @@ const d = member.data;
     height: 84px;
     border-radius: 50%;
     padding: 3px;
-    background: var(--grad-solid);
+    background: var(--orange);
   }
   .mc-faculty .mc-avatar {
     background: linear-gradient(135deg, var(--blue-glow), var(--blue-deep));
@@ -101,7 +99,7 @@ const d = member.data;
     padding: 2px 8px;
     border-radius: 999px;
     background: var(--orange);
-    color: #160800;
+    color: #fff;
     font-weight: 600;
   }
   .mc h3 {

@@ -74,7 +74,7 @@ const socials = [
   .footer {
     position: relative;
     border-top: 1px solid var(--border);
-    background: linear-gradient(180deg, rgba(7, 8, 11, 0.4), var(--bg) 40%);
+    background: var(--bg-2);
     padding-top: clamp(72px, 10vw, 130px);
     overflow: hidden;
   }
@@ -87,7 +87,6 @@ const socials = [
     height: 1px;
     translate: -50% 0;
     background: var(--grad);
-    box-shadow: 0 0 40px 2px rgba(255, 122, 26, 0.5);
   }
   .f-big {
     display: flex;
@@ -115,7 +114,7 @@ const socials = [
   .f-big:hover .f-arrow {
     background: var(--orange);
     border-color: var(--orange);
-    color: #160800;
+    color: #fff;
     transform: rotate(-45deg);
   }
   .f-grid {
@@ -140,7 +139,8 @@ const socials = [
     display: grid;
     place-items: center;
     clip-path: polygon(25% 4%, 75% 4%, 100% 50%, 75% 96%, 25% 96%, 0 50%);
-    background: var(--grad-solid);
+    background: var(--orange);
+    color: #fff;
     font-size: 11px;
     font-weight: 900;
   }

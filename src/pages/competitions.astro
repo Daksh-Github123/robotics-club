@@ -17,14 +17,12 @@ const comps = (await getCollection('competitions')).sort((a, b) => a.data.order 
 const groups = [
   {
     kind: 'club',
-    eyebrow: 'With the club',
-    title: 'Independent <span class="grad">competitions</span>',
+    title: 'Independent competitions',
     sub: 'Independent competitions are done with the club. Members plan, build and prepare their entries together.',
   },
   {
     kind: 'school-team',
-    eyebrow: 'School teams',
-    title: 'Run by <span class="grad">other teachers</span>',
+    title: 'School teams, run by other teachers',
     sub: "The school's competition teams are managed by other teachers, and their details are shared separately. Club members get recommendations to join, and each team schedules its own after-school practices.",
   },
 ] as const;
@@ -45,7 +43,6 @@ const help = [
 
 <Base title="Competitions" description="How Robotics Club connects to competitions: independent competitions with the club, and recommendations for the school teams.">
   <PageHeader
-    eyebrow="Competitions"
     title='Competitions <span class="grad">&amp; the club</span>'
     sub="Robotics Club is about building projects. Independent competitions are done with the club, and the school's competition teams are run by other teachers."
   />
@@ -54,7 +51,7 @@ const help = [
     <ol class="path" data-reveal-group>
       {
         pathway.map((p, i) => (
-          <li class="path-step" data-glow>
+          <li class="path-step">
             <span class="path-k mono">0{i + 1}</span>
             <span class="path-icon">
               <Icon name={p.icon} size={28} />
@@ -72,10 +69,10 @@ const help = [
       const list = comps.filter((c) => c.data.kind === g.kind);
       return (
         <section class="section container">
-          <SectionHeading eyebrow={g.eyebrow} title={g.title} sub={g.sub} />
+          <SectionHeading title={g.title} sub={g.sub} />
           <div class="comps" data-reveal-group>
             {list.map((c) => (
-              <article class="comp" data-tilt>
+              <article class="comp">
                 <div class="comp-head">
                   <span class="chip">{c.data.level}</span>
                   {c.data.placeholder && <span class="ph-pill">placeholder</span>}
@@ -117,7 +114,7 @@ const help = [
                   </div>
                 ))}
               </div>
-              <a href="/join/#contacts" class="btn btn-primary help-cta" data-magnetic>
+              <a href="/join/#contacts" class="btn btn-primary help-cta">
                 Ask a member <Icon name="arrow" size={18} />
               </a>
             </>
@@ -145,12 +142,11 @@ const help = [
     padding: clamp(26px, 3vw, 36px);
     border-radius: var(--radius-lg);
     border: 1px solid var(--border);
-    background: color-mix(in srgb, var(--surface) 72%, transparent);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: var(--surface);
     overflow: hidden;
   }
   .path-step:not(:last-child)::after {
+    display: none;
     content: '→';
     position: absolute;
     right: 22px;
@@ -160,7 +156,7 @@ const help = [
   }
   .path-step:last-child {
     border-color: color-mix(in srgb, var(--orange) 50%, var(--border));
-    box-shadow: 0 30px 80px -40px rgba(255, 122, 26, 0.7);
+    box-shadow: 0 12px 28px -18px rgba(26, 22, 17, 0.35);
   }
   .path-k {
     font-size: 13px;
@@ -173,8 +169,8 @@ const help = [
     place-items: center;
     border-radius: 18px;
     color: var(--orange-glow);
-    background: rgba(255, 122, 26, 0.12);
-    border: 1px solid rgba(255, 122, 26, 0.35);
+    background: var(--orange-soft);
+    border: 1px solid var(--orange);
   }
   .path-step h3 {
     font-size: clamp(22px, 2.2vw, 28px);
@@ -195,9 +191,7 @@ const help = [
     padding: 28px;
     border-radius: var(--radius-lg);
     border: 1px solid var(--border);
-    background: color-mix(in srgb, var(--surface) 72%, transparent);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: var(--surface);
     transition:
       border-color 0.3s,
       transform 0.35s var(--ease-out);
@@ -295,5 +289,17 @@ const help = [
     .help {
       grid-template-columns: 1fr;
     }
+  }
+/* Plain numbered list (no cards, no icons) */
+  .path-step, .path-step:last-child {
+    background: none;
+    border: 0;
+    border-top: 1.5px solid var(--text);
+    border-radius: 0;
+    padding: 16px 0 0;
+    box-shadow: none;
+  }
+  .path-icon {
+    display: none;
   }
 </style>

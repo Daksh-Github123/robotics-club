@@ -19,6 +19,9 @@ Every time you push a change to the `main` branch on GitHub, Vercel rebuilds and
 | Edit the FAQ                       | `src/data/faq.ts`                           |
 | Change colors or fonts             | `src/styles/tokens.css`                     |
 | Show the Sponsors page             | set `showSponsors: true` in `src/site.config.ts` |
+| Put a photo behind the homepage    | `heroPhoto` in `src/site.config.ts`         |
+| Add a member quote                 | new file in `src/content/quotes/`           |
+| Change the 3 homepage projects     | `featured: true` + `outcome:` in project files |
 
 You can edit files directly on github.com (open the file → pencil icon → "Commit changes"). That's enough for content updates.
 
@@ -65,7 +68,8 @@ academicYear: "2026-27"            # always in quotes, written like "2026-27"; b
 date: 2027-03-01
 categories: [Hardware, Software]   # anything you like; these become filter buttons
 status: building                   # concept | building | complete | deployed
-featured: true                     # true = shows in the homepage strip
+featured: true                     # true = one of the 3 projects on the homepage (keep it to 3)
+outcome: One plain sentence about what it achieved.   # shown on the homepage
 size: normal                       # normal | wide | tall | large (tile size on /projects)
 cover: /media/projects/smart-door.jpg
 video: /media/projects/smart-door.mp4   # optional, plays on hover
@@ -95,6 +99,33 @@ Write anything here in normal Markdown.
 
 3. Put photos in `public/media/projects/`. Keep images under ~500 KB (use squoosh.app to shrink them). Hover videos should be short (3–6 s), muted, and under ~3 MB. Bigger albums and full-length videos stay on Google Drive or YouTube and go in `media:` as links. Make sure the Drive folder is shared as "Anyone with the link".
 4. Delete `placeholder: true` once it's real.
+
+## Homepage photo and member quotes
+
+**Photo behind the homepage.** Put a wide photo (members building or presenting, at least 1800 px wide) in `public/media/`, then in `src/site.config.ts` set:
+
+```ts
+heroPhoto: '/media/hero.jpg',
+heroPhotoAlt: 'Members testing the smart dustbin before the BA Showcase',
+```
+
+The photo replaces the 3D gears and the mist. Leave `heroPhoto: ''` to bring them back.
+
+**Member quotes.** Each quote is a file in `src/content/quotes/`. The homepage shows the first three by `order`. Replace the placeholder files:
+
+```md
+---
+name: Ananya
+grade: Grade 9
+project: Smart Dustbin
+text: One or two sentences in the member's own words.
+order: 1
+---
+```
+
+Use their real words, lightly trimmed. Ask before publishing anyone's name.
+
+Also swap the "Photo coming soon: members at work" block in the "Run by students" section of `src/pages/index.astro` for a real photo when you have one.
 
 ## Members
 
@@ -130,8 +161,8 @@ npm run dev      # opens a live preview at http://localhost:4321
 - **Astro**: turns the content files into fast static pages.
 - **GSAP + ScrollTrigger**: scroll animations (timeline line, sideways project strip, reveals).
 - **Lenis**: smooth scrolling.
-- **WebGL fluid sim** (`src/scripts/fluid.ts`): the liquid background that follows the cursor. Tweak `CONFIG` at the top to change how long the ink lasts or how strong it is.
-- **Three.js** (`src/scripts/hero3d.ts`): the spinning 3D gears on the homepage.
+- **WebGL fluid sim** (`src/scripts/fluid.ts`): the mist in the homepage hero that follows the cursor (only when there's no hero photo). Tweak `CONFIG` at the top to change how long the ink lasts or how strong it is.
+- **Three.js** (`src/scripts/hero3d.ts`): the spinning 3D gears in the homepage hero (only when there's no hero photo).
 
 Everything respects the "reduce motion" accessibility setting: visitors who turn it on get a calm, static version.
 

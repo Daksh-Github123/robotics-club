@@ -5,13 +5,13 @@
  * Loaded lazily (after the page is interactive) so it never slows the first paint.
  */
 import {
-  AdditiveBlending, AmbientLight, BufferAttribute, BufferGeometry, Clock, Color, DirectionalLight, EdgesGeometry, ExtrudeGeometry, Group, IcosahedronGeometry, LineBasicMaterial, LineSegments, Mesh, MeshBasicMaterial, MeshStandardMaterial, Path, PerspectiveCamera, PointLight, Points, PointsMaterial, Scene, Shape, SphereGeometry, TorusGeometry, WebGLRenderer,
+  AmbientLight, BufferAttribute, BufferGeometry, Clock, Color, DirectionalLight, EdgesGeometry, ExtrudeGeometry, Group, IcosahedronGeometry, LineBasicMaterial, LineSegments, Mesh, MeshBasicMaterial, MeshStandardMaterial, Path, PerspectiveCamera, PointLight, Points, PointsMaterial, Scene, Shape, SphereGeometry, TorusGeometry, WebGLRenderer,
   type Material,
 } from 'three';
 import { scrollState } from './motion';
 
-const ORANGE = 0xff7a1a;
-const BLUE = 0x2f7bff;
+const ORANGE = 0xd9590b;
+const BLUE = 0x2f6fe0;
 
 function gearShape(teeth: number, rOuter: number, rRoot: number, bore: number, holes = 0, holeR = 0, holeDist = 0) {
   const shape = new Shape();
@@ -80,7 +80,7 @@ export function initHero3D(canvas: HTMLCanvasElement) {
   const root = new Group();
   scene.add(root);
 
-  const metal = new MeshStandardMaterial({ color: 0x1c212c, metalness: 0.85, roughness: 0.3 });
+  const metal = new MeshStandardMaterial({ color: 0xe9e2d6, metalness: 0.35, roughness: 0.55 });
 
   // Main gear (orange edges) + smaller meshing gear (blue edges)
   const gear1 = gearMesh(gearShape(14, 1.8, 1.48, 0.42, 6, 0.24, 0.98), 0.42, ORANGE, metal);
@@ -111,7 +111,7 @@ export function initHero3D(canvas: HTMLCanvasElement) {
   // Wireframe shell
   const shell = new LineSegments(
     new EdgesGeometry(new IcosahedronGeometry(4.3, 1)),
-    new LineBasicMaterial({ color: BLUE, transparent: true, opacity: 0.14 }),
+    new LineBasicMaterial({ color: BLUE, transparent: true, opacity: 0.3 }),
   );
   root.add(shell);
 
@@ -142,7 +142,6 @@ export function initHero3D(canvas: HTMLCanvasElement) {
       transparent: true,
       opacity: 0.9,
       depthWrite: false,
-      blending: AdditiveBlending,
     }),
   );
   root.add(points);

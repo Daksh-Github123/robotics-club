@@ -6,6 +6,7 @@ date: 2026-11-04
 categories: [Sustainability, IoT]
 status: building
 featured: true
+outcome: Logs when a classroom's lights are on with nobody inside, without touching the room's wiring. A two-person 9th grade team, first project.
 size: wide
 team: [Aania, Siddharth]
 tech: [ESP32, BH1750 light sensor, HC-SR501 PIR motion sensor]

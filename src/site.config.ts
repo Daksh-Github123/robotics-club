@@ -15,6 +15,15 @@ export const site = {
   description:
     'The fully student-led robotics club at Inventure Academy, where students choose their own project, learn what it needs, build it in school and present it at the BA Showcase.',
 
+  /**
+   * Homepage hero photo, e.g. '/media/hero.jpg' (put the file in public/media/).
+   * A wide photo of members building or presenting works best.
+   * Leave '' to show the 3D gears and the mist effect instead.
+   */
+  heroPhoto: '',
+  /** One line describing the hero photo, for screen readers. */
+  heroPhotoAlt: '',
+
   meeting: {
     when: 'Twice a week, in two separate BA periods',
     where: 'Assigned by the school. Watch for the announcement.',

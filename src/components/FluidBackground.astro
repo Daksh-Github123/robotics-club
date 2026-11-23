@@ -1,8 +1,9 @@
 ---
 /**
- * Fixed full-screen background: liquid cursor simulation on top of a
- * static gradient fallback (shown when WebGL2 is unavailable or the
- * visitor prefers reduced motion).
+ * Liquid "mist" that follows the cursor, over a soft gradient fallback
+ * (shown when WebGL2 is unavailable or the visitor prefers reduced motion).
+ * It fills its parent (the homepage hero), which must be position: relative.
+ * The hero hides it once a real photo is set in site.config.ts (heroPhoto).
  */
 ---
 
@@ -30,9 +31,9 @@
 
 <style>
   .bg-layer {
-    position: fixed;
+    position: absolute;
     inset: 0;
-    z-index: -1;
+    z-index: -2;
     pointer-events: none;
     background: var(--bg);
     overflow: hidden;
@@ -72,8 +73,8 @@
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+      linear-gradient(rgba(26, 22, 17, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26, 22, 17, 0.045) 1px, transparent 1px);
     background-size: 64px 64px;
     mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 30%, transparent 100%);
     -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 30%, transparent 100%);

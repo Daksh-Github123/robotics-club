@@ -3,7 +3,6 @@ import '../styles/tokens.css';
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import FluidBackground from '../components/FluidBackground.astro';
 import { site } from '../site.config';
 
 interface Props {
@@ -23,7 +22,7 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.s
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}
-    <meta name="theme-color" content="#07080B" />
+    <meta name="theme-color" content="#F5F1EA" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
@@ -31,7 +30,7 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.s
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Unbounded:wght@500;700;800;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=JetBrains+Mono:wght@400;600&display=swap"
       rel="stylesheet"
     />
     <script is:inline>
@@ -40,7 +39,6 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.s
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
-    <FluidBackground />
     <Nav />
     <main id="main">
       <slot />

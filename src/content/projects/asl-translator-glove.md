@@ -6,6 +6,7 @@ date: 2026-11-04
 categories: [Hardware, Assistive Tech]
 status: building
 featured: true
+outcome: Built solo by a 9th grader as their first electronics project. It reads hand signs and shows the letter on a phone.
 size: tall
 team: [Sohna]
 tech: [Arduino Nano, 5× flex sensors, HC-05 Bluetooth module, MIT App Inventor]

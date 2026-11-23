@@ -45,7 +45,6 @@ const facts = [
 
 <Base title="Join / FAQ" description="How to join the robotics club, what to expect, and who to ask.">
   <PageHeader
-    eyebrow="Join"
     title='Come build <span class="grad">with us.</span>'
     sub={site.applyInfo}
   />
@@ -54,7 +53,7 @@ const facts = [
     <ol class="steps" data-reveal-group>
       {
         steps.map((s, i) => (
-          <li class="step" data-glow>
+          <li class="step">
             <span class="step-k mono">STEP 0{i + 1}</span>
             <Icon name={s.icon} size={28} />
             <h3>{s.title}</h3>
@@ -80,7 +79,7 @@ const facts = [
 
   <section class="section container faq-section">
     <div class="faq-head">
-      <SectionHeading eyebrow="FAQ" title='Common <span class="grad">questions</span>' />
+      <SectionHeading title='Common questions' />
     </div>
     <div class="faq" data-reveal-group>
       {
@@ -101,8 +100,7 @@ const facts = [
 
   <section class="section container" id="contacts">
     <SectionHeading
-      eyebrow="Contacts"
-      title='Questions? <span class="grad">Email us.</span>'
+      title='Questions? Email us.'
       sub="Reach out to the student lead or either of the supervising faculty."
     />
     {
@@ -144,9 +142,7 @@ const facts = [
     padding: clamp(26px, 3vw, 36px);
     border-radius: var(--radius-lg);
     border: 1px solid var(--border);
-    background: color-mix(in srgb, var(--surface) 72%, transparent);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: var(--surface);
     overflow: hidden;
   }
   .step :global(svg) {
@@ -170,7 +166,7 @@ const facts = [
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     overflow: hidden;
-    background: color-mix(in srgb, var(--surface) 55%, transparent);
+    background: var(--surface);
   }
   .fact {
     padding: 22px 24px;
@@ -246,7 +242,7 @@ const facts = [
     transform: rotate(45deg);
     background: var(--orange);
     border-color: var(--orange);
-    color: #160800;
+    color: #fff;
   }
   .qa p {
     color: var(--muted);
@@ -301,5 +297,17 @@ const facts = [
     .qa p {
       padding-right: 0;
     }
+  }
+/* Plain numbered list (no cards, no icons) */
+  .step {
+    background: none;
+    border: 0;
+    border-top: 1.5px solid var(--text);
+    border-radius: 0;
+    padding: 16px 0 0;
+    box-shadow: none;
+  }
+  .step > :global(svg) {
+    display: none;
   }
 </style>

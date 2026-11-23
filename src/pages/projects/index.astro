@@ -22,7 +22,6 @@ const categories = [...new Set(projects.flatMap((p) => p.data.categories))].sort
 
 <Base title="Projects" description="Every robot, gadget and build from the club, by academic year.">
   <PageHeader
-    eyebrow="Projects"
     title='All <span class="grad">projects</span>'
     sub="Each project has its own page with the team, the problem it solves and how it works. Filter by academic year or category."
   />
@@ -51,7 +50,7 @@ const categories = [...new Set(projects.flatMap((p) => p.data.categories))].sort
     <div class="bento" data-bento data-reveal-group>
       {ordered.map((p) => <ProjectCard project={p} />)}
       <div class="pc-wrap" data-card data-always>
-        <a href="/join/" class="pitch" data-glow>
+        <a href="/join/" class="pitch">
           <span class="pitch-icon"><Icon name="plus" size={30} /></span>
           <div>
             <h3>Your project could be here</h3>
@@ -114,12 +113,10 @@ const categories = [...new Set(projects.flatMap((p) => p.data.categories))].sort
     margin-bottom: 28px;
   }
   .filter {
-    padding: 10px 16px;
-    border-radius: 999px;
+    padding: 8px 14px;
+    border-radius: 6px;
     border: 1px solid var(--border-strong);
-    background: rgba(7, 8, 11, 0.5);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: var(--surface);
     font-size: 14px;
     color: var(--muted);
     transition:
@@ -133,11 +130,10 @@ const categories = [...new Set(projects.flatMap((p) => p.data.categories))].sort
     border-color: var(--muted);
   }
   .filter[aria-pressed='true'] {
-    background: var(--orange);
-    border-color: var(--orange);
-    color: #160800;
-    font-weight: 600;
-    box-shadow: 0 6px 24px -6px rgba(255, 122, 26, 0.7);
+    background: var(--text);
+    border-color: var(--text);
+    color: var(--bg);
+    font-weight: 700;
   }
   .filter-sep {
     width: 1px;
@@ -154,14 +150,14 @@ const categories = [...new Set(projects.flatMap((p) => p.data.categories))].sort
   }
   .bento {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-auto-rows: 270px;
+    grid-template-columns: repeat(3, 1fr);
     grid-auto-flow: dense;
-    gap: 16px;
+    align-items: start;
+    gap: 20px;
   }
   .pitch {
     height: 100%;
-    min-height: 260px;
+    min-height: 220px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -189,7 +185,7 @@ const categories = [...new Set(projects.flatMap((p) => p.data.categories))].sort
   .pitch:hover .pitch-icon {
     transform: rotate(90deg);
     background: var(--orange);
-    color: #160800;
+    color: #fff;
   }
   .pitch h3 {
     font-size: 22px;
@@ -207,7 +203,6 @@ const categories = [...new Set(projects.flatMap((p) => p.data.categories))].sort
   @media (max-width: 640px) {
     .bento {
       grid-template-columns: 1fr;
-      grid-auto-rows: auto;
     }
     .filter-count {
       width: 100%;

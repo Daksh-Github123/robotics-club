@@ -140,11 +140,11 @@ const { Content } = await render(project);
     }
 
     <nav class="container pd-nav" aria-label="More projects">
-      <a href={`/projects/${prev.id}/`} class="pd-nav-link" data-glow>
+      <a href={`/projects/${prev.id}/`} class="pd-nav-link">
         <span class="mono pd-nav-k"><Icon name="arrowLeft" size={14} /> Previous</span>
         <span class="pd-nav-t">{prev.data.title}</span>
       </a>
-      <a href={`/projects/${next.id}/`} class="pd-nav-link pd-nav-next" data-glow>
+      <a href={`/projects/${next.id}/`} class="pd-nav-link pd-nav-next">
         <span class="mono pd-nav-k">Next <Icon name="arrow" size={14} /></span>
         <span class="pd-nav-t">{next.data.title}</span>
       </a>
@@ -185,7 +185,7 @@ const { Content } = await render(project);
     border-radius: var(--radius-lg);
     overflow: hidden;
     border: 1px solid var(--border);
-    box-shadow: 0 40px 120px -50px rgba(255, 122, 26, 0.5);
+    box-shadow: 0 12px 28px -18px rgba(26, 22, 17, 0.35);
   }
   .pd-media :global(.pm-video) {
     opacity: 1;
@@ -273,7 +273,7 @@ const { Content } = await render(project);
     padding: 28px;
     border-radius: var(--radius-lg);
     border: 1px solid var(--border);
-    background: color-mix(in srgb, var(--surface) 70%, transparent);
+    background: var(--surface);
     overflow: hidden;
     transition: border-color 0.3s;
   }

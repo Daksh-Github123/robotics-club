@@ -20,7 +20,7 @@ const d = project.data;
       decoding="async"
     />
   ) : (
-    <PlaceholderArt seed={project.id} label="PHOTO COMING SOON" />
+    <PlaceholderArt seed={project.id} label={d.title} />
   )
 }
 {d.video && <video class="pm-video" src={d.video} muted loop playsinline preload="none" data-hover-video />}

@@ -32,6 +32,8 @@ const projects = defineCollection({
     status: z.enum(['concept', 'building', 'complete', 'deployed']).default('building'),
     /** true = one of the 3 highlighted projects on the homepage. Keep it to 3. */
     featured: z.boolean().default(false),
+    /** One plain sentence about what the project achieved, shown on the homepage. */
+    outcome: z.string().optional(),
     /** How big the tile is on the Projects page grid. */
     size: z.enum(['normal', 'wide', 'tall', 'large']).default('normal'),
     /** Path to an image in /public, e.g. /media/projects/sorting-bot.jpg */
@@ -102,4 +104,19 @@ const competitions = defineCollection({
   }),
 });
 
-export const collections = { milestones, projects, members, competitions };
+/** Short quotes from members, shown on the homepage. */
+const quotes = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/quotes' }),
+  schema: z.object({
+    name: z.string(),
+    /** e.g. "Grade 9" */
+    grade: z.string(),
+    /** Project they worked on (optional) */
+    project: z.string().optional(),
+    text: z.string(),
+    order: z.number().default(50),
+    placeholder: z.boolean().default(false),
+  }),
+});
+
+export const collections = { milestones, projects, members, competitions, quotes };

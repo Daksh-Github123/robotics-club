@@ -1,6 +1,6 @@
 /**
  * Site-wide motion: smooth scrolling, scroll reveals, counters,
- * magnetic buttons, card tilt and hover glow.
+ * and project clips that play on hover.
  * Loaded once on every page from the Base layout.
  */
 import { gsap } from 'gsap';
@@ -120,60 +120,20 @@ document.querySelectorAll<HTMLElement>('[data-count]').forEach((el) => {
   });
 }
 
-/* ───────── Pointer-only effects ───────── */
+/* ───────── Project clips: play a project's short video on hover ───────── */
 if (finePointer && !reducedMotion) {
-  // Magnetic buttons
-  document.querySelectorAll<HTMLElement>('[data-magnetic]').forEach((el) => {
-    const xTo = gsap.quickTo(el, 'x', { duration: 0.5, ease: 'power3' });
-    const yTo = gsap.quickTo(el, 'y', { duration: 0.5, ease: 'power3' });
-    el.addEventListener('pointermove', (e) => {
-      const r = el.getBoundingClientRect();
-      xTo((e.clientX - r.left - r.width / 2) * 0.3);
-      yTo((e.clientY - r.top - r.height / 2) * 0.4);
-    });
-    el.addEventListener('pointerleave', () => {
-      xTo(0);
-      yTo(0);
-    });
-  });
-
-  // 3D tilt + hover video
-  document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((card) => {
-    const video = card.querySelector<HTMLVideoElement>('video[data-hover-video]');
-    card.addEventListener('pointermove', (e) => {
-      const r = card.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width;
-      const py = (e.clientY - r.top) / r.height;
-      card.style.setProperty('--rx', `${((0.5 - py) * 9).toFixed(2)}deg`);
-      card.style.setProperty('--ry', `${((px - 0.5) * 11).toFixed(2)}deg`);
-      card.style.setProperty('--mx', `${(px * 100).toFixed(1)}%`);
-      card.style.setProperty('--my', `${(py * 100).toFixed(1)}%`);
-    });
+  document.querySelectorAll<HTMLVideoElement>('video[data-hover-video]').forEach((video) => {
+    const card = video.closest<HTMLElement>('.pc, .hg-card') ?? video.parentElement!;
     card.addEventListener('pointerenter', () => {
-      if (video) {
-        card.classList.add('is-playing');
-        video.play().catch(() => {});
-      }
+      card.classList.add('is-playing');
+      video.play().catch(() => {});
     });
     card.addEventListener('pointerleave', () => {
-      card.style.setProperty('--rx', '0deg');
-      card.style.setProperty('--ry', '0deg');
-      if (video) {
-        card.classList.remove('is-playing');
-        video.pause();
-      }
+      card.classList.remove('is-playing');
+      video.pause();
     });
   });
 }
-
-/* Cursor-following glow inside cards (works with touch too) */
-document.querySelectorAll<HTMLElement>('[data-glow]').forEach((el) => {
-  el.addEventListener('pointermove', (e) => {
-    const r = el.getBoundingClientRect();
-    el.style.setProperty('--gx', `${e.clientX - r.left}px`);
-    el.style.setProperty('--gy', `${e.clientY - r.top}px`);
-  });
-});
 
 // Fonts and images change layout; recalculate trigger positions once loaded.
 window.addEventListener('load', () => ScrollTrigger.refresh());

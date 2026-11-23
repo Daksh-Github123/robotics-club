@@ -1,48 +1,50 @@
 /*
  * DESIGN TOKENS: change the site's colors, fonts and spacing here.
  * Every component reads from these variables, so edits apply everywhere.
- * (The liquid background and 3D gear have their own copies of the
- *  orange/blue values in src/scripts/fluid.ts and src/scripts/hero3d.ts.)
+ * (The liquid background and 3D gear keep their own copies of the colors
+ *  in src/scripts/fluid.ts and src/scripts/hero3d.ts.)
  */
 :root {
-  /* Surfaces: black is the dominant color */
-  --bg: #07080b;
-  --bg-2: #0b0d12;
-  --surface: #10131a;
-  --surface-2: #161a23;
-  --border: #1e2430;
-  --border-strong: #2a3242;
+  /* Paper-like light theme */
+  --bg: #f5f1ea;
+  --bg-2: #efe9df;
+  --surface: #fffdf9;
+  --surface-2: #ece5d9;
+  --border: #e0d8ca;
+  --border-strong: #c9bfae;
 
-  /* School colors, neon edition */
-  --orange: #ff7a1a;
-  --orange-glow: #ff9a4d;
-  --orange-deep: #c2520a;
-  --blue: #2f7bff;
-  --blue-glow: #5fa0ff;
-  --blue-deep: #1b4fb8;
+  /* School colors. --orange fills buttons; --orange-glow / --blue-glow are the
+     darker shades used for small text so it stays readable on the light background. */
+  --orange: #d9590b;
+  --orange-glow: #b2470a;
+  --orange-deep: #8f3906;
+  --orange-soft: #f6dcc8;
+  --blue: #2f6fe0;
+  --blue-glow: #1f56b8;
+  --blue-deep: #173f86;
 
-  /* Status accents */
-  --green: #3ddc97;
-  --yellow: #ffc94d;
+  /* Status accents (dark enough for text on paper) */
+  --green: #1d8a57;
+  --yellow: #a86b00;
 
   /* Text */
-  --text: #f3f4f6;
-  --muted: #8b93a3;
-  --faint: #5a6273;
+  --text: #1a1611;
+  --muted: #5c554b;
+  --faint: #8d8476;
 
-  /* Signature gradient */
-  --grad: linear-gradient(100deg, var(--orange) 0%, #ffb36b 38%, var(--blue-glow) 72%, var(--blue) 100%);
+  /* Kept for components that still reference them */
+  --grad: linear-gradient(90deg, var(--orange), var(--orange));
   --grad-solid: linear-gradient(135deg, var(--orange) 0%, var(--blue) 100%);
 
   /* Type */
-  --font-display: 'Unbounded', 'Space Grotesk', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Atkinson Hyperlegible', 'Segoe UI', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', monospace;
 
   /* Shape & layout */
-  --radius: 18px;
-  --radius-lg: 28px;
-  --container: 1240px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --container: 1180px;
   --gutter: clamp(16px, 4vw, 40px);
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
 }

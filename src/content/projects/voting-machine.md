@@ -6,6 +6,7 @@ date: 2026-03-01
 categories: [Hardware, Software]
 status: complete
 featured: true
+outcome: Built to replace the paper ballots used in school elections, with an RFID lock so nobody can vote twice.
 size: large
 team: [Daksh Singh]
 tech: [Arduino Uno R3, RC522 RFID reader, 74HC164 shift registers, 10 illuminated push buttons, 3D-printed case, Buzzer]
