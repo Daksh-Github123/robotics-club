@@ -14,7 +14,10 @@ const milestones = sortMilestones(await getCollection('milestones'));
 const projects = sortProjects(await getCollection('projects'));
 const members = await getCollection('members');
 const featured = projects.filter((p) => p.data.featured);
-const strip = (featured.length >= 3 ? featured : projects).slice(0, 8);
+// The homepage strip shows up to 3 highlighted projects (featured: true), then a "See every project" card.
+const strip = (featured.length ? featured : projects)
+  .slice(0, 3)
+  .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf()); // oldest first
 
 // Only count sprints and showcases that have already happened (counted when the site is built).
 const happened = milestones.filter((m) => m.data.date <= new Date());
@@ -204,51 +207,6 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
     <Marquee words={['BUILD', 'CODE', 'SOLDER', 'COMPETE', 'SHIP', 'REPEAT']} />
   </section>
 
-  <!-- ═════════ STUDENT-LED ═════════ -->
-  <section class="section led-section">
-    <div class="container">
-      <div class="led-head">
-        <p class="eyebrow" data-reveal>Student-led</p>
-        <h2 class="h2" data-reveal>Run by <span class="grad">students.</span></h2>
-        <p class="lede" data-reveal>
-          Robotics Club is fully student-led, one of the only student-led clubs at {site.school}. Students run the
-          sessions, teach each other and build the projects, with supervision from faculty.
-        </p>
-      </div>
-      <div class="led-grid" data-reveal-group>
-        {
-          led.map((l) => (
-            <article class="led-card" data-glow style={`--accent: var(${l.accent})`}>
-              <span class="led-icon">
-                <Icon name={l.icon} size={24} />
-              </span>
-              <h3>{l.title}</h3>
-              <p>{l.text}</p>
-            </article>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
-  <!-- ═════════ TIMELINE ═════════ -->
-  <section class="section" id="journey">
-    <div class="container">
-      <SectionHeading
-        eyebrow="Timeline"
-        title='Our story <span class="grad">so far</span>'
-        sub="Every sprint, showcase and first since the club started."
-        align="center"
-      />
-    </div>
-    <div class="container">
-      <Timeline milestones={milestones} />
-    </div>
-  </section>
-
-  <!-- ═════════ PROJECT STRIP ═════════ -->
-  <HorizontalGallery projects={strip} />
-
   <!-- ═════════ WHAT YOU'LL DO ═════════ -->
   <section class="section">
     <div class="container">
@@ -271,6 +229,36 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
                 <h3>{c.title}</h3>
                 <p>{c.text}</p>
               </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ PROJECT STRIP ═════════ -->
+  <HorizontalGallery projects={strip} />
+
+  <!-- ═════════ STUDENT-LED ═════════ -->
+  <section class="section led-section">
+    <div class="container">
+      <div class="led-head">
+        <p class="eyebrow" data-reveal>Student-led</p>
+        <h2 class="h2" data-reveal>Run by <span class="grad">students.</span></h2>
+        <p class="lede" data-reveal>
+          Robotics Club is fully student-led, one of the only student-led clubs at {site.school}. Students run the
+          sessions, teach each other and build the projects, with supervision from faculty.
+        </p>
+      </div>
+      <div class="led-grid" data-reveal-group>
+        {
+          led.map((l) => (
+            <article class="led-card" data-glow style={`--accent: var(${l.accent})`}>
+              <span class="led-icon">
+                <Icon name={l.icon} size={24} />
+              </span>
+              <h3>{l.title}</h3>
+              <p>{l.text}</p>
             </article>
           ))
         }
@@ -302,6 +290,21 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
           ))
         }
       </ol>
+    </div>
+  </section>
+
+  <!-- ═════════ TIMELINE ═════════ -->
+  <section class="section" id="journey">
+    <div class="container">
+      <SectionHeading
+        eyebrow="Timeline"
+        title='Our story <span class="grad">so far</span>'
+        sub="Every sprint, showcase and first since the club started."
+        align="center"
+      />
+    </div>
+    <div class="container">
+      <Timeline milestones={milestones} />
     </div>
   </section>
 
@@ -389,7 +392,7 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
   }
   .hero-grid {
     display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
+    grid-template-columns: 0.95fr 1.05fr;
     gap: 32px;
     align-items: center;
   }
@@ -398,7 +401,7 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
   }
   .hero-title {
     /* Sized from the column width so the longest word ("COMPETE.") always fits on one line. */
-    font-size: min(14.6cqi, 132px);
+    font-size: min(12.5cqi, 104px);
     font-weight: 900;
     line-height: 1;
     letter-spacing: -0.045em;
@@ -435,7 +438,7 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
   .hero-visual {
     position: relative;
     width: 100%;
-    max-width: 640px;
+    max-width: 760px;
     aspect-ratio: 1;
     justify-self: end;
   }
@@ -501,7 +504,7 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
     margin: 0;
     font-family: var(--font-display);
     font-weight: 900;
-    font-size: clamp(44px, 5.6vw, 84px);
+    font-size: clamp(36px, 4.2vw, 60px);
     line-height: 1;
     letter-spacing: -0.04em;
     background: var(--grad);
@@ -567,7 +570,7 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
     top: 6px;
     font-family: var(--font-display);
     font-weight: 900;
-    font-size: clamp(80px, 10vw, 140px);
+    font-size: clamp(56px, 6vw, 92px);
     line-height: 1;
     color: transparent;
     -webkit-text-stroke: 1px var(--border-strong);
@@ -707,7 +710,7 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
     justify-items: center;
   }
   .cta h2 {
-    font-size: clamp(44px, 8.5vw, 132px);
+    font-size: clamp(34px, 5.6vw, 80px);
     font-weight: 900;
     line-height: 0.93;
     letter-spacing: -0.045em;

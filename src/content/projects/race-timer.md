@@ -5,7 +5,7 @@ academicYear: "2026-27"
 date: 2026-11-04
 categories: [Software, Computer Vision]
 status: building
-featured: true
+featured: false
 size: normal
 team: [Bharghav, Ishan, Samridh]
 tech: [Python, OpenCV, Camera]

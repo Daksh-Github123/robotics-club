@@ -1,6 +1,6 @@
 /**
  * Site-wide motion: smooth scrolling, scroll reveals, counters,
- * magnetic buttons, cursor ring, card tilt and hover glow.
+ * magnetic buttons, card tilt and hover glow.
  * Loaded once on every page from the Base layout.
  */
 import { gsap } from 'gsap';
@@ -136,27 +136,6 @@ if (finePointer && !reducedMotion) {
       yTo(0);
     });
   });
-
-  // Trailing cursor ring
-  const ring = document.querySelector<HTMLElement>('.cursor-ring');
-  if (ring) {
-    document.documentElement.classList.add('has-cursor');
-    const xTo = gsap.quickTo(ring, 'x', { duration: 0.35, ease: 'power3' });
-    const yTo = gsap.quickTo(ring, 'y', { duration: 0.35, ease: 'power3' });
-    window.addEventListener(
-      'pointermove',
-      (e) => {
-        xTo(e.clientX);
-        yTo(e.clientY);
-      },
-      { passive: true },
-    );
-    document.addEventListener('pointerover', (e) => {
-      const hit = (e.target as Element).closest('a, button, summary, [data-cursor]');
-      ring.classList.toggle('is-hover', !!hit);
-    });
-    document.addEventListener('pointerleave', () => ring.classList.remove('is-hover'));
-  }
 
   // 3D tilt + hover video
   document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((card) => {

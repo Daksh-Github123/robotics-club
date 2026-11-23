@@ -5,7 +5,7 @@ academicYear: "2026-27"
 date: 2026-11-04
 categories: [Hardware, Automation]
 status: building
-featured: true
+featured: false
 size: normal
 team: [Adwitya, Ananya, Mihika]
 tech: [ESP32, HC-SR04 ultrasonic sensor, MG995 servo, 4×AA battery pack, Voltage divider]

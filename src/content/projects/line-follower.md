@@ -5,7 +5,7 @@ academicYear: "2025-26"
 date: 2025-12-15
 categories: [Hardware, Software]
 status: complete
-featured: true
+featured: false
 size: wide
 team: [All Sprint 1 members]
 tech: [Infrared line sensors, DC motors, Motor driver, Microcontroller]

@@ -30,6 +30,7 @@ const projects = defineCollection({
     date: z.coerce.date(),
     categories: z.array(z.string()).default([]),
     status: z.enum(['concept', 'building', 'complete', 'deployed']).default('building'),
+    /** true = one of the 3 highlighted projects on the homepage. Keep it to 3. */
     featured: z.boolean().default(false),
     /** How big the tile is on the Projects page grid. */
     size: z.enum(['normal', 'wide', 'tall', 'large']).default('normal'),

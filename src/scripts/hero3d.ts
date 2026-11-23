@@ -75,7 +75,7 @@ export function initHero3D(canvas: HTMLCanvasElement) {
 
   const scene = new Scene();
   const camera = new PerspectiveCamera(32, 1, 0.1, 100);
-  camera.position.set(0, 0, 12);
+  camera.position.set(0, 0, 10.2);
 
   const root = new Group();
   scene.add(root);
