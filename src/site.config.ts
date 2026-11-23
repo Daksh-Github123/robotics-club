@@ -27,9 +27,6 @@ export const site = {
   /** Rough weekly time commitment shown on the Join page. */
   timeCommitment: 'TODO: e.g. ~2 hours a week, a bit more before showcases',
 
-  /** How long a build sprint lasts. */
-  sprintLength: 'TODO: e.g. 8 weeks',
-
   /** Leave a value as '' to hide that link. */
   socials: {
     instagram: '', // e.g. 'https://instagram.com/yourclub'

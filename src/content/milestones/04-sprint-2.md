@@ -1,7 +1,7 @@
 ---
-title: Sprint 2 kicks off
+title: Sprint 2 goes project-first
 date: 2026-08-24
 type: sprint
-summary: New school year, more members. Sprint 2 builds aim at real problems around the school.
+summary: The club changes format. Students now choose their own project first, and Daksh teaches the sensors and electronics each project needs instead of a set course.
 placeholder: true
 ---

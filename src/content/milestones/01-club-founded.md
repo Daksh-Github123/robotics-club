@@ -1,7 +1,6 @@
 ---
-title: The club is founded
-date: 2025-08-25
+title: Daksh Singh founds the club
+date: 2025-09-01
 type: founding
-summary: A handful of students, one empty room and a box of spare parts. Robotics Club officially starts.
-placeholder: true
+summary: Daksh Singh starts Robotics Club in September 2025.
 ---

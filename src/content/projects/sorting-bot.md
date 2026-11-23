@@ -1,8 +1,8 @@
 ---
 title: Lost & Found Sorting Bot
 tagline: A conveyor with a color sensor that sorts lost-and-found items so they're easy to claim.
-academicYear: "2025-26"
-date: 2026-04-20
+academicYear: "2026-27"
+date: 2026-10-25
 categories: [Hardware, Automation]
 status: deployed
 featured: true

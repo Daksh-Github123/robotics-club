@@ -37,30 +37,37 @@ function gradColor(t: number) {
   return `rgb(${a.map((v, i) => Math.round(v + (b[i]! - v) * k)).join(',')})`;
 }
 
+/* How every sprint runs, step by step. */
 const doCards = [
   {
-    icon: 'wrench',
+    icon: 'lightbulb',
     accent: '--orange',
-    title: 'Build real robots',
-    text: 'From first sketch to working prototype. CAD, 3D printing, wiring, code. Every sprint ends with something that moves.',
+    title: 'Pick a project',
+    text: "Think of a problem you want to solve, a project idea, or something interesting you've seen and want to build. It just needs to be realistic to finish before the BA Showcase.",
   },
   {
-    icon: 'school',
-    accent: '--green',
-    title: 'Ship it into school',
-    text: 'The best builds get deployed around campus. Your project, used by real people every single day.',
-  },
-  {
-    icon: 'trophy',
-    accent: '--yellow',
-    title: 'Compete',
-    text: "Club members get a direct pathway onto the school's robotics competition teams.",
-  },
-  {
-    icon: 'cpu',
+    icon: 'file',
     accent: '--blue',
-    title: 'Learn the whole stack',
-    text: 'Microcontrollers, sensors, motors, machine learning. Learn by doing, with members who have been there.',
+    title: 'Plan it',
+    text: "Make a parts list and a circuit diagram to check you're ordering the right parts. Work out the tools you need and how you'll build it, plus any research, cloud setup or sensor calibration. If something doesn't make sense, the club leads teach it to you.",
+  },
+  {
+    icon: 'wrench',
+    accent: '--yellow',
+    title: 'Order and build',
+    text: 'Order your parts, bring them to school and build there. Club leads help you wire things up when you get stuck, and supervise sawing, drilling and soldering with the teachers.',
+  },
+  {
+    icon: 'star',
+    accent: '--orange',
+    title: 'Present at the BA Showcase',
+    text: 'Every sprint ends with the BA Showcase, where the whole school, including the principal, comes to see what you built.',
+  },
+  {
+    icon: 'rocket',
+    accent: '--green',
+    title: 'Take it further',
+    text: 'After the showcase the project is yours. Take it outside school, start your own organization around it, enter it in competitions or write a research paper on it.',
   },
 ];
 
@@ -83,12 +90,6 @@ const why = [
   },
 ];
 
-const steps = [
-  { k: '01', title: 'Pitch', text: 'Each sprint kicks off with pitches. Bring your own idea or a problem the school needs solved. Teams form around the best.' },
-  { k: '02', title: 'Build', text: 'Design it, print it, wire it, code it. Weekly sessions with experienced members on hand to help.' },
-  { k: '03', title: 'Break & fix', text: 'Test it, find what breaks, and improve it before the showcase.' },
-  { k: '04', title: 'Showcase', text: 'Demo to the whole school at the end-of-sprint showcase. Standout builds get deployed on campus.' },
-];
 
 function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
   let d = '';
@@ -133,8 +134,8 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
           }
         </h1>
         <p class="lede hero-lede" data-hero-fade>
-          <strong>{site.name}</strong> is where students design and build real robots, get them used around the
-          school, and take them to competitions.
+          At <strong>{site.name}</strong>, students pick their own robotics project, learn what it needs, build it in
+          school and present it to the whole school.
         </p>
         <div class="hero-cta" data-hero-fade>
           <a href="/projects/" class="btn btn-primary" data-magnetic>Explore projects <Icon name="arrow" size={18} /></a>
@@ -201,9 +202,9 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
   <section class="section">
     <div class="container">
       <SectionHeading
-        eyebrow="In the club"
+        eyebrow="How a sprint works"
         title='What you&#39;ll <span class="grad">do</span>'
-        sub="You don't need any experience to join. You'll learn as you build, with help from other members."
+        sub="Every sprint follows these steps. You don't need experience to join, because you learn what your project needs while you build it."
       />
       <div class="do-grid" data-reveal-group>
         {
@@ -250,29 +251,6 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
           ))
         }
       </ol>
-    </div>
-  </section>
-
-  <!-- ═════════ HOW A SPRINT WORKS ═════════ -->
-  <section class="section">
-    <div class="container">
-      <SectionHeading
-        eyebrow="What to expect"
-        title='How a <span class="grad">sprint</span> works'
-        sub={`The club runs in build sprints (${site.sprintLength}). Here's the loop.`}
-      />
-      <div class="steps" data-steps>
-        <div class="steps-line" aria-hidden="true"><span data-steps-line></span></div>
-        {
-          steps.map((s) => (
-            <div class="step" data-reveal>
-              <span class="step-dot mono">{s.k}</span>
-              <h3>{s.title}</h3>
-              <p>{s.text}</p>
-            </div>
-          ))
-        }
-      </div>
     </div>
   </section>
 
@@ -336,20 +314,6 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
       scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true },
     });
 
-    // Sprint steps connector line
-    const line = document.querySelector('[data-steps-line]');
-    if (line) {
-      gsap.fromTo(
-        line,
-        { scaleX: 0 },
-        {
-          scaleX: 1,
-          ease: 'none',
-          scrollTrigger: { trigger: '[data-steps]', start: 'top 75%', end: 'bottom 60%', scrub: 0.6 },
-        },
-      );
-    }
-
     // Load the 3D gear once the page is idle
     const canvas = document.querySelector<HTMLCanvasElement>('[data-hero3d]');
     if (canvas) {
@@ -357,8 +321,6 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
       if ('requestIdleCallback' in window) window.requestIdleCallback(go, { timeout: 1200 });
       else setTimeout(go, 400);
     }
-  } else {
-    document.querySelector<HTMLElement>('[data-steps-line]')?.style.setProperty('transform', 'none');
   }
 </script>
 
@@ -537,6 +499,13 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
   .do-card:nth-child(3) {
     grid-column: span 5;
   }
+  .do-card:nth-child(5) {
+    grid-column: span 12;
+    min-height: 240px;
+  }
+  .do-card:nth-child(5) p {
+    max-width: 70ch;
+  }
   .do-card:hover {
     border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
     transform: translateY(-4px);
@@ -622,52 +591,6 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
   }
   .why-item p {
     color: var(--muted);
-  }
-
-  /* ── Sprint steps ── */
-  .steps {
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 28px;
-    margin-top: clamp(48px, 6vw, 80px);
-  }
-  .steps-line {
-    position: absolute;
-    top: 29px;
-    left: 30px;
-    right: 30px;
-    height: 2px;
-    background: var(--border);
-  }
-  .steps-line span {
-    display: block;
-    height: 100%;
-    background: var(--grad);
-    box-shadow: 0 0 16px rgba(255, 122, 26, 0.6);
-    transform-origin: left;
-    transform: scaleX(0);
-  }
-  .step-dot {
-    position: relative;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    font-size: 14px;
-    font-weight: 600;
-    background: var(--surface);
-    border: 1px solid var(--border-strong);
-    color: var(--orange-glow);
-  }
-  .step h3 {
-    font-size: 24px;
-    margin: 24px 0 10px;
-  }
-  .step p {
-    color: var(--muted);
-    font-size: 15.5px;
   }
 
   /* ── CTA ── */
@@ -774,18 +697,8 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
     .why-sticky {
       position: static;
     }
-    .steps {
-      grid-template-columns: 1fr 1fr;
-      row-gap: 48px;
-    }
-    .steps-line {
-      display: none;
-    }
   }
   @media (max-width: 520px) {
-    .steps {
-      grid-template-columns: 1fr;
-    }
     .why-item {
       grid-template-columns: 44px 1fr;
     }

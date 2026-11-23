@@ -1,7 +1,6 @@
 ---
 title: Sprint 1 kicks off
-date: 2025-09-08
+date: 2025-11-01
 type: sprint
-summary: Our first build sprint. Teams pitch ideas, form crews and start building their first robots.
-placeholder: true
+summary: The first sprint is a robotics course. Daksh teaches the basics and every member builds the same line follower robot.
 ---

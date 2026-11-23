@@ -5,7 +5,7 @@
 export const faq: { q: string; a: string }[] = [
   {
     q: 'Do I need any experience?',
-    a: "Nope. Most members had never touched a soldering iron or written a line of code before joining. You'll learn by building, with experienced members helping out.",
+    a: "No. While you plan your project, the club leads teach you how its sensors and parts work, and they help with wiring once your parts arrive.",
   },
   {
     q: 'How do I apply?',
@@ -13,7 +13,7 @@ export const faq: { q: string; a: string }[] = [
   },
   {
     q: 'How much time does it take?',
-    a: 'TODO: e.g. One meeting a week during a sprint, plus a few extra sessions before showcases.',
+    a: 'TODO: e.g. One meeting a week during a sprint, plus a few extra sessions before the BA Showcase.',
   },
   {
     q: 'Will this help my college applications?',
@@ -25,7 +25,7 @@ export const faq: { q: string; a: string }[] = [
   },
   {
     q: 'Can I pitch my own project?',
-    a: 'Absolutely. Every sprint starts with pitches. If the school has a problem you want to solve, pitch it. The best builds get deployed on campus.',
+    a: 'Yes, that is how every sprint starts. You choose a problem to solve, a project idea, or something you have seen and want to build. It needs to be realistic to finish before the BA Showcase.',
   },
   {
     q: 'I want to enter a competition the school doesn\'t compete in. Can the club help?',
@@ -33,6 +33,6 @@ export const faq: { q: string; a: string }[] = [
   },
   {
     q: 'Does it cost anything?',
-    a: 'TODO: e.g. Free. Parts and tools are provided by the club.',
+    a: 'You buy the parts for your own project. During planning you make a parts list and a circuit diagram, so you know exactly what to order before you spend anything.',
   },
 ];
