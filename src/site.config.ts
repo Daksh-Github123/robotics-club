@@ -9,7 +9,7 @@ export const site = {
   name: 'Robotics Club', // TODO: real club name
   /** 2–3 letters for the hexagon logo badge. */
   shortName: 'RC',
-  school: 'Your High School', // TODO
+  school: 'Inventure Academy',
   founded: 2025, // TODO: year the club started
 
   description:
