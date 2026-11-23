@@ -63,7 +63,8 @@ const members = defineCollection({
   schema: z.object({
     name: z.string(),
     role: z.string(),
-    status: z.enum(['current', 'alumni']).default('current'),
+    /** current students, alumni (graduated), or faculty (supervising teachers). */
+    status: z.enum(['current', 'alumni', 'faculty']).default('current'),
     gradYear: z.number().int().optional(),
     founder: z.boolean().default(false),
     /** Lower numbers show first. */
@@ -86,6 +87,11 @@ const competitions = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/competitions' }),
   schema: z.object({
     name: z.string(),
+    /**
+     * club: independent competitions done with the club.
+     * school-team: school teams run by other teachers (the club recommends members).
+     */
+    kind: z.enum(['club', 'school-team']),
     level: z.string(),
     description: z.string(),
     website: z.string().optional(),

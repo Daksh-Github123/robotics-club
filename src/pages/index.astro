@@ -39,6 +39,28 @@ function gradColor(t: number) {
   return `rgb(${a.map((v, i) => Math.round(v + (b[i]! - v) * k)).join(',')})`;
 }
 
+/* What being a student-led club means for members. */
+const led = [
+  {
+    icon: 'users',
+    accent: '--orange',
+    title: 'Work with peers and seniors',
+    text: "You'll build alongside students from other grades, including seniors you might not otherwise get to know.",
+  },
+  {
+    icon: 'chat',
+    accent: '--blue',
+    title: 'Make real connections',
+    text: 'The people you build with become teammates, mentors and friends you can ask for advice long after a sprint ends.',
+  },
+  {
+    icon: 'rocket',
+    accent: '--green',
+    title: 'Step up and lead',
+    text: 'Because students run the club, you can take on more over time: mentoring newer members, teaching a topic, or leading the club once the current leads graduate.',
+  },
+];
+
 /* How every sprint runs, step by step. */
 const doCards = [
   {
@@ -79,12 +101,12 @@ const why = [
     text: 'Every project gets its own page on this site: your name, your role, what you built and how it works. Drop the link straight into college applications.',
   },
   {
-    title: 'Fast track to school teams',
-    text: "Being in the club is your way onto the school's robotics competition teams. Show up, build, and you're in the pool.",
+    title: 'Recommendations for school teams',
+    text: "The school's competition teams are run by other teachers. Club members get recommendations so they can join those teams straight away.",
   },
   {
-    title: 'Advice for outside competitions',
-    text: "Want to enter something the school doesn't? Members and alumni who've competed will help you apply, team up and prepare.",
+    title: 'Independent competitions together',
+    text: 'Independent competitions are done with the club. Members help each other plan, build and prepare their entries.',
   },
   {
     title: 'Ideas that get implemented',
@@ -118,7 +140,7 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
   <section class="hero" data-hero>
     <div class="container hero-grid">
       <div class="hero-copy">
-        <p class="eyebrow" data-hero-fade>{site.school} · Est. {site.founded}</p>
+        <p class="eyebrow" data-hero-fade>{site.school} · Student-led · Est. {site.founded}</p>
         <h1 class="hero-title" aria-label={`${lines.join(' ')} ${site.name}.`}>
           {
             lines.map((line, li) => (
@@ -180,6 +202,33 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
       </dl>
     </div>
     <Marquee words={['BUILD', 'CODE', 'SOLDER', 'COMPETE', 'SHIP', 'REPEAT']} />
+  </section>
+
+  <!-- ═════════ STUDENT-LED ═════════ -->
+  <section class="section led-section">
+    <div class="container">
+      <div class="led-head">
+        <p class="eyebrow" data-reveal>Student-led</p>
+        <h2 class="h2" data-reveal>Run by <span class="grad">students.</span></h2>
+        <p class="lede" data-reveal>
+          Robotics Club is fully student-led, one of the only student-led clubs at {site.school}. Students run the
+          sessions, teach each other and build the projects, with supervision from faculty.
+        </p>
+      </div>
+      <div class="led-grid" data-reveal-group>
+        {
+          led.map((l) => (
+            <article class="led-card" data-glow style={`--accent: var(${l.accent})`}>
+              <span class="led-icon">
+                <Icon name={l.icon} size={24} />
+              </span>
+              <h3>{l.title}</h3>
+              <p>{l.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
   </section>
 
   <!-- ═════════ TIMELINE ═════════ -->
@@ -548,6 +597,55 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
     max-width: 46ch;
   }
 
+  /* ── Student-led ── */
+  .led-section {
+    padding-bottom: 0;
+  }
+  .led-head {
+    display: grid;
+    gap: 20px;
+    max-width: 820px;
+  }
+  .led-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: clamp(36px, 5vw, 56px);
+  }
+  .led-card {
+    display: grid;
+    gap: 14px;
+    align-content: start;
+    padding: clamp(24px, 2.6vw, 32px);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--surface) 75%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    overflow: hidden;
+    transition: border-color 0.4s;
+  }
+  .led-card:hover {
+    border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+  }
+  .led-icon {
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+  .led-card h3 {
+    font-size: clamp(20px, 2vw, 26px);
+  }
+  .led-card p {
+    color: var(--muted);
+    font-size: 15.5px;
+  }
+
   /* ── Why join ── */
   .why {
     display: grid;
@@ -692,6 +790,9 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
     .do-card,
     .do-card:nth-child(n) {
       grid-column: span 12;
+    }
+    .led-grid {
+      grid-template-columns: 1fr;
     }
     .why {
       grid-template-columns: 1fr;

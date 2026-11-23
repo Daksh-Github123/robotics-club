@@ -1,4 +1,11 @@
 ---
+/**
+ * Competitions page. The club is about building projects; this page explains
+ * how it connects to competitions:
+ *  - "club" competitions (independent ones) are done with the club.
+ *  - "school-team" competitions are run by other teachers; the club recommends members.
+ * Set `kind` in each file in src/content/competitions/.
+ */
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
@@ -7,25 +14,40 @@ import Icon from '../components/Icon.astro';
 
 const comps = (await getCollection('competitions')).sort((a, b) => a.data.order - b.data.order);
 
+const groups = [
+  {
+    kind: 'club',
+    eyebrow: 'With the club',
+    title: 'Independent <span class="grad">competitions</span>',
+    sub: 'Independent competitions are done with the club. Members plan, build and prepare their entries together.',
+  },
+  {
+    kind: 'school-team',
+    eyebrow: 'School teams',
+    title: 'Run by <span class="grad">other teachers</span>',
+    sub: "The school's competition teams are managed by other teachers, and their details are shared separately. Club members get recommendations to join, and each team schedules its own after-school practices.",
+  },
+] as const;
+
 const pathway = [
-  { icon: 'users', title: 'Join the club', text: 'Sign up through the school system and come to meetings.' },
-  { icon: 'wrench', title: 'Build in sprints', text: 'Work on real projects and pick up the skills competitions test.' },
-  { icon: 'trophy', title: 'Get on a school team', text: "Club members get a direct route onto the school's competition teams." },
+  { icon: 'users', title: 'Join the club', text: "Sign up through the school's Beyond Academics (BA) sign-ups and build projects in BA periods." },
+  { icon: 'wrench', title: 'Build your skills', text: 'Every project teaches you sensors, wiring and code, the same skills competitions test.' },
+  { icon: 'trophy', title: 'Get recommended', text: "The club gives members recommendations so they can join the school's competition teams straight away." },
 ];
 
 const help = [
   { icon: 'lightbulb', title: 'Picking a competition', text: 'Figure out which events fit your interests and skill level.' },
   { icon: 'users', title: 'Building a team', text: 'Find teammates in the club with the skills you are missing.' },
-  { icon: 'code', title: 'Application & prep', text: 'Feedback on applications, design docs and practice runs from people who have done it.' },
-  { icon: 'box', title: 'Parts & workspace', text: 'Access to the club workspace and spare parts for prototyping.' },
+  { icon: 'code', title: 'Application & prep', text: 'Feedback on applications, pitch videos and practice runs from people who have done it.' },
+  { icon: 'box', title: 'Parts & workspace', text: 'Build and test your entry during club time.' },
 ];
 ---
 
-<Base title="Competitions" description="How club members get onto the school's robotics competition teams, and get help entering others.">
+<Base title="Competitions" description="How Robotics Club connects to competitions: independent competitions with the club, and recommendations for the school teams.">
   <PageHeader
     eyebrow="Competitions"
-    title='Your pathway onto <span class="grad">school teams.</span>'
-    sub="The club is the way onto the school's robotics competition teams, and a launchpad for entering competitions on your own."
+    title='Competitions <span class="grad">&amp; the club</span>'
+    sub="Robotics Club is about building projects. Independent competitions are done with the club, and the school's competition teams are run by other teachers."
   />
 
   <section class="container">
@@ -45,64 +67,65 @@ const help = [
     </ol>
   </section>
 
-  <section class="section container">
-    <SectionHeading eyebrow="Where we compete" title='Competitions <span class="grad">&amp; results</span>' />
-    <div class="comps" data-reveal-group>
-      {
-        comps.map((c) => (
-          <article class="comp" data-tilt>
-            <div class="comp-head">
-              <span class="chip">{c.data.level}</span>
-              {c.data.placeholder && <span class="ph-pill">placeholder</span>}
-            </div>
-            <h3>{c.data.name}</h3>
-            <p class="comp-desc">{c.data.description}</p>
-            <div class="comp-results">
-              <p class="mono comp-label">
-                <Icon name="trophy" size={14} /> Results
-              </p>
-              {c.data.results.length > 0 ? (
-                <ul>
-                  {c.data.results.map((r) => (
-                    <li>
-                      <span class="mono">{r.year}</span> {r.result}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p class="muted comp-empty">No results yet.</p>
-              )}
-            </div>
-            {c.data.website && (
-              <a class="comp-link" href={c.data.website} target="_blank" rel="noopener">
-                Official site <Icon name="external" size={14} />
-              </a>
-            )}
-          </article>
-        ))
-      }
-    </div>
-  </section>
-
-  <section class="section container help-section">
-    <SectionHeading
-      eyebrow="Other competitions"
-      title='We help you enter <span class="grad">other competitions</span> too.'
-      sub="If there's a competition the school doesn't send a team to, the club is still your support crew."
-    />
-    <div class="help" data-reveal-group>
-      {
-        help.map((h) => (
-          <div class="help-item">
-            <Icon name={h.icon} size={24} />
-            <h3>{h.title}</h3>
-            <p>{h.text}</p>
+  {
+    groups.map((g) => {
+      const list = comps.filter((c) => c.data.kind === g.kind);
+      return (
+        <section class="section container">
+          <SectionHeading eyebrow={g.eyebrow} title={g.title} sub={g.sub} />
+          <div class="comps" data-reveal-group>
+            {list.map((c) => (
+              <article class="comp" data-tilt>
+                <div class="comp-head">
+                  <span class="chip">{c.data.level}</span>
+                  {c.data.placeholder && <span class="ph-pill">placeholder</span>}
+                </div>
+                <h3>{c.data.name}</h3>
+                <p class="comp-desc">{c.data.description}</p>
+                <div class="comp-results">
+                  <p class="mono comp-label">
+                    <Icon name="trophy" size={14} /> {g.kind === 'school-team' ? 'School results' : 'Results'}
+                  </p>
+                  {c.data.results.length > 0 ? (
+                    <ul>
+                      {c.data.results.map((r) => (
+                        <li>
+                          <span class="mono">{r.year}</span> {r.result}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p class="muted comp-empty">No results yet.</p>
+                  )}
+                </div>
+                {c.data.website && (
+                  <a class="comp-link" href={c.data.website} target="_blank" rel="noopener">
+                    Official site <Icon name="external" size={14} />
+                  </a>
+                )}
+              </article>
+            ))}
           </div>
-        ))
-      }
-    </div>
-    <a href="/join/#contacts" class="btn btn-primary help-cta" data-magnetic>Ask a member <Icon name="arrow" size={18} /></a>
-  </section>
+          {g.kind === 'club' && (
+            <>
+              <div class="help" data-reveal-group>
+                {help.map((h) => (
+                  <div class="help-item">
+                    <Icon name={h.icon} size={24} />
+                    <h3>{h.title}</h3>
+                    <p>{h.text}</p>
+                  </div>
+                ))}
+              </div>
+              <a href="/join/#contacts" class="btn btn-primary help-cta" data-magnetic>
+                Ask a member <Icon name="arrow" size={18} />
+              </a>
+            </>
+          )}
+        </section>
+      );
+    })
+  }
 </Base>
 
 <style>

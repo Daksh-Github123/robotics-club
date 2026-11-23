@@ -10,17 +10,33 @@ import { faq } from '../data/faq';
 import { sortMembers } from '../lib/meta';
 
 const members = sortMembers(await getCollection('members')).filter((m) => m.data.contact && Object.values(m.data.contact).some(Boolean));
-const currentContacts = members.filter((m) => m.data.status === 'current');
+// Student leads first, then supervising faculty
+const currentContacts = [
+  ...members.filter((m) => m.data.status === 'current'),
+  ...members.filter((m) => m.data.status === 'faculty'),
+];
 const alumniContacts = members.filter((m) => m.data.status === 'alumni');
 
 const steps = [
-  { icon: 'calendar', title: 'Watch for sign-ups', text: "Club applications open through the school's sign-up system, usually at the start of term." },
-  { icon: 'star', title: 'Pick Robotics Club', text: 'Choose us when sign-ups open. No portfolio, test or experience required.' },
-  { icon: 'rocket', title: 'Show up & build', text: `Come to the first meeting (${site.meeting.when}) and start thinking about the project you want to build.` },
+  {
+    icon: 'calendar',
+    title: 'Watch for BA sign-ups',
+    text: "Robotics Club is part of the school's Beyond Academics (BA) program. Sign-ups open through the school.",
+  },
+  {
+    icon: 'bolt',
+    title: 'Sign up fast',
+    text: "Spots are first come, first served. Choose Robotics Club as soon as sign-ups open. You don't need any experience.",
+  },
+  {
+    icon: 'pin',
+    title: 'Check your venue',
+    text: 'The school assigns the room. Watch for the announcement, then come to the first BA period and start thinking about your project.',
+  },
 ];
 
 const facts = [
-  { icon: 'clock', label: 'Time', value: site.timeCommitment },
+  { icon: 'bolt', label: 'Sign-ups', value: 'BA sign-ups, first come, first served' },
   { icon: 'pin', label: 'Where', value: site.meeting.where },
   { icon: 'calendar', label: 'When', value: site.meeting.when },
   { icon: 'spark', label: 'Experience', value: 'None needed' },
@@ -86,8 +102,8 @@ const facts = [
   <section class="section container" id="contacts">
     <SectionHeading
       eyebrow="Contacts"
-      title='Ask <span class="grad">a member</span>'
-      sub="The students running the club right now, plus alumni who are happy to help."
+      title='Questions? <span class="grad">Email us.</span>'
+      sub="Reach out to the student lead or either of the supervising faculty."
     />
     {
       currentContacts.length > 0 && (

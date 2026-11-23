@@ -14,13 +14,14 @@ const alumni = all
   .filter((m) => m.data.status === 'alumni')
   .sort((a, b) => (b.data.gradYear ?? 0) - (a.data.gradYear ?? 0) || a.data.order - b.data.order);
 const alumniFounders = alumni.filter((m) => m.data.founder);
+const faculty = all.filter((m) => m.data.status === 'faculty');
 ---
 
-<Base title="Team" description="The students who run the club, and the alumni who built it.">
+<Base title="Team" description="The students who run Robotics Club at Inventure Academy, its supervising faculty, and its alumni.">
   <PageHeader
     eyebrow="Team"
     title='The people behind <span class="grad">the bots.</span>'
-    sub="The students running the club right now, and the alumni who built it before them."
+    sub="Robotics Club is fully student-led. Students run it and teach it, with supervision from faculty."
   />
 
   <section class="container team">
@@ -40,6 +41,23 @@ const alumniFounders = alumni.filter((m) => m.data.founder);
           <SectionHeading eyebrow="Current leads" title="Running the club" />
           <div class="grid" data-reveal-group>
             {current.map((m) => (
+              <MemberCard member={m} />
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    {
+      faculty.length > 0 && (
+        <div class="block">
+          <SectionHeading
+            eyebrow="Faculty"
+            title='Supervising <span class="grad">faculty</span>'
+            sub="The club is run by students. Faculty supervise it and oversee anything that needs a teacher, like sawing, drilling and soldering."
+          />
+          <div class="grid" data-reveal-group>
+            {faculty.map((m) => (
               <MemberCard member={m} />
             ))}
           </div>

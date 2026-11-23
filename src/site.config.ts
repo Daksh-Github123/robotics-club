@@ -10,22 +10,22 @@ export const site = {
   /** 2–3 letters for the hexagon logo badge. */
   shortName: 'RC',
   school: 'Inventure Academy',
-  founded: 2025, // TODO: year the club started
+  founded: 2025,
 
   description:
-    'The robotics club where students design, build and ship real robots: into our school and onto competition fields.',
+    'The fully student-led robotics club at Inventure Academy, where students choose their own project, learn what it needs, build it in school and present it at the BA Showcase.',
 
   meeting: {
-    when: 'TODO: e.g. Wednesdays, 3:30–5:00 PM',
-    where: 'TODO: e.g. Room 204 / Engineering Lab',
+    when: 'Twice a week, in two separate BA periods',
+    where: 'Assigned by the school. Watch for the announcement.',
   },
 
-  /** How students apply. Applications run through the school's own system. */
+  /** How students join. Sign-ups run through the school's Beyond Academics (BA) program. */
   applyInfo:
-    "Applications run through the school's club sign-up system. When sign-ups open, choose Robotics Club.",
+    "Sign up through the school's Beyond Academics (BA) program sign-ups. Spots are first come, first served, so sign up as soon as they open.",
 
-  /** Rough weekly time commitment shown on the Join page. */
-  timeCommitment: 'TODO: e.g. ~2 hours a week, a bit more before showcases',
+  /** Weekly time commitment shown on the Join page. */
+  timeCommitment: 'Two BA periods a week',
 
   /** Leave a value as '' to hide that link. */
   socials: {
