@@ -1,0 +1,213 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import Icon from '../../components/Icon.astro';
+import { sortProjects } from '../../lib/meta';
+
+const projects = sortProjects(await getCollection('projects'));
+// Big tiles first so the grid packs nicely, then everything else by date.
+const sizeRank = { large: 0, tall: 1, wide: 2, normal: 3 } as const;
+const ordered = [...projects].sort(
+  (a, b) =>
+    Number(b.data.featured) - Number(a.data.featured) ||
+    sizeRank[a.data.size] - sizeRank[b.data.size] ||
+    b.data.date.valueOf() - a.data.date.valueOf(),
+);
+const sprints = [...new Set(projects.map((p) => p.data.sprint))].sort((a, b) => a - b);
+const categories = [...new Set(projects.flatMap((p) => p.data.categories))].sort();
+---
+
+<Base title="Projects" description="Every robot, gadget and build from the club, sprint by sprint.">
+  <PageHeader
+    eyebrow="// the build log"
+    title='Every project. <span class="grad">Every sprint.</span>'
+    sub="Click anything that catches your eye. Each project has its own page with the team, the problem and how it works."
+  />
+
+  <section class="container projects">
+    <div class="filters" role="group" aria-label="Filter projects" data-reveal>
+      <button class="filter" data-filter="all" aria-pressed="true">All</button>
+      {sprints.map((s) => <button class="filter" data-filter={`sprint:${s}`} aria-pressed="false">Sprint {s}</button>)}
+      <span class="filter-sep" aria-hidden="true"></span>
+      {
+        categories.map((c) => (
+          <button class="filter" data-filter={`cat:${c.toLowerCase()}`} aria-pressed="false">
+            {c}
+          </button>
+        ))
+      }
+      <span class="filter-count mono" aria-live="polite" data-count-label>{projects.length} projects</span>
+    </div>
+
+    <div class="bento" data-bento data-reveal-group>
+      {ordered.map((p) => <ProjectCard project={p} />)}
+      <div class="pc-wrap" data-card data-always>
+        <a href="/join/" class="pitch" data-glow>
+          <span class="pitch-icon"><Icon name="plus" size={30} /></span>
+          <div>
+            <h3>Your project could be here.</h3>
+            <p>Pitch an idea at the start of the next sprint.</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { gsap } from 'gsap';
+  import { Flip } from 'gsap/Flip';
+  gsap.registerPlugin(Flip);
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const filters = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-bento] [data-card]'));
+  const label = document.querySelector<HTMLElement>('[data-count-label]')!;
+
+  filters.forEach((btn) =>
+    btn.addEventListener('click', () => {
+      filters.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      const [kind, value] = btn.dataset.filter!.split(':');
+      const state = Flip.getState(cards);
+      let shown = 0;
+      cards.forEach((card) => {
+        if (card.dataset.always !== undefined) return;
+        const show =
+          kind === 'all' ||
+          (kind === 'sprint' && card.dataset.sprint === value) ||
+          (kind === 'cat' && (card.dataset.cats || '').split('|').includes(value!));
+        card.hidden = !show;
+        if (show) shown++;
+      });
+      label.textContent = `${shown} project${shown === 1 ? '' : 's'}`;
+      if (reduced) return;
+      Flip.from(state, {
+        duration: 0.65,
+        ease: 'power3.inOut',
+        scale: true,
+        absolute: true,
+        onEnter: (els) => gsap.fromTo(els, { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.55 }),
+        onLeave: (els) => gsap.to(els, { opacity: 0, scale: 0.85, duration: 0.4 }),
+      });
+    }),
+  );
+</script>
+
+<style>
+  .projects {
+    padding-bottom: clamp(80px, 10vw, 140px);
+  }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+  .filter {
+    padding: 10px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--border-strong);
+    background: rgba(7, 8, 11, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    font-size: 14px;
+    color: var(--muted);
+    transition:
+      color 0.2s,
+      background 0.2s,
+      border-color 0.2s,
+      box-shadow 0.3s;
+  }
+  .filter:hover {
+    color: var(--text);
+    border-color: var(--muted);
+  }
+  .filter[aria-pressed='true'] {
+    background: var(--orange);
+    border-color: var(--orange);
+    color: #160800;
+    font-weight: 600;
+    box-shadow: 0 6px 24px -6px rgba(255, 122, 26, 0.7);
+  }
+  .filter-sep {
+    width: 1px;
+    height: 24px;
+    background: var(--border-strong);
+    margin-inline: 6px;
+  }
+  .filter-count {
+    margin-left: auto;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 270px;
+    grid-auto-flow: dense;
+    gap: 16px;
+  }
+  .pitch {
+    height: 100%;
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 26px;
+    border-radius: var(--radius-lg);
+    border: 1px dashed var(--border-strong);
+    transition: border-color 0.3s;
+  }
+  .pitch:hover {
+    border-color: var(--orange);
+  }
+  .pitch-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--border-strong);
+    color: var(--orange-glow);
+    transition:
+      transform 0.5s var(--ease-out),
+      background 0.3s,
+      color 0.3s;
+  }
+  .pitch:hover .pitch-icon {
+    transform: rotate(90deg);
+    background: var(--orange);
+    color: #160800;
+  }
+  .pitch h3 {
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+  .pitch p {
+    color: var(--muted);
+    font-size: 15px;
+  }
+  @media (max-width: 1000px) {
+    .bento {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 640px) {
+    .bento {
+      grid-template-columns: 1fr;
+      grid-auto-rows: auto;
+    }
+    .filter-count {
+      width: 100%;
+      margin-left: 0;
+    }
+    .filter-sep {
+      display: none;
+    }
+  }
+</style>

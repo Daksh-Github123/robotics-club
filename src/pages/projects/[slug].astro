@@ -1,0 +1,293 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ProjectMedia from '../../components/ProjectMedia.astro';
+import Icon from '../../components/Icon.astro';
+import { formatDate, sortProjects, statusLabel } from '../../lib/meta';
+
+export async function getStaticPaths() {
+  const projects = sortProjects(await getCollection('projects'));
+  return projects.map((project, i) => ({
+    params: { slug: project.id },
+    props: {
+      project,
+      prev: projects[(i - 1 + projects.length) % projects.length],
+      next: projects[(i + 1) % projects.length],
+    },
+  }));
+}
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  prev: CollectionEntry<'projects'>;
+  next: CollectionEntry<'projects'>;
+}
+const { project, prev, next } = Astro.props;
+const d = project.data;
+const { Content } = await render(project);
+---
+
+<Base title={d.title} description={d.tagline}>
+  <article>
+    <header class="container pd-head">
+      <a href="/projects/" class="pd-back"><Icon name="arrowLeft" size={16} /> All projects</a>
+      <div class="pd-meta" data-reveal>
+        <span class={`chip status status-${d.status}`}>{statusLabel[d.status]}</span>
+        <span class="chip">Sprint {d.sprint}</span>
+        <span class="chip"><time datetime={d.date.toISOString()}>{formatDate(d.date)}</time></span>
+        {d.placeholder && <span class="ph-pill">placeholder</span>}
+      </div>
+      <h1 class="display pd-title" data-reveal>{d.title}</h1>
+      <p class="lede" data-reveal>{d.tagline}</p>
+    </header>
+
+    <div class="container">
+      <div class="pd-media" data-reveal>
+        <ProjectMedia project={project} eager />
+      </div>
+    </div>
+
+    <div class="container pd-grid">
+      <aside class="pd-side" data-reveal>
+        {
+          d.team.length > 0 && (
+            <section>
+              <h2 class="pd-label">
+                <Icon name="users" size={16} /> Team
+              </h2>
+              <ul class="pd-team">
+                {d.team.map((n) => (
+                  <li>{n}</li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+        {
+          d.tech.length > 0 && (
+            <section>
+              <h2 class="pd-label">
+                <Icon name="cpu" size={16} /> Built with
+              </h2>
+              <div class="pd-tags">
+                {d.tech.map((t) => (
+                  <span class="tag">{t}</span>
+                ))}
+              </div>
+            </section>
+          )
+        }
+        {
+          d.categories.length > 0 && (
+            <section>
+              <h2 class="pd-label">
+                <Icon name="box" size={16} /> Category
+              </h2>
+              <div class="pd-tags">
+                {d.categories.map((c) => (
+                  <span class="tag">{c}</span>
+                ))}
+              </div>
+            </section>
+          )
+        }
+        {
+          d.links.length > 0 && (
+            <section>
+              <h2 class="pd-label">
+                <Icon name="external" size={16} /> Links
+              </h2>
+              <ul class="pd-links">
+                {d.links.map((l) => (
+                  <li>
+                    <a href={l.url} target="_blank" rel="noopener">
+                      {l.label} <Icon name="external" size={14} />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+      </aside>
+      <div class="prose" data-reveal>
+        <Content />
+      </div>
+    </div>
+
+    {
+      d.gallery.length > 0 && (
+        <section class="container pd-gallery" aria-label="Gallery" data-reveal-group>
+          {d.gallery.map((src, i) => (
+            <img src={src} alt={`${d.title}, photo ${i + 1}`} loading="lazy" decoding="async" />
+          ))}
+        </section>
+      )
+    }
+
+    <nav class="container pd-nav" aria-label="More projects">
+      <a href={`/projects/${prev.id}/`} class="pd-nav-link" data-glow>
+        <span class="mono pd-nav-k"><Icon name="arrowLeft" size={14} /> Previous</span>
+        <span class="pd-nav-t">{prev.data.title}</span>
+      </a>
+      <a href={`/projects/${next.id}/`} class="pd-nav-link pd-nav-next" data-glow>
+        <span class="mono pd-nav-k">Next <Icon name="arrow" size={14} /></span>
+        <span class="pd-nav-t">{next.data.title}</span>
+      </a>
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .pd-head {
+    padding-top: clamp(120px, 15vw, 180px);
+    padding-bottom: clamp(36px, 5vw, 56px);
+  }
+  .pd-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    transition: color 0.2s;
+  }
+  .pd-back:hover {
+    color: var(--orange-glow);
+  }
+  .pd-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  .pd-title {
+    font-size: clamp(40px, 7vw, 100px);
+    margin: 22px 0 20px;
+  }
+  .pd-media {
+    position: relative;
+    aspect-ratio: 16 / 8;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 40px 120px -50px rgba(255, 122, 26, 0.5);
+  }
+  .pd-media :global(.pm-video) {
+    opacity: 1;
+  }
+  .pd-grid {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: clamp(32px, 6vw, 88px);
+    padding-block: clamp(48px, 7vw, 96px);
+  }
+  .pd-side {
+    display: grid;
+    gap: 32px;
+    align-content: start;
+    position: sticky;
+    top: 110px;
+  }
+  .pd-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--orange-glow);
+    margin-bottom: 14px;
+  }
+  .pd-team,
+  .pd-links {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .pd-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text);
+    border-bottom: 1px solid var(--border-strong);
+  }
+  .pd-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .pd-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    padding-bottom: clamp(48px, 7vw, 96px);
+  }
+  .pd-gallery img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+  }
+  .pd-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding-bottom: clamp(80px, 10vw, 130px);
+  }
+  .pd-nav-link {
+    display: grid;
+    gap: 10px;
+    padding: 28px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--surface) 70%, transparent);
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .pd-nav-link:hover {
+    border-color: var(--orange);
+  }
+  .pd-nav-next {
+    text-align: right;
+    --accent: var(--blue);
+  }
+  .pd-nav-k {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .pd-nav-next .pd-nav-k {
+    justify-content: flex-end;
+  }
+  .pd-nav-t {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(18px, 2vw, 26px);
+  }
+  @media (max-width: 860px) {
+    .pd-grid {
+      grid-template-columns: 1fr;
+    }
+    .pd-side {
+      position: static;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+    .pd-media {
+      aspect-ratio: 4 / 3;
+    }
+  }
+  @media (max-width: 560px) {
+    .pd-nav {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

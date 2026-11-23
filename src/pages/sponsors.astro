@@ -1,0 +1,179 @@
+---
+/**
+ * Sponsors page. Hidden from the nav (and from search engines) until
+ * `features.showSponsors` is set to true in src/site.config.ts.
+ * Add sponsors to the `sponsors` list below as they come in.
+ */
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../site.config';
+
+const sponsors: { name: string; logo?: string; url?: string; tier?: string }[] = [
+  // { name: 'Local Hardware Store', logo: '/media/sponsors/hardware.png', url: 'https://…', tier: 'Gold' },
+];
+
+const uses = [
+  { icon: 'cpu', title: 'Parts & electronics', text: 'Microcontrollers, motors, sensors and batteries for every sprint team.' },
+  { icon: 'trophy', title: 'Competition fees', text: 'Registration and travel so school teams can actually compete.' },
+  { icon: 'wrench', title: 'Tools & 3D printing', text: 'Filament, soldering stations and the tools that turn ideas into robots.' },
+];
+const contact = site.socials.email ? `mailto:${site.socials.email}` : '/join/#contacts';
+---
+
+<Base
+  title="Sponsors"
+  description="Support student-built robotics at our school."
+  noindex={!site.features.showSponsors}
+>
+  <PageHeader
+    eyebrow="// sponsors & funding"
+    title='Fuel the <span class="grad">next build.</span>'
+    sub="Every dollar goes straight into parts, tools and competition entries for students building real robots."
+  >
+    <a href={contact} class="btn btn-primary header-cta" data-magnetic>Become a sponsor <Icon name="arrow" size={18} /></a>
+  </PageHeader>
+
+  <section class="container">
+    <div class="uses" data-reveal-group>
+      {
+        uses.map((u) => (
+          <div class="use" data-glow>
+            <span class="use-icon">
+              <Icon name={u.icon} size={26} />
+            </span>
+            <h3>{u.title}</h3>
+            <p>{u.text}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section container">
+    <SectionHeading eyebrow="// thank you" title='Our <span class="grad">supporters</span>' />
+    {
+      sponsors.length > 0 ? (
+        <ul class="logos" data-reveal-group>
+          {sponsors.map((s) => (
+            <li>
+              <a href={s.url} target="_blank" rel="noopener" class="logo-card">
+                {s.logo ? <img src={s.logo} alt={s.name} /> : <span>{s.name}</span>}
+                {s.tier && <span class="chip">{s.tier}</span>}
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <a href={contact} class="empty" data-reveal data-glow>
+          <span class="empty-icon">
+            <Icon name="plus" size={30} />
+          </span>
+          <span>
+            <strong>Be our first sponsor.</strong>
+            <span class="muted">Your logo here, on every project page and at every showcase.</span>
+          </span>
+        </a>
+      )
+    }
+  </section>
+</Base>
+
+<style>
+  .header-cta {
+    margin-top: 32px;
+  }
+  .uses {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .use {
+    display: grid;
+    gap: 14px;
+    align-content: start;
+    padding: clamp(26px, 3vw, 36px);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--surface) 72%, transparent);
+    overflow: hidden;
+  }
+  .use-icon {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    border-radius: 18px;
+    color: var(--green);
+    background: rgba(61, 220, 151, 0.1);
+    border: 1px solid rgba(61, 220, 151, 0.3);
+  }
+  .use h3 {
+    font-size: 24px;
+  }
+  .use p {
+    color: var(--muted);
+  }
+  .logos {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    margin-top: 40px;
+  }
+  .logo-card {
+    display: grid;
+    place-items: center;
+    gap: 12px;
+    min-height: 160px;
+    padding: 24px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--surface) 72%, transparent);
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+  .logo-card img {
+    max-height: 64px;
+    width: auto;
+  }
+  .empty {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-top: 40px;
+    padding: clamp(28px, 4vw, 48px);
+    border-radius: var(--radius-lg);
+    border: 1px dashed var(--border-strong);
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .empty:hover {
+    border-color: var(--green);
+  }
+  .empty > span:last-child {
+    display: grid;
+    gap: 6px;
+  }
+  .empty strong {
+    font-family: var(--font-display);
+    font-size: clamp(22px, 3vw, 34px);
+  }
+  .empty-icon {
+    flex-shrink: 0;
+    width: 70px;
+    height: 70px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--green);
+    color: #04140c;
+  }
+  @media (max-width: 900px) {
+    .uses {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

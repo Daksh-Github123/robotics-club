@@ -1,0 +1,86 @@
+---
+/**
+ * Fixed full-screen background: liquid cursor simulation on top of a
+ * static gradient fallback (shown when WebGL2 is unavailable or the
+ * visitor prefers reduced motion).
+ */
+---
+
+<div class="bg-layer" aria-hidden="true">
+  <div class="bg-fallback">
+    <span class="blob b1"></span>
+    <span class="blob b2"></span>
+  </div>
+  <canvas class="fluid" data-fluid></canvas>
+  <div class="bg-grid"></div>
+</div>
+
+<script>
+  import { initFluid } from '../scripts/fluid';
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-fluid]');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (canvas && !reduced) {
+    try {
+      if (initFluid(canvas)) document.documentElement.classList.add('has-fluid');
+    } catch (err) {
+      console.warn('Liquid background disabled:', err);
+    }
+  }
+</script>
+
+<style>
+  .bg-layer {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: var(--bg);
+    overflow: hidden;
+  }
+  .fluid {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1.4s;
+  }
+  :global(.has-fluid) .fluid {
+    opacity: 1;
+  }
+  .blob {
+    position: absolute;
+    width: 60vmax;
+    height: 60vmax;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.22;
+    animation: drift 22s ease-in-out infinite alternate;
+  }
+  .b1 {
+    background: radial-gradient(circle, var(--orange), transparent 65%);
+    left: -15vmax;
+    top: -20vmax;
+  }
+  .b2 {
+    background: radial-gradient(circle, var(--blue), transparent 65%);
+    right: -20vmax;
+    bottom: -25vmax;
+    animation-delay: -11s;
+  }
+  .bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 30%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 30%, transparent 100%);
+  }
+  @keyframes drift {
+    to {
+      transform: translate(12vmax, 10vmax) scale(1.15);
+    }
+  }
+</style>

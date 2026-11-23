@@ -1,0 +1,122 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import MemberCard from '../components/MemberCard.astro';
+import Icon from '../components/Icon.astro';
+import { sortMembers } from '../lib/meta';
+
+const all = sortMembers(await getCollection('members'));
+const founders = all.filter((m) => m.data.founder && m.data.status === 'current');
+const current = all.filter((m) => m.data.status === 'current' && !m.data.founder);
+const alumni = all
+  .filter((m) => m.data.status === 'alumni')
+  .sort((a, b) => (b.data.gradYear ?? 0) - (a.data.gradYear ?? 0) || a.data.order - b.data.order);
+const alumniFounders = alumni.filter((m) => m.data.founder);
+---
+
+<Base title="Team" description="The students who run the club, and the alumni who built it.">
+  <PageHeader
+    eyebrow="// the crew"
+    title='The people behind <span class="grad">the bots.</span>'
+    sub="The students running the club right now, and the alumni who built it before them."
+  />
+
+  <section class="container team">
+    {
+      founders.length > 0 && (
+        <div class="founders" data-reveal>
+          {founders.map((m) => (
+            <MemberCard member={m} big />
+          ))}
+        </div>
+      )
+    }
+
+    {
+      current.length > 0 && (
+        <div class="block">
+          <SectionHeading eyebrow="// current leads" title="Running the club" />
+          <div class="grid" data-reveal-group>
+            {current.map((m) => (
+              <MemberCard member={m} />
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    <div class="block">
+      <SectionHeading
+        eyebrow="// hall of alumni"
+        title='Graduated, <span class="grad">not forgotten.</span>'
+        sub="Past members who helped build the club. Many are happy to answer questions about competitions and college."
+      />
+      {
+        alumni.length > 0 ? (
+          <div class="grid" data-reveal-group>
+            {[...alumniFounders, ...alumni.filter((m) => !m.data.founder)].map((m) => (
+              <MemberCard member={m} />
+            ))}
+          </div>
+        ) : (
+          <p class="muted empty">No alumni yet. Our first class graduates soon.</p>
+        )
+      }
+    </div>
+
+    <a href="/join/" class="join-strip" data-glow data-reveal>
+      <span>
+        <span class="mono eyebrow">// open roles</span>
+        <strong>Want your face on this page?</strong>
+      </span>
+      <span class="btn btn-primary">Join the club <Icon name="arrow" size={18} /></span>
+    </a>
+  </section>
+</Base>
+
+<style>
+  .team {
+    padding-bottom: clamp(80px, 10vw, 140px);
+    display: grid;
+    gap: clamp(72px, 9vw, 120px);
+  }
+  .founders {
+    display: grid;
+    gap: 16px;
+  }
+  .block {
+    display: grid;
+    gap: clamp(32px, 4vw, 48px);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .empty {
+    font-size: 17px;
+  }
+  .join-strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: clamp(28px, 4vw, 44px);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--surface) 70%, transparent);
+    overflow: hidden;
+  }
+  .join-strip > span:first-child {
+    display: grid;
+    gap: 8px;
+  }
+  .join-strip strong {
+    font-family: var(--font-display);
+    font-size: clamp(24px, 3vw, 38px);
+    line-height: 1.1;
+  }
+</style>

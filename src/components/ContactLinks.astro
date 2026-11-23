@@ -1,0 +1,76 @@
+---
+/** Small contact chips for a member (email / Instagram / Discord / LinkedIn). */
+import type { CollectionEntry } from 'astro:content';
+import Icon from './Icon.astro';
+
+interface Props {
+  member: CollectionEntry<'members'>;
+}
+const c = Astro.props.member.data.contact ?? {};
+const handle = (s: string) => s.replace(/^@/, '');
+const items = [
+  c.email && { href: `mailto:${c.email}`, icon: 'mail', label: c.email },
+  c.instagram && {
+    href: c.instagram.startsWith('http') ? c.instagram : `https://instagram.com/${handle(c.instagram)}`,
+    icon: 'instagram',
+    label: `@${handle(c.instagram.replace(/^https?:\/\/(www\.)?instagram\.com\//, '').replace(/\/$/, ''))}`,
+  },
+  c.discord && { href: '', icon: 'chat', label: `Discord: ${c.discord}` },
+  c.linkedin && { href: c.linkedin, icon: 'linkedin', label: 'LinkedIn' },
+].filter(Boolean) as { href: string; icon: string; label: string }[];
+---
+
+{
+  items.length > 0 && (
+    <ul class="cl">
+      {items.map((i) => (
+        <li>
+          {i.href ? (
+            <a href={i.href} target={i.href.startsWith('http') ? '_blank' : undefined} rel="noopener">
+              <Icon name={i.icon} size={15} />
+              {i.label}
+            </a>
+          ) : (
+            <span>
+              <Icon name={i.icon} size={15} />
+              {i.label}
+            </span>
+          )}
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<style>
+  .cl {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .cl a,
+  .cl span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    padding: 6px 11px;
+    border-radius: 999px;
+    border: 1px solid var(--border-strong);
+    color: var(--muted);
+    word-break: break-all;
+    transition:
+      color 0.2s,
+      border-color 0.2s;
+  }
+  .cl a:hover {
+    color: var(--text);
+    border-color: var(--orange);
+  }
+  .cl :global(svg) {
+    flex-shrink: 0;
+    color: var(--orange-glow);
+  }
+</style>

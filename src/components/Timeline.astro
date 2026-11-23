@@ -1,0 +1,268 @@
+---
+/**
+ * Scroll-driven timeline. The glowing line draws itself as you scroll
+ * and each milestone lights up when the line reaches it.
+ * Milestones come from src/content/milestones/*.md (oldest first).
+ */
+import type { CollectionEntry } from 'astro:content';
+import Icon from './Icon.astro';
+import { milestoneMeta, formatDate } from '../lib/meta';
+
+interface Props {
+  milestones: CollectionEntry<'milestones'>[];
+}
+const { milestones } = Astro.props;
+const now = new Date();
+const nextSide = milestones.length % 2 ? 'is-right' : 'is-left';
+---
+
+<div class="tl" data-timeline>
+  <div class="tl-rail" aria-hidden="true"><div class="tl-progress" data-tl-progress></div></div>
+  <ol class="tl-list">
+    {
+      milestones.map((m, i) => {
+        const meta = milestoneMeta[m.data.type];
+        const upcoming = m.data.date > now;
+        return (
+          <li
+            class:list={['tl-item', i % 2 ? 'is-right' : 'is-left', { upcoming }]}
+            data-tl-item
+            style={`--accent: var(${meta.color})`}
+          >
+            <div class="tl-node" aria-hidden="true">
+              <Icon name={meta.icon} size={18} />
+            </div>
+            <article class="tl-card">
+              <div class="tl-meta">
+                <time datetime={m.data.date.toISOString()}>{formatDate(m.data.date)}</time>
+                <span class="tl-type">
+                  {upcoming ? 'Upcoming · ' : ''}
+                  {meta.label}
+                </span>
+              </div>
+              <h3>{m.data.title}</h3>
+              <p>{m.data.summary}</p>
+              {m.data.placeholder && <span class="ph-pill">placeholder date</span>}
+            </article>
+          </li>
+        );
+      })
+    }
+    <li class:list={['tl-item', 'tl-next', nextSide]} data-tl-item style="--accent: var(--faint)">
+      <div class="tl-node" aria-hidden="true"><Icon name="plus" size={18} /></div>
+      <article class="tl-card">
+        <div class="tl-meta"><span class="tl-type">Next milestone · loading</span></div>
+        <h3>What's next?</h3>
+        <p>First funding. First competition. First project deployed across the school. You could be part of the next one.</p>
+      </article>
+    </li>
+  </ol>
+</div>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  const tl = document.querySelector<HTMLElement>('[data-timeline]');
+  if (tl) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const items = tl.querySelectorAll<HTMLElement>('[data-tl-item]');
+    const progress = tl.querySelector<HTMLElement>('[data-tl-progress]')!;
+
+    if (reduced) {
+      progress.style.transform = 'none';
+      items.forEach((i) => i.classList.add('is-lit'));
+    } else {
+      gsap.fromTo(
+        progress,
+        { scaleY: 0 },
+        {
+          scaleY: 1,
+          ease: 'none',
+          scrollTrigger: { trigger: tl, start: 'top 62%', end: 'bottom 62%', scrub: 0.6 },
+        },
+      );
+      items.forEach((item) => {
+        const card = item.querySelector('.tl-card');
+        const fromRight = item.classList.contains('is-right') || window.innerWidth < 760;
+        gsap.fromTo(
+          card,
+          { opacity: 0, x: fromRight ? 70 : -70, rotateY: fromRight ? -14 : 14 },
+          {
+            opacity: 1,
+            x: 0,
+            rotateY: 0,
+            duration: 1,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: item, start: 'top 82%', once: true },
+          },
+        );
+        ScrollTrigger.create({
+          trigger: item,
+          start: 'center 62%',
+          onEnter: () => item.classList.add('is-lit'),
+          onLeaveBack: () => item.classList.remove('is-lit'),
+        });
+      });
+    }
+  }
+</script>
+
+<style>
+  .tl {
+    position: relative;
+    max-width: 1040px;
+    margin: clamp(56px, 7vw, 90px) auto 0;
+    perspective: 1200px;
+  }
+  .tl-rail {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    translate: -50% 0;
+    background: var(--border);
+    border-radius: 2px;
+  }
+  .tl-progress {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(180deg, var(--orange), var(--orange-glow) 40%, var(--blue-glow) 75%, var(--blue));
+    box-shadow:
+      0 0 14px 1px rgba(255, 122, 26, 0.6),
+      0 0 40px 2px rgba(47, 123, 255, 0.25);
+    transform-origin: top;
+    transform: scaleY(0);
+  }
+  :global(html:not(.js)) .tl-progress {
+    transform: none;
+  }
+  .tl-list {
+    list-style: none;
+    padding: 0;
+  }
+  .tl-item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 72px 1fr;
+    align-items: center;
+    padding-block: 22px;
+  }
+  .tl-node {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: center;
+    position: relative;
+    z-index: 1;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    color: var(--faint);
+    transition:
+      background 0.5s,
+      color 0.5s,
+      box-shadow 0.5s,
+      transform 0.5s var(--ease-out);
+  }
+  .tl-item.is-lit .tl-node {
+    color: #fff;
+    background: var(--accent);
+    border-color: transparent;
+    transform: scale(1.12);
+    box-shadow:
+      0 0 0 7px color-mix(in srgb, var(--accent) 22%, transparent),
+      0 0 36px 4px color-mix(in srgb, var(--accent) 70%, transparent);
+  }
+  .tl-card {
+    grid-row: 1;
+    position: relative;
+    padding: 24px 26px;
+    border-radius: var(--radius);
+    background: color-mix(in srgb, var(--surface) 72%, transparent);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition:
+      border-color 0.5s,
+      box-shadow 0.5s;
+  }
+  .is-left .tl-card {
+    grid-column: 1;
+    text-align: right;
+  }
+  .is-right .tl-card {
+    grid-column: 3;
+  }
+  .tl-item.is-lit .tl-card {
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+    box-shadow: 0 20px 60px -30px color-mix(in srgb, var(--accent) 80%, transparent);
+  }
+  .tl-meta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .is-left .tl-meta {
+    justify-content: flex-end;
+  }
+  .tl-type {
+    color: var(--accent);
+  }
+  .tl-card h3 {
+    font-size: clamp(20px, 2.2vw, 26px);
+    margin-bottom: 8px;
+  }
+  .tl-card p {
+    color: var(--muted);
+    font-size: 15.5px;
+  }
+  .tl-card .ph-pill {
+    margin-top: 12px;
+  }
+  .upcoming .tl-card,
+  .tl-next .tl-card {
+    border-style: dashed;
+    background: transparent;
+  }
+  .tl-next .tl-node {
+    border-style: dashed;
+  }
+
+  @media (max-width: 760px) {
+    .tl-rail {
+      left: 23px;
+      translate: 0 0;
+    }
+    .tl-item {
+      grid-template-columns: 48px 1fr;
+      column-gap: 14px;
+    }
+    .tl-node {
+      grid-column: 1;
+    }
+    .is-left .tl-card,
+    .is-right .tl-card {
+      grid-column: 2;
+      text-align: left;
+    }
+    .is-left .tl-meta {
+      justify-content: flex-start;
+    }
+    .tl-card {
+      padding: 20px;
+    }
+  }
+</style>

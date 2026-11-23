@@ -1,0 +1,793 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Timeline from '../components/Timeline.astro';
+import HorizontalGallery from '../components/HorizontalGallery.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import SpinBadge from '../components/SpinBadge.astro';
+import Marquee from '../components/Marquee.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../site.config';
+import { sortMilestones, sortProjects } from '../lib/meta';
+
+const milestones = sortMilestones(await getCollection('milestones'));
+const projects = sortProjects(await getCollection('projects'));
+const members = await getCollection('members');
+const featured = projects.filter((p) => p.data.featured);
+const strip = (featured.length >= 3 ? featured : projects).slice(0, 8);
+
+const stats = [
+  { n: projects.length, label: 'Projects built' },
+  { n: members.filter((m) => m.data.status === 'current').length, label: 'Core members' },
+  { n: milestones.filter((m) => m.data.type === 'sprint').length, label: 'Sprints run' },
+  { n: milestones.filter((m) => m.data.type === 'showcase').length, label: 'Showcases' },
+];
+
+/* Hero headline: each letter is its own span so it can animate in. */
+const lines = ['BUILD.', 'CODE.', 'COMPETE.'];
+const stops = [
+  [255, 122, 26],
+  [255, 179, 107],
+  [95, 160, 255],
+];
+function gradColor(t: number) {
+  const seg = t < 0.5 ? 0 : 1;
+  const k = (t - seg * 0.5) * 2;
+  const [a, b] = [stops[seg]!, stops[seg + 1]!];
+  return `rgb(${a.map((v, i) => Math.round(v + (b[i]! - v) * k)).join(',')})`;
+}
+
+const doCards = [
+  {
+    icon: 'wrench',
+    accent: '--orange',
+    title: 'Build real robots',
+    text: 'From first sketch to working prototype. CAD, 3D printing, wiring, code. Every sprint ends with something that moves.',
+  },
+  {
+    icon: 'school',
+    accent: '--green',
+    title: 'Ship it into school',
+    text: 'The best builds get deployed around campus. Your project, used by real people every single day.',
+  },
+  {
+    icon: 'trophy',
+    accent: '--yellow',
+    title: 'Compete',
+    text: "Club members get a direct pathway onto the school's robotics competition teams. No cold tryouts.",
+  },
+  {
+    icon: 'cpu',
+    accent: '--blue',
+    title: 'Learn the whole stack',
+    text: 'Microcontrollers, sensors, motors, machine learning. Learn by doing, with members who have been there.',
+  },
+];
+
+const why = [
+  {
+    title: 'A portfolio that proves it',
+    text: 'Every project gets its own page on this site: your name, your role, what you built and how it works. Drop the link straight into college applications.',
+  },
+  {
+    title: 'Fast track to school teams',
+    text: "Being in the club is your way onto the school's robotics competition teams. Show up, build, and you're in the pool.",
+  },
+  {
+    title: 'Advice for outside competitions',
+    text: "Want to enter something the school doesn't? Members and alumni who've competed will help you apply, team up and prepare.",
+  },
+  {
+    title: 'Ideas that get implemented',
+    text: "Pitch a fix for a real problem at school, build it with a team, and watch it get installed. That's a story worth telling.",
+  },
+];
+
+const steps = [
+  { k: '01', title: 'Pitch', text: 'Each sprint kicks off with pitches. Bring your own idea or a problem the school needs solved. Teams form around the best.' },
+  { k: '02', title: 'Build', text: 'Design it, print it, wire it, code it. Weekly sessions with experienced members on hand to help.' },
+  { k: '03', title: 'Break & fix', text: "Test it until it fails, then make it better. Real engineering is mostly debugging, and that's the fun part." },
+  { k: '04', title: 'Showcase', text: 'Demo to the whole school at the end-of-sprint showcase. Standout builds get deployed on campus.' },
+];
+
+function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
+  let d = '';
+  const s = (Math.PI * 2) / n;
+  for (let i = 0; i < n; i++) {
+    const t0 = i * s;
+    (
+      [
+        [ri, t0],
+        [ro, t0 + s * 0.16],
+        [ro, t0 + s * 0.44],
+        [ri, t0 + s * 0.6],
+      ] as [number, number][]
+    ).forEach(([r, t], j) => {
+      d += `${i === 0 && j === 0 ? 'M' : 'L'}${(cx + Math.cos(t) * r).toFixed(1)} ${(cy + Math.sin(t) * r).toFixed(1)} `;
+    });
+  }
+  return d + 'Z';
+}
+---
+
+<Base>
+  <!-- ═════════ HERO ═════════ -->
+  <section class="hero" data-hero>
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow" data-hero-fade>// {site.school} · est. {site.founded}</p>
+        <h1 class="hero-title" aria-label={`${lines.join(' ')} ${site.name}.`}>
+          {
+            lines.map((line, li) => (
+              <span class="line" aria-hidden="true">
+                {[...line].map((ch, ci) => (
+                  <span
+                    class="ch"
+                    style={li === lines.length - 1 ? `color:${gradColor(ci / (line.length - 1))}` : undefined}
+                  >
+                    {ch}
+                  </span>
+                ))}
+              </span>
+            ))
+          }
+        </h1>
+        <p class="lede hero-lede" data-hero-fade>
+          <strong>{site.name}</strong> is where students design, build and ship real robots: into our school and onto
+          competition fields.
+        </p>
+        <div class="hero-cta" data-hero-fade>
+          <a href="/projects/" class="btn btn-primary" data-magnetic>Explore projects <Icon name="arrow" size={18} /></a>
+          <a href="#journey" class="btn btn-ghost" data-magnetic>Our journey</a>
+        </div>
+      </div>
+
+      <div class="hero-visual" data-hero-visual>
+        <div class="hero-glow"></div>
+        <svg class="hero-fallback" viewBox="0 0 400 400" aria-hidden="true">
+          <g fill="none" stroke-width="2" stroke-linejoin="round">
+            <path d={gear(185, 210, 120, 98, 14)} stroke="#FF7A1A"></path>
+            <circle cx="185" cy="210" r="30" stroke="#FF7A1A"></circle>
+            <path d={gear(305, 110, 76, 60, 9)} stroke="#2F7BFF"></path>
+            <circle cx="200" cy="200" r="190" stroke="#2F7BFF" stroke-opacity=".25" stroke-dasharray="4 10"></circle>
+          </g>
+        </svg>
+        <canvas data-hero3d aria-hidden="true"></canvas>
+      </div>
+    </div>
+    <div class="hero-badge" data-hero-fade>
+      <SpinBadge href="#journey" label="Scroll to our journey" text="SCROLL ✦ BUILD ✦ CODE ✦ COMPETE ✦ " />
+    </div>
+  </section>
+
+  <!-- ═════════ STATS + TICKER ═════════ -->
+  <section class="stats-wrap" aria-label="Club in numbers">
+    <div class="container">
+      <dl class="stats" data-reveal-group>
+        {
+          stats.map((s) => (
+            <div class="stat">
+              <dt class="stat-l">{s.label}</dt>
+              <dd class="stat-n" data-count={s.n}>
+                {s.n}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+    <Marquee words={['BUILD', 'CODE', 'SOLDER', 'COMPETE', 'SHIP', 'REPEAT']} />
+  </section>
+
+  <!-- ═════════ TIMELINE ═════════ -->
+  <section class="section" id="journey">
+    <div class="container">
+      <SectionHeading
+        eyebrow="// the journey so far"
+        title='From an empty room to <span class="grad">real robots.</span>'
+        sub="Every sprint, showcase and first along the way. Scroll to watch it unfold."
+        align="center"
+      />
+    </div>
+    <div class="container">
+      <Timeline milestones={milestones} />
+    </div>
+  </section>
+
+  <!-- ═════════ PROJECT STRIP ═════════ -->
+  <HorizontalGallery projects={strip} />
+
+  <!-- ═════════ WHAT YOU'LL DO ═════════ -->
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="// what you'll do"
+        title='Less lecture. <span class="grad">More building.</span>'
+        sub="No experience needed. Just curiosity and a willingness to break things (then fix them)."
+      />
+      <div class="do-grid" data-reveal-group>
+        {
+          doCards.map((c, i) => (
+            <article class="do-card" data-glow style={`--accent: var(${c.accent})`}>
+              <span class="do-k" aria-hidden="true">
+                0{i + 1}
+              </span>
+              <span class="do-icon">
+                <Icon name={c.icon} size={26} />
+              </span>
+              <div>
+                <h3>{c.title}</h3>
+                <p>{c.text}</p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ WHY JOIN ═════════ -->
+  <section class="section why-section">
+    <div class="container why">
+      <div class="why-sticky">
+        <p class="eyebrow" data-reveal>// why join</p>
+        <h2 class="h2" data-reveal>More than a line on your <span class="grad">college app.</span></h2>
+        <p class="lede" data-reveal>
+          Colleges want to see what you've actually done. Here, you'll have the projects, the role and the receipts.
+        </p>
+        <a href="/join/" class="btn btn-primary" data-reveal data-magnetic>How to join <Icon name="arrow" size={18} /></a>
+      </div>
+      <ol class="why-list">
+        {
+          why.map((w, i) => (
+            <li class="why-item" data-reveal>
+              <span class="why-k mono">0{i + 1}</span>
+              <div>
+                <h3>{w.title}</h3>
+                <p>{w.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- ═════════ HOW A SPRINT WORKS ═════════ -->
+  <section class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="// what to expect"
+        title='How a <span class="grad">sprint</span> works'
+        sub={`The club runs in build sprints (${site.sprintLength}). Here's the loop.`}
+      />
+      <div class="steps" data-steps>
+        <div class="steps-line" aria-hidden="true"><span data-steps-line></span></div>
+        {
+          steps.map((s) => (
+            <div class="step" data-reveal>
+              <span class="step-dot mono">{s.k}</span>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ CTA ═════════ -->
+  <section class="cta">
+    <div class="cta-ring" aria-hidden="true"></div>
+    <div class="cta-ring cta-ring-2" aria-hidden="true"></div>
+    <div class="container cta-inner">
+      <p class="eyebrow" data-reveal>// your move</p>
+      <h2 data-reveal>Ready to build<br /><span class="grad">something real?</span></h2>
+      <p class="lede" data-reveal>{site.applyInfo}</p>
+      <div class="cta-actions" data-reveal>
+        <a href="/join/" class="btn btn-primary" data-magnetic>How to join <Icon name="arrow" size={18} /></a>
+        <a href="/team/" class="btn btn-ghost" data-magnetic>Meet the team</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script is:inline>
+  // Hide the hero headline until its intro animation is ready (with a safety timeout).
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('hero-pending');
+    setTimeout(() => document.documentElement.classList.remove('hero-pending'), 2500);
+  }
+</script>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { reducedMotion } from '../scripts/motion';
+  gsap.registerPlugin(ScrollTrigger);
+
+  const hero = document.querySelector<HTMLElement>('[data-hero]');
+  if (hero && !reducedMotion) {
+    const chars = hero.querySelectorAll('.ch');
+    const fades = hero.querySelectorAll('[data-hero-fade]');
+    const visual = hero.querySelector('[data-hero-visual]');
+    // y: 0 clears the pixel offset GSAP would otherwise inherit from the .hero-pending CSS.
+    gsap.set(chars, { y: 0, yPercent: 115, rotate: 8 });
+    gsap.set(fades, { y: 26, opacity: 0 });
+    gsap.set(visual, { scale: 0.75, opacity: 0 });
+    document.documentElement.classList.remove('hero-pending');
+
+    gsap
+      .timeline({ defaults: { ease: 'expo.out' }, delay: 0.1 })
+      .to(chars, { yPercent: 0, rotate: 0, duration: 1.2, stagger: 0.028 })
+      .to(visual, { scale: 1, opacity: 1, duration: 1.6 }, 0.15)
+      .to(fades, { y: 0, opacity: 1, duration: 1, stagger: 0.08 }, 0.45);
+
+    // Hero drifts away as you scroll past it
+    gsap.to('.hero-copy', {
+      yPercent: -14,
+      opacity: 0.15,
+      ease: 'none',
+      scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true },
+    });
+    gsap.to(visual, {
+      yPercent: 18,
+      ease: 'none',
+      scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true },
+    });
+
+    // Sprint steps connector line
+    const line = document.querySelector('[data-steps-line]');
+    if (line) {
+      gsap.fromTo(
+        line,
+        { scaleX: 0 },
+        {
+          scaleX: 1,
+          ease: 'none',
+          scrollTrigger: { trigger: '[data-steps]', start: 'top 75%', end: 'bottom 60%', scrub: 0.6 },
+        },
+      );
+    }
+
+    // Load the 3D gear once the page is idle
+    const canvas = document.querySelector<HTMLCanvasElement>('[data-hero3d]');
+    if (canvas) {
+      const go = () => import('../scripts/hero3d').then((m) => m.initHero3D(canvas));
+      if ('requestIdleCallback' in window) window.requestIdleCallback(go, { timeout: 1200 });
+      else setTimeout(go, 400);
+    }
+  } else {
+    document.querySelector<HTMLElement>('[data-steps-line]')?.style.setProperty('transform', 'none');
+  }
+</script>
+
+<style>
+  /* ── Hero ── */
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: grid;
+    align-items: center;
+    padding-top: 110px;
+    padding-bottom: 80px;
+    isolation: isolate;
+    overflow-x: clip;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 32px;
+    align-items: center;
+  }
+  .hero-copy {
+    container-type: inline-size;
+  }
+  .hero-title {
+    /* Sized from the column width so the longest word ("COMPETE.") always fits on one line. */
+    font-size: min(14.6cqi, 132px);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.045em;
+    margin: 22px 0 30px;
+  }
+  .hero-title .line {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    padding-block: 0.1em 0.04em;
+    margin-block: -0.07em;
+  }
+  .hero-title .ch {
+    display: inline-block;
+    will-change: transform;
+  }
+  :global(.hero-pending) .hero-title .ch {
+    transform: translateY(115%);
+  }
+  :global(.hero-pending) [data-hero-fade],
+  :global(.hero-pending) .hero-visual {
+    opacity: 0;
+  }
+  .hero-lede strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .hero-cta {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 36px;
+  }
+  .hero-visual {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+    aspect-ratio: 1;
+    justify-self: end;
+  }
+  .hero-visual canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .hero-glow {
+    position: absolute;
+    inset: 18%;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 40% 40%, rgba(255, 122, 26, 0.35), transparent 60%),
+      radial-gradient(circle at 65% 65%, rgba(47, 123, 255, 0.3), transparent 60%);
+    filter: blur(50px);
+  }
+  .hero-fallback {
+    position: absolute;
+    inset: 8%;
+    width: 84%;
+    height: 84%;
+    opacity: 0.85;
+    transition: opacity 0.8s;
+    animation: spin 40s linear infinite;
+  }
+  .hero-visual:global(.has-3d) .hero-fallback {
+    opacity: 0;
+  }
+  .hero-badge {
+    position: absolute;
+    right: var(--gutter);
+    bottom: 32px;
+  }
+
+  /* ── Stats ── */
+  .stats-wrap {
+    padding-block: 40px 20px;
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin: 0 0 clamp(40px, 6vw, 72px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--surface) 55%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    overflow: hidden;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 6px;
+    padding: clamp(24px, 3vw, 40px);
+    border-right: 1px solid var(--border);
+  }
+  .stat:last-child {
+    border-right: 0;
+  }
+  .stat-n {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(44px, 5.6vw, 84px);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .stat-l {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── What you'll do ── */
+  .do-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+    margin-top: clamp(40px, 5vw, 64px);
+  }
+  .do-card {
+    grid-column: span 6;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 40px;
+    min-height: 300px;
+    padding: clamp(26px, 3vw, 38px);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--surface) 75%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    overflow: hidden;
+    transition:
+      border-color 0.4s,
+      transform 0.5s var(--ease-out);
+  }
+  .do-card:nth-child(1),
+  .do-card:nth-child(4) {
+    grid-column: span 7;
+  }
+  .do-card:nth-child(2),
+  .do-card:nth-child(3) {
+    grid-column: span 5;
+  }
+  .do-card:hover {
+    border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+    transform: translateY(-4px);
+  }
+  .do-k {
+    position: absolute;
+    right: 22px;
+    top: 6px;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(80px, 10vw, 140px);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--border-strong);
+    transition: -webkit-text-stroke-color 0.4s;
+    z-index: -1;
+  }
+  .do-card:hover .do-k {
+    -webkit-text-stroke-color: color-mix(in srgb, var(--accent) 60%, transparent);
+  }
+  .do-icon {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    border-radius: 18px;
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    box-shadow: 0 0 30px -10px var(--accent);
+  }
+  .do-card h3 {
+    font-size: clamp(24px, 2.6vw, 34px);
+    margin-bottom: 12px;
+  }
+  .do-card p {
+    color: var(--muted);
+    max-width: 46ch;
+  }
+
+  /* ── Why join ── */
+  .why {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(40px, 6vw, 96px);
+    align-items: start;
+  }
+  .why-sticky {
+    position: sticky;
+    top: 120px;
+    display: grid;
+    gap: 22px;
+    justify-items: start;
+  }
+  .why-list {
+    list-style: none;
+    padding: 0;
+    border-top: 1px solid var(--border);
+  }
+  .why-item {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 16px;
+    padding: clamp(28px, 3.5vw, 44px) 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .why-k {
+    font-size: 14px;
+    color: var(--faint);
+    padding-top: 8px;
+    transition: color 0.3s;
+  }
+  .why-item:hover .why-k {
+    color: var(--orange);
+  }
+  .why-item h3 {
+    font-size: clamp(22px, 2.4vw, 32px);
+    margin-bottom: 12px;
+    transition: transform 0.4s var(--ease-out);
+  }
+  .why-item:hover h3 {
+    transform: translateX(8px);
+  }
+  .why-item p {
+    color: var(--muted);
+  }
+
+  /* ── Sprint steps ── */
+  .steps {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+    margin-top: clamp(48px, 6vw, 80px);
+  }
+  .steps-line {
+    position: absolute;
+    top: 29px;
+    left: 30px;
+    right: 30px;
+    height: 2px;
+    background: var(--border);
+  }
+  .steps-line span {
+    display: block;
+    height: 100%;
+    background: var(--grad);
+    box-shadow: 0 0 16px rgba(255, 122, 26, 0.6);
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+  .step-dot {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+    font-weight: 600;
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    color: var(--orange-glow);
+  }
+  .step h3 {
+    font-size: 24px;
+    margin: 24px 0 10px;
+  }
+  .step p {
+    color: var(--muted);
+    font-size: 15.5px;
+  }
+
+  /* ── CTA ── */
+  .cta {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    text-align: center;
+    padding-block: clamp(110px, 16vw, 210px);
+  }
+  .cta-inner {
+    display: grid;
+    gap: 24px;
+    justify-items: center;
+  }
+  .cta h2 {
+    font-size: clamp(44px, 8.5vw, 132px);
+    font-weight: 900;
+    line-height: 0.93;
+    letter-spacing: -0.045em;
+  }
+  .cta .lede {
+    max-width: 52ch;
+  }
+  .cta-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  .cta-ring {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: -1;
+    width: min(980px, 150vw);
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    border-radius: 50%;
+    border: 1px dashed var(--border-strong);
+    animation: spin 70s linear infinite;
+  }
+  .cta-ring::before {
+    content: '';
+    position: absolute;
+    inset: 12%;
+    border-radius: 50%;
+    background: conic-gradient(
+      from 0deg,
+      transparent,
+      rgba(255, 122, 26, 0.3),
+      transparent 28%,
+      rgba(47, 123, 255, 0.3),
+      transparent 60%
+    );
+    filter: blur(40px);
+  }
+  .cta-ring-2 {
+    width: min(640px, 100vw);
+    border-style: solid;
+    border-color: rgba(255, 122, 26, 0.18);
+    animation-duration: 45s;
+    animation-direction: reverse;
+  }
+  .cta-ring-2::before {
+    display: none;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero-visual {
+      position: absolute;
+      z-index: -1;
+      top: 60px;
+      right: -35%;
+      width: 115vw;
+      max-width: none;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: none;
+    }
+    .stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .stat:nth-child(2) {
+      border-right: 0;
+    }
+    .stat:nth-child(-n + 2) {
+      border-bottom: 1px solid var(--border);
+    }
+    .do-card,
+    .do-card:nth-child(n) {
+      grid-column: span 12;
+    }
+    .why {
+      grid-template-columns: 1fr;
+    }
+    .why-sticky {
+      position: static;
+    }
+    .steps {
+      grid-template-columns: 1fr 1fr;
+      row-gap: 48px;
+    }
+    .steps-line {
+      display: none;
+    }
+  }
+  @media (max-width: 520px) {
+    .steps {
+      grid-template-columns: 1fr;
+    }
+    .why-item {
+      grid-template-columns: 44px 1fr;
+    }
+  }
+</style>

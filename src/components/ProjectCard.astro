@@ -1,0 +1,150 @@
+---
+/** A tile on the Projects page bento grid. */
+import type { CollectionEntry } from 'astro:content';
+import ProjectMedia from './ProjectMedia.astro';
+import { statusLabel } from '../lib/meta';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+const { project } = Astro.props;
+const d = project.data;
+---
+
+<div
+  class:list={['pc-wrap', `size-${d.size}`]}
+  data-card
+  data-sprint={d.sprint}
+  data-cats={d.categories.map((c) => c.toLowerCase()).join('|')}
+>
+  <a href={`/projects/${project.id}/`} class="pc" data-tilt>
+    <div class="pc-media"><ProjectMedia project={project} /></div>
+    <div class="pc-shade" aria-hidden="true"></div>
+    <div class="pc-glare" aria-hidden="true"></div>
+    <div class="pc-top">
+      <span class={`chip status status-${d.status}`}>{statusLabel[d.status]}</span>
+      <span class="chip">Sprint {d.sprint}</span>
+    </div>
+    <div class="pc-body">
+      <h3>{d.title}</h3>
+      <p>{d.tagline}</p>
+      <div class="pc-tags">{d.categories.map((c) => <span class="tag">{c}</span>)}</div>
+    </div>
+  </a>
+</div>
+
+<style>
+  .pc-wrap {
+    min-height: 0;
+  }
+  .size-wide {
+    grid-column: span 2;
+  }
+  .size-tall {
+    grid-row: span 2;
+  }
+  .size-large {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+  .pc {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    min-height: 280px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    isolation: isolate;
+    transition:
+      border-color 0.3s,
+      box-shadow 0.4s,
+      transform 0.35s var(--ease-out);
+  }
+  .pc:hover {
+    border-color: color-mix(in srgb, var(--orange) 50%, var(--border));
+    box-shadow: 0 30px 80px -30px rgba(255, 122, 26, 0.5);
+  }
+  .pc-media {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    transition: transform 0.9s var(--ease-out);
+  }
+  .pc:hover .pc-media {
+    transform: scale(1.07);
+  }
+  .pc-shade {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, rgba(7, 8, 11, 0.1) 30%, rgba(7, 8, 11, 0.92) 100%);
+  }
+  .pc-glare {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.14), transparent 42%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .pc:hover .pc-glare {
+    opacity: 1;
+  }
+  .pc-top {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 18px;
+  }
+  .pc-body {
+    padding: 22px 24px 24px;
+  }
+  .pc-body h3 {
+    font-size: clamp(20px, 1.9vw, 26px);
+    margin-bottom: 8px;
+  }
+  .size-large .pc-body h3 {
+    font-size: clamp(26px, 3vw, 40px);
+  }
+  .pc-body p {
+    color: #b9bfcb;
+    font-size: 15px;
+    line-height: 1.5;
+    max-width: 48ch;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+  }
+  .size-normal .pc-tags,
+  .size-tall .pc-tags {
+    display: none;
+  }
+  .pc-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+  @media (max-width: 1000px) {
+    .size-tall {
+      grid-row: span 1;
+    }
+  }
+  @media (max-width: 640px) {
+    .size-wide,
+    .size-large {
+      grid-column: span 1;
+      grid-row: span 1;
+    }
+    .pc {
+      min-height: 340px;
+    }
+  }
+</style>

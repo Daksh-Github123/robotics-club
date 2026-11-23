@@ -1,0 +1,135 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ContactLinks from './ContactLinks.astro';
+import { initials } from '../lib/meta';
+
+interface Props {
+  member: CollectionEntry<'members'>;
+  big?: boolean;
+}
+const { member, big = false } = Astro.props;
+const d = member.data;
+---
+
+<article class:list={['mc', { 'mc-big': big, 'mc-alumni': d.status === 'alumni' }]} data-tilt>
+  <div class="mc-avatar">
+    {d.photo ? <img src={d.photo} alt={d.name} loading="lazy" /> : <span>{initials(d.name)}</span>}
+  </div>
+  <div class="mc-body">
+    <p class="mc-role mono">
+      {d.founder && <span class="mc-founder">Founder</span>}
+      {d.role}
+    </p>
+    <h3>{d.name}</h3>
+    {d.gradYear && <p class="mc-year mono">{d.status === 'alumni' ? 'Graduated' : 'Class of'} {d.gradYear}</p>}
+    {d.bio && <p class="mc-bio">{d.bio}</p>}
+    <ContactLinks member={member} />
+    {d.placeholder && <span class="ph-pill">placeholder</span>}
+  </div>
+</article>
+
+<style>
+  .mc {
+    display: grid;
+    gap: 20px;
+    align-content: start;
+    height: 100%;
+    padding: 26px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--surface) 72%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition:
+      border-color 0.3s,
+      box-shadow 0.4s,
+      transform 0.35s var(--ease-out);
+  }
+  .mc:hover {
+    border-color: color-mix(in srgb, var(--orange) 45%, var(--border));
+    box-shadow: 0 30px 70px -36px rgba(255, 122, 26, 0.6);
+  }
+  .mc-avatar {
+    position: relative;
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    padding: 3px;
+    background: var(--grad-solid);
+  }
+  .mc-alumni .mc-avatar {
+    background: linear-gradient(135deg, var(--border-strong), var(--faint));
+  }
+  .mc-avatar img,
+  .mc-avatar span {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: grid;
+    place-items: center;
+    background: var(--surface-2);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 24px;
+  }
+  .mc-body {
+    display: grid;
+    gap: 10px;
+    justify-items: start;
+  }
+  .mc-role {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--orange-glow);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  .mc-founder {
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--orange);
+    color: #160800;
+    font-weight: 600;
+  }
+  .mc h3 {
+    font-size: 22px;
+  }
+  .mc-year {
+    font-size: 12px;
+    color: var(--faint);
+    letter-spacing: 0.06em;
+  }
+  .mc-bio {
+    color: var(--muted);
+    font-size: 15px;
+  }
+  .mc-big {
+    grid-template-columns: auto 1fr;
+    gap: clamp(24px, 4vw, 48px);
+    padding: clamp(28px, 4vw, 48px);
+    align-items: center;
+  }
+  .mc-big .mc-avatar {
+    width: clamp(120px, 16vw, 200px);
+    height: clamp(120px, 16vw, 200px);
+  }
+  .mc-big .mc-avatar span {
+    font-size: clamp(36px, 5vw, 60px);
+  }
+  .mc-big h3 {
+    font-size: clamp(30px, 4vw, 52px);
+  }
+  .mc-big .mc-bio {
+    font-size: 17px;
+    max-width: 52ch;
+  }
+  @media (max-width: 640px) {
+    .mc-big {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

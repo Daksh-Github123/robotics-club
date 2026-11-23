@@ -1,0 +1,309 @@
+---
+/**
+ * Homepage project strip. On desktop the section pins in place and
+ * scrolling down slides the projects sideways. On phones (and with
+ * reduced motion) it becomes a normal swipeable row.
+ */
+import type { CollectionEntry } from 'astro:content';
+import ProjectMedia from './ProjectMedia.astro';
+import SectionHeading from './SectionHeading.astro';
+import Icon from './Icon.astro';
+import { statusLabel } from '../lib/meta';
+
+interface Props {
+  projects: CollectionEntry<'projects'>[];
+}
+const { projects } = Astro.props;
+---
+
+<section class="hg" data-hg aria-label="Featured projects">
+  <div class="hg-pin">
+    <div class="container hg-head">
+      <SectionHeading eyebrow="// built by students" title='Projects that <span class="grad">actually work.</span>' />
+      <a href="/projects/" class="btn btn-ghost" data-magnetic>All projects <Icon name="arrow" size={18} /></a>
+    </div>
+    <div class="hg-viewport" data-hg-viewport>
+      <ul class="hg-track" data-hg-track>
+        {
+          projects.map((p, i) => (
+            <li class="hg-slot">
+              <a class="hg-card" href={`/projects/${p.id}/`} data-tilt>
+                <div class="hg-media">
+                  <ProjectMedia project={p} />
+                  <span class={`chip status status-${p.data.status} hg-status`}>{statusLabel[p.data.status]}</span>
+                </div>
+                <div class="hg-body">
+                  <span class="hg-index mono">{String(i + 1).padStart(2, '0')}</span>
+                  <div>
+                    <h3>{p.data.title}</h3>
+                    <p>{p.data.tagline}</p>
+                  </div>
+                  <span class="hg-go">
+                    <Icon name="arrow" size={18} />
+                  </span>
+                </div>
+              </a>
+            </li>
+          ))
+        }
+        <li class="hg-slot hg-slot-more">
+          <a class="hg-more" href="/projects/">
+            <span>See every<br /><span class="grad">project</span></span>
+            <span class="hg-more-icon"><Icon name="arrow" size={34} /></span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="container">
+      <div class="hg-progress" aria-hidden="true"><span data-hg-bar></span></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  const section = document.querySelector<HTMLElement>('[data-hg]');
+  const track = document.querySelector<HTMLElement>('[data-hg-track]');
+  const bar = document.querySelector<HTMLElement>('[data-hg-bar]');
+  if (section && track && bar) {
+    const mm = gsap.matchMedia();
+    mm.add('(min-width: 768px) and (prefers-reduced-motion: no-preference)', () => {
+      section.classList.add('is-pinned');
+      const distance = () => Math.max(0, track.scrollWidth - document.documentElement.clientWidth);
+      const tween = gsap.to(track, {
+        x: () => -distance(),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: () => `+=${distance()}`,
+          pin: true,
+          scrub: 0.8,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => gsap.set(bar, { scaleX: self.progress }),
+        },
+      });
+      // Cards gently rise as they slide into view
+      gsap.utils.toArray<HTMLElement>('.hg-slot', track).forEach((slot) => {
+        gsap.fromTo(
+          slot,
+          { y: 60, rotate: 2 },
+          {
+            y: 0,
+            rotate: 0,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: slot,
+              containerAnimation: tween,
+              start: 'left 100%',
+              end: 'left 55%',
+              scrub: true,
+            },
+          },
+        );
+      });
+      return () => section.classList.remove('is-pinned');
+    });
+    // Phone / reduced motion: progress bar follows native swiping
+    const viewport = document.querySelector<HTMLElement>('[data-hg-viewport]')!;
+    viewport.addEventListener(
+      'scroll',
+      () => {
+        const max = viewport.scrollWidth - viewport.clientWidth;
+        bar.style.transform = `scaleX(${max > 0 ? viewport.scrollLeft / max : 0})`;
+      },
+      { passive: true },
+    );
+  }
+</script>
+
+<style>
+  .hg {
+    position: relative;
+    padding-block: clamp(80px, 10vw, 120px);
+  }
+  .hg.is-pinned {
+    padding-block: 0;
+  }
+  .hg-pin {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(32px, 4vw, 56px);
+  }
+  .is-pinned .hg-pin {
+    height: 100vh;
+    padding-block: 84px 28px;
+    gap: clamp(20px, 3vh, 40px);
+  }
+  /* While pinned, size cards from the window height so everything fits on screen. */
+  .is-pinned .hg-slot {
+    width: clamp(260px, min(36vw, 62vh), 540px);
+  }
+  .is-pinned .hg-media {
+    aspect-ratio: 16 / 10;
+  }
+  .is-pinned .hg-head :global(.h2) {
+    font-size: clamp(30px, min(4.6vw, 7vh), 70px);
+  }
+  .hg-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .hg-viewport {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+  .hg-viewport::-webkit-scrollbar {
+    display: none;
+  }
+  .is-pinned .hg-viewport {
+    overflow: visible;
+  }
+  .hg-track {
+    display: flex;
+    gap: clamp(16px, 2vw, 28px);
+    list-style: none;
+    margin: 0;
+    padding: 10px max(var(--gutter), calc((100vw - var(--container)) / 2 + var(--gutter)));
+    width: max-content;
+    will-change: transform;
+  }
+  .hg-slot {
+    width: clamp(280px, 38vw, 540px);
+    flex-shrink: 0;
+    scroll-snap-align: center;
+  }
+  .hg-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    transition:
+      border-color 0.3s,
+      box-shadow 0.4s,
+      transform 0.35s var(--ease-out);
+  }
+  .hg-card:hover {
+    border-color: color-mix(in srgb, var(--orange) 50%, var(--border));
+    box-shadow: 0 30px 80px -30px rgba(255, 122, 26, 0.55);
+  }
+  .hg-media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+  .hg-media > :global(*:not(.hg-status)) {
+    transition: transform 0.8s var(--ease-out);
+  }
+  .hg-card:hover .hg-media > :global(*:not(.hg-status)) {
+    transform: scale(1.06);
+  }
+  .hg-status {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 1;
+  }
+  .hg-body {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 18px;
+    align-items: start;
+    padding: 22px 24px 26px;
+  }
+  .hg-index {
+    font-size: 13px;
+    color: var(--orange-glow);
+    padding-top: 5px;
+  }
+  .hg-body h3 {
+    font-size: clamp(19px, 1.8vw, 24px);
+    margin-bottom: 8px;
+  }
+  .hg-body p {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .hg-go {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid var(--border-strong);
+    transition:
+      background 0.3s,
+      transform 0.4s var(--ease-out),
+      color 0.3s;
+  }
+  .hg-card:hover .hg-go {
+    background: var(--orange);
+    color: #160800;
+    border-color: var(--orange);
+    transform: rotate(-45deg);
+  }
+  .hg-slot-more {
+    width: clamp(240px, 26vw, 360px);
+  }
+  .hg-more {
+    height: 100%;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 32px;
+    border-radius: var(--radius-lg);
+    border: 1px dashed var(--border-strong);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(30px, 3vw, 44px);
+    line-height: 1.05;
+    transition:
+      border-color 0.3s,
+      background 0.3s;
+  }
+  .hg-more:hover {
+    border-color: var(--orange);
+    background: rgba(255, 122, 26, 0.06);
+  }
+  .hg-more-icon {
+    align-self: flex-end;
+    width: 76px;
+    height: 76px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--orange);
+    color: #160800;
+    transition: transform 0.5s var(--ease-out);
+  }
+  .hg-more:hover .hg-more-icon {
+    transform: rotate(-45deg) scale(1.08);
+  }
+  .hg-progress {
+    height: 2px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .hg-progress span {
+    display: block;
+    height: 100%;
+    background: var(--grad);
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+</style>
