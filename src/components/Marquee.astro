@@ -15,7 +15,7 @@ const { words, reverse = false } = Astro.props;
           {words.map((w, i) => (
             <span class:list={['mq-word', { 'mq-fill': i % 2 === 1 }]}>
               {w}
-              <i>✦</i>
+              <i>•</i>
             </span>
           ))}
         </div>

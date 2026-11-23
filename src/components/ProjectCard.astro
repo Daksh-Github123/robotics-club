@@ -1,8 +1,13 @@
 ---
-/** A tile on the Projects page bento grid. */
+/**
+ * A tile on the Projects page bento grid.
+ * The whole card links to the project page; media buttons (Drive photos,
+ * videos…) sit on top and open in a new tab.
+ */
 import type { CollectionEntry } from 'astro:content';
 import ProjectMedia from './ProjectMedia.astro';
-import { statusLabel } from '../lib/meta';
+import Icon from './Icon.astro';
+import { statusLabel, yearLabel, mediaIcon } from '../lib/meta';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -14,23 +19,37 @@ const d = project.data;
 <div
   class:list={['pc-wrap', `size-${d.size}`]}
   data-card
-  data-sprint={d.sprint}
+  data-year={d.academicYear}
   data-cats={d.categories.map((c) => c.toLowerCase()).join('|')}
 >
-  <a href={`/projects/${project.id}/`} class="pc" data-tilt>
+  <article class="pc" data-tilt>
     <div class="pc-media"><ProjectMedia project={project} /></div>
     <div class="pc-shade" aria-hidden="true"></div>
     <div class="pc-glare" aria-hidden="true"></div>
     <div class="pc-top">
       <span class={`chip status status-${d.status}`}>{statusLabel[d.status]}</span>
-      <span class="chip">Sprint {d.sprint}</span>
+      <span class="chip">{yearLabel(d.academicYear)}</span>
     </div>
     <div class="pc-body">
-      <h3>{d.title}</h3>
+      <h3><a href={`/projects/${project.id}/`} class="pc-link">{d.title}</a></h3>
       <p>{d.tagline}</p>
       <div class="pc-tags">{d.categories.map((c) => <span class="tag">{c}</span>)}</div>
+      {
+        d.media.length > 0 && (
+          <ul class="pc-mlinks" aria-label={`${d.title} photos and videos`}>
+            {d.media.map((m) => (
+              <li>
+                <a href={m.url} target="_blank" rel="noopener">
+                  <Icon name={mediaIcon[m.type] ?? 'external'} size={14} />
+                  {m.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
     </div>
-  </a>
+  </article>
 </div>
 
 <style>
@@ -67,6 +86,10 @@ const d = project.data;
   .pc:hover {
     border-color: color-mix(in srgb, var(--orange) 50%, var(--border));
     box-shadow: 0 30px 80px -30px rgba(255, 122, 26, 0.5);
+  }
+  .pc:focus-within {
+    outline: 2px solid var(--orange-glow);
+    outline-offset: 3px;
   }
   .pc-media {
     position: absolute;
@@ -108,6 +131,16 @@ const d = project.data;
     font-size: clamp(20px, 1.9vw, 26px);
     margin-bottom: 8px;
   }
+  /* Stretch the title link over the whole card */
+  .pc-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  .pc-link:focus-visible {
+    outline: none;
+  }
   .size-large .pc-body h3 {
     font-size: clamp(26px, 3vw, 40px);
   }
@@ -122,15 +155,51 @@ const d = project.data;
     line-clamp: 3;
     overflow: hidden;
   }
-  .size-normal .pc-tags,
-  .size-tall .pc-tags {
-    display: none;
-  }
   .pc-tags {
     display: flex;
     gap: 6px;
     flex-wrap: wrap;
     margin-top: 14px;
+  }
+  .size-normal .pc-tags,
+  .size-tall .pc-tags {
+    display: none;
+  }
+  .pc-mlinks {
+    position: relative;
+    z-index: 3;
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 14px;
+  }
+  .pc-mlinks a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    background: rgba(7, 8, 11, 0.6);
+    border: 1px solid var(--border-strong);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition:
+      background 0.2s,
+      border-color 0.2s,
+      color 0.2s;
+  }
+  .pc-mlinks a:hover {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: #fff;
+  }
+  .pc-mlinks :global(svg) {
+    flex-shrink: 0;
   }
   @media (max-width: 1000px) {
     .size-tall {

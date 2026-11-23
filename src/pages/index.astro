@@ -54,7 +54,7 @@ const doCards = [
     icon: 'trophy',
     accent: '--yellow',
     title: 'Compete',
-    text: "Club members get a direct pathway onto the school's robotics competition teams. No cold tryouts.",
+    text: "Club members get a direct pathway onto the school's robotics competition teams.",
   },
   {
     icon: 'cpu',
@@ -79,14 +79,14 @@ const why = [
   },
   {
     title: 'Ideas that get implemented',
-    text: "Pitch a fix for a real problem at school, build it with a team, and watch it get installed. That's a story worth telling.",
+    text: 'Pitch a fix for a real problem at school, build it with a team, and get it installed on campus.',
   },
 ];
 
 const steps = [
   { k: '01', title: 'Pitch', text: 'Each sprint kicks off with pitches. Bring your own idea or a problem the school needs solved. Teams form around the best.' },
   { k: '02', title: 'Build', text: 'Design it, print it, wire it, code it. Weekly sessions with experienced members on hand to help.' },
-  { k: '03', title: 'Break & fix', text: "Test it until it fails, then make it better. Real engineering is mostly debugging, and that's the fun part." },
+  { k: '03', title: 'Break & fix', text: 'Test it, find what breaks, and improve it before the showcase.' },
   { k: '04', title: 'Showcase', text: 'Demo to the whole school at the end-of-sprint showcase. Standout builds get deployed on campus.' },
 ];
 
@@ -115,7 +115,7 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
   <section class="hero" data-hero>
     <div class="container hero-grid">
       <div class="hero-copy">
-        <p class="eyebrow" data-hero-fade>// {site.school} · est. {site.founded}</p>
+        <p class="eyebrow" data-hero-fade>{site.school} · Est. {site.founded}</p>
         <h1 class="hero-title" aria-label={`${lines.join(' ')} ${site.name}.`}>
           {
             lines.map((line, li) => (
@@ -133,8 +133,8 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
           }
         </h1>
         <p class="lede hero-lede" data-hero-fade>
-          <strong>{site.name}</strong> is where students design, build and ship real robots: into our school and onto
-          competition fields.
+          <strong>{site.name}</strong> is where students design and build real robots, get them used around the
+          school, and take them to competitions.
         </p>
         <div class="hero-cta" data-hero-fade>
           <a href="/projects/" class="btn btn-primary" data-magnetic>Explore projects <Icon name="arrow" size={18} /></a>
@@ -156,7 +156,7 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
       </div>
     </div>
     <div class="hero-badge" data-hero-fade>
-      <SpinBadge href="#journey" label="Scroll to our journey" text="SCROLL ✦ BUILD ✦ CODE ✦ COMPETE ✦ " />
+      <SpinBadge href="#journey" label="Scroll to our journey" text="SCROLL • BUILD • CODE • COMPETE • " />
     </div>
   </section>
 
@@ -183,9 +183,9 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
   <section class="section" id="journey">
     <div class="container">
       <SectionHeading
-        eyebrow="// the journey so far"
-        title='From an empty room to <span class="grad">real robots.</span>'
-        sub="Every sprint, showcase and first along the way. Scroll to watch it unfold."
+        eyebrow="Timeline"
+        title='Our story <span class="grad">so far</span>'
+        sub="Every sprint, showcase and first since the club started."
         align="center"
       />
     </div>
@@ -201,9 +201,9 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
   <section class="section">
     <div class="container">
       <SectionHeading
-        eyebrow="// what you'll do"
-        title='Less lecture. <span class="grad">More building.</span>'
-        sub="No experience needed. Just curiosity and a willingness to break things (then fix them)."
+        eyebrow="In the club"
+        title='What you&#39;ll <span class="grad">do</span>'
+        sub="You don't need any experience to join. You'll learn as you build, with help from other members."
       />
       <div class="do-grid" data-reveal-group>
         {
@@ -230,10 +230,10 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
   <section class="section why-section">
     <div class="container why">
       <div class="why-sticky">
-        <p class="eyebrow" data-reveal>// why join</p>
-        <h2 class="h2" data-reveal>More than a line on your <span class="grad">college app.</span></h2>
+        <p class="eyebrow" data-reveal>Why join</p>
+        <h2 class="h2" data-reveal>Build things you can <span class="grad">show people.</span></h2>
         <p class="lede" data-reveal>
-          Colleges want to see what you've actually done. Here, you'll have the projects, the role and the receipts.
+          Colleges want to see what you've built and what you did on the team. Every club project is documented here.
         </p>
         <a href="/join/" class="btn btn-primary" data-reveal data-magnetic>How to join <Icon name="arrow" size={18} /></a>
       </div>
@@ -257,7 +257,7 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
   <section class="section">
     <div class="container">
       <SectionHeading
-        eyebrow="// what to expect"
+        eyebrow="What to expect"
         title='How a <span class="grad">sprint</span> works'
         sub={`The club runs in build sprints (${site.sprintLength}). Here's the loop.`}
       />
@@ -281,8 +281,8 @@ function gear(cx: number, cy: number, ro: number, ri: number, n: number) {
     <div class="cta-ring" aria-hidden="true"></div>
     <div class="cta-ring cta-ring-2" aria-hidden="true"></div>
     <div class="container cta-inner">
-      <p class="eyebrow" data-reveal>// your move</p>
-      <h2 data-reveal>Ready to build<br /><span class="grad">something real?</span></h2>
+      <p class="eyebrow" data-reveal>Join us</p>
+      <h2 data-reveal>Want to build<br /><span class="grad">with us?</span></h2>
       <p class="lede" data-reveal>{site.applyInfo}</p>
       <div class="cta-actions" data-reveal>
         <a href="/join/" class="btn btn-primary" data-magnetic>How to join <Icon name="arrow" size={18} /></a>

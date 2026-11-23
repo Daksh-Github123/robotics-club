@@ -1,14 +1,18 @@
 ---
 title: Smart Recycling Bin
 tagline: A bin that tells you which slot your trash belongs in, and tracks how much the school recycles.
-sprint: 2
-date: 2026-04-20
+academicYear: "2026-27"
+date: 2026-10-15
 categories: [Software, Sustainability]
 status: deployed
 featured: true
 size: tall
 team: [Student Name, Student Name, Student Name, Student Name]
 tech: [ESP32, Camera module, TensorFlow Lite, Load cells]
+media:
+  - label: Build photos
+    url: https://drive.google.com/drive/folders/REPLACE-ME
+    type: photos
 placeholder: true
 ---
 

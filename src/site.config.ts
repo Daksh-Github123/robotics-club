@@ -22,7 +22,7 @@ export const site = {
 
   /** How students apply. Applications run through the school's own system. */
   applyInfo:
-    "Applications run through the school's club sign-up system. When sign-ups open, pick Robotics Club. That's it.",
+    "Applications run through the school's club sign-up system. When sign-ups open, choose Robotics Club.",
 
   /** Rough weekly time commitment shown on the Join page. */
   timeCommitment: 'TODO: e.g. ~2 hours a week, a bit more before showcases',

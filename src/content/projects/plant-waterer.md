@@ -1,8 +1,8 @@
 ---
 title: Auto Plant Waterer
 tagline: Soil sensors and a tiny pump keep the biology lab's plants alive over long weekends.
-sprint: 3
-date: 2026-10-30
+academicYear: "2026-27"
+date: 2026-11-16
 categories: [Sustainability, Software]
 status: concept
 featured: false

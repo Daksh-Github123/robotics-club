@@ -44,6 +44,14 @@ summary: One sentence about what happened. Shows on the timeline card.
 
 Dates in the future show as "Upcoming". The timeline sorts itself by date, so file names don't matter for order.
 
+## Collecting project info from students
+
+Students fill in the **[Project Page Template](https://docs.google.com/document/d/1JkOaCIHGlFpuFjT6dEH_IfT5xzVRSfot7AQq1pcarNM/edit)** Google Doc in their own time. They make a copy, fill it in, and put their photos and videos in a shared Drive folder. The last section of the template says which part of the doc goes into which field of the project file below.
+
+Share the template as **View only** so nobody edits the original. Students use File → Make a copy.
+
+Tip: you can paste a finished submission into Claude (or any AI assistant) along with one existing project file and ask it to produce the new project file in the same format. Check the result before committing.
+
 ## Add a project
 
 1. Copy a file in `src/content/projects/` (e.g. `sorting-bot.md`) and rename it. The file name becomes the URL: `smart-door.md` → `/projects/smart-door/`.
@@ -53,7 +61,7 @@ Dates in the future show as "Upcoming". The timeline sorts itself by date, so fi
 ---
 title: Smart Door Sensor
 tagline: One sentence pitch.
-sprint: 4
+academicYear: "2026-27"            # always in quotes, written like "2026-27"; becomes a filter button
 date: 2027-03-01
 categories: [Hardware, Software]   # anything you like; these become filter buttons
 status: building                   # concept | building | complete | deployed
@@ -69,6 +77,13 @@ tech: [ESP32, Reed switch]
 links:
   - label: Code on GitHub
     url: https://github.com/...
+media:                             # buttons on the project card + page (Drive albums, videos…)
+  - label: Photo album
+    url: https://drive.google.com/drive/folders/...
+    type: photos                   # photos | video | folder | doc | other (sets the icon)
+  - label: Demo video
+    url: https://youtu.be/...
+    type: video
 ---
 
 ## The problem
@@ -78,7 +93,7 @@ Write anything here in normal Markdown.
 ...
 ```
 
-3. Put photos in `public/media/projects/`. Keep images under ~500 KB (use squoosh.app to shrink them). Hover videos should be short (3–6 s), muted, and under ~3 MB.
+3. Put photos in `public/media/projects/`. Keep images under ~500 KB (use squoosh.app to shrink them). Hover videos should be short (3–6 s), muted, and under ~3 MB. Bigger albums and full-length videos stay on Google Drive or YouTube and go in `media:` as links. Make sure the Drive folder is shared as "Anyone with the link".
 4. Delete `placeholder: true` once it's real.
 
 ## Members

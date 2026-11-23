@@ -1,8 +1,8 @@
 ---
 title: Desktop Robotic Arm
 tagline: A 5-axis arm you can control with a phone, built almost entirely from 3D-printed parts.
-sprint: 2
-date: 2026-04-28
+academicYear: "2026-27"
+date: 2026-10-20
 categories: [Hardware, Software]
 status: complete
 featured: true

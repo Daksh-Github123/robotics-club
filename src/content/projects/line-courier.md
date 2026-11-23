@@ -1,8 +1,8 @@
 ---
 title: Line-Following Courier
 tagline: A little robot that delivers notes between classrooms by following tape lines on the floor.
-sprint: 1
-date: 2025-11-28
+academicYear: "2025-26"
+date: 2026-04-10
 categories: [Hardware, Software]
 status: complete
 featured: true

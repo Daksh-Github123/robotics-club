@@ -16,7 +16,7 @@ const sponsors: { name: string; logo?: string; url?: string; tier?: string }[] =
 
 const uses = [
   { icon: 'cpu', title: 'Parts & electronics', text: 'Microcontrollers, motors, sensors and batteries for every sprint team.' },
-  { icon: 'trophy', title: 'Competition fees', text: 'Registration and travel so school teams can actually compete.' },
+  { icon: 'trophy', title: 'Competition fees', text: 'Registration and travel for school competition teams.' },
   { icon: 'wrench', title: 'Tools & 3D printing', text: 'Filament, soldering stations and the tools that turn ideas into robots.' },
 ];
 const contact = site.socials.email ? `mailto:${site.socials.email}` : '/join/#contacts';
@@ -28,7 +28,7 @@ const contact = site.socials.email ? `mailto:${site.socials.email}` : '/join/#co
   noindex={!site.features.showSponsors}
 >
   <PageHeader
-    eyebrow="// sponsors & funding"
+    eyebrow="Sponsors & funding"
     title='Fuel the <span class="grad">next build.</span>'
     sub="Every dollar goes straight into parts, tools and competition entries for students building real robots."
   >
@@ -52,7 +52,7 @@ const contact = site.socials.email ? `mailto:${site.socials.email}` : '/join/#co
   </section>
 
   <section class="section container">
-    <SectionHeading eyebrow="// thank you" title='Our <span class="grad">supporters</span>' />
+    <SectionHeading eyebrow="Thank you" title='Our <span class="grad">supporters</span>' />
     {
       sponsors.length > 0 ? (
         <ul class="logos" data-reveal-group>

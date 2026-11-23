@@ -25,7 +25,8 @@ const projects = defineCollection({
   schema: z.object({
     title: z.string(),
     tagline: z.string(),
-    sprint: z.number().int().positive(),
+    /** School year the project belongs to, written like "2025-26". */
+    academicYear: z.string().regex(/^\d{4}-\d{2}$/, 'Write the academic year like "2025-26"'),
     date: z.coerce.date(),
     categories: z.array(z.string()).default([]),
     status: z.enum(['concept', 'building', 'complete', 'deployed']).default('building'),
@@ -40,6 +41,19 @@ const projects = defineCollection({
     team: z.array(z.string()).default([]),
     tech: z.array(z.string()).default([]),
     links: z.array(z.object({ label: z.string(), url: z.string() })).default([]),
+    /**
+     * Extra photos/videos hosted elsewhere (Google Drive, YouTube…).
+     * Shown as buttons on the project card and the project page.
+     */
+    media: z
+      .array(
+        z.object({
+          label: z.string(),
+          url: z.string().url(),
+          type: z.enum(['photos', 'video', 'folder', 'doc', 'other']).default('other'),
+        }),
+      )
+      .default([]),
     placeholder: z.boolean().default(false),
   }),
 });

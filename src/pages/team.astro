@@ -18,7 +18,7 @@ const alumniFounders = alumni.filter((m) => m.data.founder);
 
 <Base title="Team" description="The students who run the club, and the alumni who built it.">
   <PageHeader
-    eyebrow="// the crew"
+    eyebrow="Team"
     title='The people behind <span class="grad">the bots.</span>'
     sub="The students running the club right now, and the alumni who built it before them."
   />
@@ -37,7 +37,7 @@ const alumniFounders = alumni.filter((m) => m.data.founder);
     {
       current.length > 0 && (
         <div class="block">
-          <SectionHeading eyebrow="// current leads" title="Running the club" />
+          <SectionHeading eyebrow="Current leads" title="Running the club" />
           <div class="grid" data-reveal-group>
             {current.map((m) => (
               <MemberCard member={m} />
@@ -49,8 +49,8 @@ const alumniFounders = alumni.filter((m) => m.data.founder);
 
     <div class="block">
       <SectionHeading
-        eyebrow="// hall of alumni"
-        title='Graduated, <span class="grad">not forgotten.</span>'
+        eyebrow="Alumni"
+        title='Past <span class="grad">members</span>'
         sub="Past members who helped build the club. Many are happy to answer questions about competitions and college."
       />
       {
@@ -68,7 +68,7 @@ const alumniFounders = alumni.filter((m) => m.data.founder);
 
     <a href="/join/" class="join-strip" data-glow data-reveal>
       <span>
-        <span class="mono eyebrow">// open roles</span>
+        <span class="mono eyebrow">Join us</span>
         <strong>Want your face on this page?</strong>
       </span>
       <span class="btn btn-primary">Join the club <Icon name="arrow" size={18} /></span>

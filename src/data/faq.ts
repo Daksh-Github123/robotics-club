@@ -13,7 +13,7 @@ export const faq: { q: string; a: string }[] = [
   },
   {
     q: 'How much time does it take?',
-    a: 'TODO: e.g. One meeting a week during a sprint, plus a few extra sessions before showcases. You can put in more if you get hooked (people do).',
+    a: 'TODO: e.g. One meeting a week during a sprint, plus a few extra sessions before showcases.',
   },
   {
     q: 'Will this help my college applications?',

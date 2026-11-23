@@ -3,7 +3,7 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ProjectMedia from '../../components/ProjectMedia.astro';
 import Icon from '../../components/Icon.astro';
-import { formatDate, sortProjects, statusLabel } from '../../lib/meta';
+import { formatDate, sortProjects, statusLabel, yearLabel, mediaIcon } from '../../lib/meta';
 
 export async function getStaticPaths() {
   const projects = sortProjects(await getCollection('projects'));
@@ -33,7 +33,7 @@ const { Content } = await render(project);
       <a href="/projects/" class="pd-back"><Icon name="arrowLeft" size={16} /> All projects</a>
       <div class="pd-meta" data-reveal>
         <span class={`chip status status-${d.status}`}>{statusLabel[d.status]}</span>
-        <span class="chip">Sprint {d.sprint}</span>
+        <span class="chip">{yearLabel(d.academicYear)}</span>
         <span class="chip"><time datetime={d.date.toISOString()}>{formatDate(d.date)}</time></span>
         {d.placeholder && <span class="ph-pill">placeholder</span>}
       </div>
@@ -45,6 +45,20 @@ const { Content } = await render(project);
       <div class="pd-media" data-reveal>
         <ProjectMedia project={project} eager />
       </div>
+      {
+        d.media.length > 0 && (
+          <ul class="pd-mlinks" aria-label="More photos and videos" data-reveal>
+            {d.media.map((m) => (
+              <li>
+                <a href={m.url} target="_blank" rel="noopener" class="btn btn-ghost btn-sm">
+                  <Icon name={mediaIcon[m.type] ?? 'external'} size={16} />
+                  {m.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
     </div>
 
     <div class="container pd-grid">
@@ -175,6 +189,20 @@ const { Content } = await render(project);
   }
   .pd-media :global(.pm-video) {
     opacity: 1;
+  }
+  .pd-mlinks {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .pd-mlinks :global(svg) {
+    color: var(--blue-glow);
+  }
+  .pd-mlinks a:hover :global(svg) {
+    transform: none;
   }
   .pd-grid {
     display: grid;

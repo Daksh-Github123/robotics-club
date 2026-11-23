@@ -23,13 +23,13 @@ const facts = [
   { icon: 'clock', label: 'Time', value: site.timeCommitment },
   { icon: 'pin', label: 'Where', value: site.meeting.where },
   { icon: 'calendar', label: 'When', value: site.meeting.when },
-  { icon: 'spark', label: 'Experience', value: 'None needed. Seriously.' },
+  { icon: 'spark', label: 'Experience', value: 'None needed' },
 ];
 ---
 
 <Base title="Join / FAQ" description="How to join the robotics club, what to expect, and who to ask.">
   <PageHeader
-    eyebrow="// join the crew"
+    eyebrow="Join"
     title='Come build <span class="grad">with us.</span>'
     sub={site.applyInfo}
   />
@@ -64,7 +64,7 @@ const facts = [
 
   <section class="section container faq-section">
     <div class="faq-head">
-      <SectionHeading eyebrow="// faq" title='Questions, <span class="grad">answered.</span>' />
+      <SectionHeading eyebrow="FAQ" title='Common <span class="grad">questions</span>' />
     </div>
     <div class="faq" data-reveal-group>
       {
@@ -85,8 +85,8 @@ const facts = [
 
   <section class="section container" id="contacts">
     <SectionHeading
-      eyebrow="// ask a human"
-      title='Still curious? <span class="grad">Message us.</span>'
+      eyebrow="Contacts"
+      title='Ask <span class="grad">a member</span>'
       sub="The students running the club right now, plus alumni who are happy to help."
     />
     {

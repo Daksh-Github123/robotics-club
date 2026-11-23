@@ -1,8 +1,8 @@
 ---
 title: Mini Sumo Bot
 tagline: A 500-gram pusher built to shove other robots out of the ring. Our first competition build.
-sprint: 3
-date: 2026-10-15
+academicYear: "2026-27"
+date: 2026-11-12
 categories: [Competition, Hardware]
 status: building
 featured: false

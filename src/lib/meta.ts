@@ -21,7 +21,19 @@ export const statusLabel: Record<ProjectStatus, string> = {
   deployed: 'Deployed in school',
 };
 
-export const sortMilestones = (items: CollectionEntry<'milestones'>[]) =>
+/** "2025-26" → "2025–26" (with a proper en dash). */
+export const yearLabel = (academicYear: string) => academicYear.replace('-', '–');
+
+/** Icon for each kind of media link on a project. */
+export const mediaIcon: Record<string, string> = {
+  photos: 'image',
+  video: 'play',
+  folder: 'folder',
+  doc: 'file',
+  other: 'external',
+};
+
+export const sortMilestones =(items: CollectionEntry<'milestones'>[]) =>
   [...items].sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
 
 /** Featured first, then newest first. */

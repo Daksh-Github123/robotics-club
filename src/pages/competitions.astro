@@ -23,7 +23,7 @@ const help = [
 
 <Base title="Competitions" description="How club members get onto the school's robotics competition teams, and get help entering others.">
   <PageHeader
-    eyebrow="// compete"
+    eyebrow="Competitions"
     title='Your pathway onto <span class="grad">school teams.</span>'
     sub="The club is the way onto the school's robotics competition teams, and a launchpad for entering competitions on your own."
   />
@@ -46,7 +46,7 @@ const help = [
   </section>
 
   <section class="section container">
-    <SectionHeading eyebrow="// where we compete" title='Competitions <span class="grad">&amp; results</span>' />
+    <SectionHeading eyebrow="Where we compete" title='Competitions <span class="grad">&amp; results</span>' />
     <div class="comps" data-reveal-group>
       {
         comps.map((c) => (
@@ -70,7 +70,7 @@ const help = [
                   ))}
                 </ul>
               ) : (
-                <p class="muted comp-empty">First season loading…</p>
+                <p class="muted comp-empty">No results yet.</p>
               )}
             </div>
             {c.data.website && (
@@ -86,7 +86,7 @@ const help = [
 
   <section class="section container help-section">
     <SectionHeading
-      eyebrow="// going solo?"
+      eyebrow="Other competitions"
       title='We help you enter <span class="grad">other competitions</span> too.'
       sub="If there's a competition the school doesn't send a team to, the club is still your support crew."
     />
