@@ -12,7 +12,7 @@ export const faq: { q: string; a: string }[] = [
   },
   {
     q: 'Who runs the club?',
-    a: 'Students. Robotics Club is fully student-led, one of the only student-led clubs at Inventure Academy. Daksh Singh is the student lead, and Aravind Saseendran and Suprity Bhattacharya are the supervising faculty.',
+    a: 'Students. Tech for Change is fully student-led, one of the only student-led clubs at Inventure Academy. Daksh Singh is the student lead, and Aravind Saseendran and Suprity Bhattacharya are the supervising faculty.',
   },
   {
     q: 'Do I need any experience?',

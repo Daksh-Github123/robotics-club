@@ -1,6 +1,6 @@
-# Robotics Club website
+# Tech for Change website
 
-The home of our school robotics club: every project we build, the club's journey so far, and how to join.
+The home of Tech for Change, the student-led robotics and tech club at Inventure Academy: every project we build, the club's journey so far, and how to join.
 
 Built with [Astro](https://astro.build), GSAP, Lenis and Three.js. Hosted on Vercel.
 

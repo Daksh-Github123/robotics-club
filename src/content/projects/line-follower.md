@@ -16,7 +16,7 @@ placeholder: true
 
 ## About Sprint 1
 
-In the club's first sprint, Robotics Club ran as a robotics course. Daksh Singh taught the basics of robotics, and every member built the same project: a line follower.
+In the club's first sprint, Tech for Change ran as a robotics course. Daksh Singh taught the basics of robotics, and every member built the same project: a line follower.
 
 ## How it works
 

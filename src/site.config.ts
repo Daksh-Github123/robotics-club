@@ -6,14 +6,14 @@
  */
 export const site = {
   /** Full club name, shown in the nav, footer and browser tab. */
-  name: 'Robotics Club', // TODO: real club name
+  name: 'Tech for Change',
   /** 2–3 letters for the hexagon logo badge. */
-  shortName: 'RC',
+  shortName: 'TfC',
   school: 'Inventure Academy',
   founded: 2025,
 
   description:
-    'The fully student-led robotics club at Inventure Academy, where students choose their own project, learn what it needs, build it in school and present it at the BA Showcase.',
+    'Tech for Change is the fully student-led robotics and tech club at Inventure Academy, where students choose their own project, learn what it needs, build it in school and present it at the BA Showcase.',
 
   /**
    * Homepage hero photo, e.g. '/media/hero.jpg' (put the file in public/media/).

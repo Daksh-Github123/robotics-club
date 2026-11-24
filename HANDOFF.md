@@ -1,4 +1,4 @@
-# Handoff guide: running the Robotics Club website
+# Handoff guide: running the Tech for Change website
 
 This guide is for whoever maintains the site next. You don't need to be a web developer.
 Almost everything you'll ever change is a **text file** in `src/content/` or `src/site.config.ts`.
