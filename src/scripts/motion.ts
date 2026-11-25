@@ -12,9 +12,6 @@ gsap.registerPlugin(ScrollTrigger);
 export const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 export const finePointer = window.matchMedia('(pointer: fine)').matches;
 
-/** Shared scroll speed, read by the 3D hero to spin faster while scrolling. */
-export const scrollState = { velocity: 0 };
-
 /* ───────── Smooth scrolling ───────── */
 export let lenis: Lenis | null = null;
 if (!reducedMotion) {
@@ -100,25 +97,6 @@ document.querySelectorAll<HTMLElement>('[data-count]').forEach((el) => {
       }),
   });
 });
-
-/* ───────── Scroll velocity (skews marquees, spins the gear) ───────── */
-{
-  let target = 0;
-  let current = 0;
-  const skewEls = gsap.utils.toArray<HTMLElement>('[data-velocity-skew]');
-  ScrollTrigger.create({
-    onUpdate: (self) => {
-      scrollState.velocity = self.getVelocity();
-      target = gsap.utils.clamp(-10, 10, self.getVelocity() / -320);
-    },
-  });
-  gsap.ticker.add(() => {
-    scrollState.velocity *= 0.92;
-    target *= 0.9;
-    current += (target - current) * 0.12;
-    if (!reducedMotion && skewEls.length) skewEls.forEach((el) => gsap.set(el, { skewX: current }));
-  });
-}
 
 /* ───────── Project clips: play a project's short video on hover ───────── */
 if (finePointer && !reducedMotion) {

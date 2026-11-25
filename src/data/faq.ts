@@ -16,15 +16,15 @@ export const faq: { q: string; a: string }[] = [
   },
   {
     q: 'Do I need any experience?',
-    a: 'No. While you plan your project, the club leads teach you how its sensors and parts work, and they help with wiring once your parts arrive.',
+    a: 'No. While you plan your project, the club leads teach you what it needs: code for a website, or sensors and wiring for a robot. They keep helping while you build.',
   },
   {
     q: 'Can I pick my own project?',
-    a: 'Yes, that is how every sprint starts. You choose a problem to solve, a project idea, or something you have seen and want to build. It needs to be realistic to finish before the BA Showcase.',
+    a: 'Yes, that is how every sprint starts. You choose a problem to solve, a project idea, or something you have seen and want to build: a website, a robot, or both. It needs to be realistic to finish before the BA Showcase.',
   },
   {
     q: 'Does it cost anything?',
-    a: 'You buy the parts for your own project. During planning you make a parts list and a circuit diagram, so you know exactly what to order before you spend anything.',
+    a: 'Software projects usually cost nothing. For a robotics project you buy your own parts, after making a parts list and a circuit diagram so you know exactly what to order.',
   },
   {
     q: 'Will this help my college applications?',

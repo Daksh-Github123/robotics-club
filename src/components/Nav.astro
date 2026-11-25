@@ -4,7 +4,7 @@ import { site } from '../site.config';
 const path = Astro.url.pathname;
 const links = [
   { href: '/projects/', label: 'Projects' },
-  { href: '/#journey', label: 'Journey' },
+  { href: '/why-join/', label: 'Why join' },
   { href: '/team/', label: 'Team' },
   { href: '/competitions/', label: 'Competitions' },
   ...(site.features.showSponsors ? [{ href: '/sponsors/', label: 'Sponsors' }] : []),

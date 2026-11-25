@@ -5,7 +5,7 @@ academicYear: "2026-27"
 date: 2026-11-04
 categories: [Sustainability, IoT]
 status: building
-featured: true
+featured: false
 outcome: Logs when a classroom's lights are on with nobody inside, without touching the room's wiring. A two-person 9th grade team, first project.
 size: wide
 team: [Aania, Siddharth]

@@ -1,0 +1,421 @@
+---
+/**
+ * "Why join" page: the link to share around school.
+ * Opens with a big scroll-driven intro announcing that Tech for Change now does
+ * robotics as well as websites, then switches to the site's calm layout.
+ */
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import HorizontalGallery from '../components/HorizontalGallery.astro';
+import SprintSteps from '../components/SprintSteps.astro';
+import JoinBox from '../components/JoinBox.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../site.config';
+
+const projects = await getCollection('projects');
+const pick = ['pathfinder', 'smart-dustbin', 'asl-translator-glove'];
+const showcase = pick.map((id) => projects.find((p) => p.id === id)).filter((p) => p !== undefined);
+
+const word = 'Robotics';
+
+const tracks = [
+  {
+    name: 'Software',
+    lead: 'Build websites and tools that make school run better.',
+    points: [
+      'Turn paper systems into something searchable and easy to use, like the Pathfinder behaviour charts.',
+      'Design it, build it, then get real people at school using it.',
+      'Club leads help with the code when you get stuck.',
+    ],
+  },
+  {
+    name: 'Robotics',
+    lead: 'Build machines that work in the real world.',
+    points: [
+      'Wire up sensors, motors and microcontrollers like Arduino and ESP32.',
+      "Make things like a bin that opens itself or a glove that reads sign language.",
+      'You learn exactly the electronics your project needs, nothing more.',
+    ],
+  },
+];
+
+const further = [
+  {
+    title: 'Get the school using it',
+    text: 'Projects are built for real problems at school, so the next step is real users.',
+    eg: 'The Pathfinder team is planning posters and video ads so every teacher knows it exists.',
+  },
+  {
+    title: 'Enter a competition',
+    text: 'Independent competitions, like the Blue Ocean Entrepreneurship Competition, are done with the club. For the school competition teams, run by other teachers, club members get recommendations to join.',
+  },
+  {
+    title: 'Write a research paper',
+    text: 'Your project page already records the problem, how it works and what you learned: a head start on a paper.',
+  },
+  {
+    title: 'Take it outside school',
+    text: 'The project is yours. Keep building it, or start your own organisation around it.',
+  },
+];
+---
+
+<Base
+  title="Why join"
+  description="Tech for Change isn't just websites any more. Build robots and software that your school actually uses, in a club run by students."
+>
+  <!-- ═════════ BIG SCROLLING INTRO ═════════ -->
+  <section class="intro" data-intro aria-label="Tech for Change now does robotics">
+    <div class="stage">
+      <p class="frame f1" data-f1>
+        <span class="small">You know Tech for Change</span>
+        <span class="big">for websites.</span>
+      </p>
+      <p class="frame f2" data-f2>
+        <span class="big">Now we build</span>
+        <span class="big accent">robots too.</span>
+      </p>
+      <h1 class="frame f3" data-f3>
+        <span class="small" data-f3-fade>New to Tech for Change</span>
+        <span class="huge" aria-label={word}>
+          {[...word].map((ch) => <span class="ch" aria-hidden="true">{ch}</span>)}
+        </span>
+        <span class="sub" data-f3-fade>Websites and robots, built by students, used by the school.</span>
+      </h1>
+      <span class="cue" data-cue aria-hidden="true">Scroll <Icon name="arrowDown" size={16} /></span>
+    </div>
+  </section>
+
+  <!-- ═════════ WHAT YOU'LL DO ═════════ -->
+  <section class="section first">
+    <div class="container">
+      <div class="head">
+        <h2 class="h2">What you'll do</h2>
+        <p class="lede">
+          Pick a problem worth solving, build the fix and show it to the whole school. Choose software, robotics or both.
+        </p>
+      </div>
+      <div class="tracks">
+        {
+          tracks.map((t) => (
+            <article class="track" data-reveal>
+              <h3>{t.name}</h3>
+              <p class="track-lead">{t.lead}</p>
+              <ul>
+                {t.points.map((p) => (
+                  <li>{p}</li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ PROJECTS ═════════ -->
+  <section class="section alt">
+    <div class="container">
+      <div class="head">
+        <h2 class="h2">What members are building</h2>
+        <p class="lede">A website the school's teachers can use, a bin you never have to touch, a glove that reads sign language. More are in progress.</p>
+      </div>
+      <HorizontalGallery projects={showcase} total={projects.length} />
+    </div>
+  </section>
+
+  <!-- ═════════ HOW A SPRINT WORKS ═════════ -->
+  <section class="section">
+    <div class="container">
+      <div class="head">
+        <h2 class="h2">How a project happens</h2>
+        <p class="lede">No experience needed. Each step shows what a real team did.</p>
+      </div>
+      <SprintSteps />
+    </div>
+  </section>
+
+  <!-- ═════════ TAKE IT FURTHER ═════════ -->
+  <section class="section alt">
+    <div class="container">
+      <div class="head">
+        <h2 class="h2">After the showcase, it's yours</h2>
+        <p class="lede">The BA Showcase isn't the finish line. Here's where members take their projects next.</p>
+      </div>
+      <ol class="further">
+        {
+          further.map((f, i) => (
+            <li data-reveal>
+              <span class="n">{i + 1}</span>
+              <div>
+                <h3>{f.title}</h3>
+                <p>{f.text}</p>
+                {f.eg && <p class="eg">{f.eg}</p>}
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- ═════════ STUDENT-LED ═════════ -->
+  <section class="section">
+    <div class="container led">
+      <h2 class="h2">Run by students, start to finish</h2>
+      <div class="led-text">
+        <p>
+          {site.name} is one of the only student-led clubs at {site.school}. Students run the sessions, teach each other
+          and decide what to build. Faculty supervise.
+        </p>
+        <ul>
+          <li>You'll work with students from other grades, including seniors you might not otherwise meet.</li>
+          <li>You can step up: mentor newer members, teach a topic, or run the club when the current leads graduate.</li>
+          <li>Every project gets its own page on this site, which you can link in applications.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ JOIN ═════════ -->
+  <section class="section">
+    <div class="container">
+      <JoinBox title={`Join ${site.name}`} />
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { reducedMotion } from '../scripts/motion';
+  gsap.registerPlugin(ScrollTrigger);
+
+  const intro = document.querySelector<HTMLElement>('[data-intro]');
+  if (intro && !reducedMotion) {
+    // Without this class the frames simply stack (no-JS / reduced motion).
+    intro.classList.add('is-animated');
+    const f1 = intro.querySelector('[data-f1]');
+    const f2 = intro.querySelector('[data-f2]');
+    const chars = intro.querySelectorAll('.f3 .ch');
+    const f3fade = intro.querySelectorAll('[data-f3-fade]');
+    const cue = intro.querySelector('[data-cue]');
+
+    gsap.set([f2], { autoAlpha: 0, y: 80 });
+    gsap.set(chars, { yPercent: 110, autoAlpha: 0 });
+    gsap.set(f3fade, { autoAlpha: 0, y: 24 });
+
+    // First frame rises in on load
+    gsap.from(f1!.children, { y: 60, autoAlpha: 0, duration: 1.1, stagger: 0.12, ease: 'power3.out' });
+
+    // Then scrolling drives the rest
+    gsap
+      .timeline({
+        defaults: { ease: 'power2.inOut' },
+        scrollTrigger: { trigger: intro, start: 'top top', end: 'bottom bottom', scrub: 0.6 },
+      })
+      .to(cue, { autoAlpha: 0, duration: 0.3 }, 0)
+      .to(f1, { autoAlpha: 0, y: -80, scale: 1.06, duration: 1 }, 0.1)
+      .to(f2, { autoAlpha: 1, y: 0, duration: 1 }, 0.5)
+      .to({}, { duration: 0.6 })
+      .to(f2, { autoAlpha: 0, y: -80, duration: 1 })
+      .to(chars, { yPercent: 0, autoAlpha: 1, duration: 1, stagger: 0.07, ease: 'power3.out' }, '<0.3')
+      .to(f3fade, { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.15 }, '-=0.4')
+      .to({}, { duration: 0.8 });
+  }
+</script>
+
+<style>
+  /* ── Intro ── */
+  .intro {
+    position: relative;
+    background: var(--bg);
+  }
+  .stage {
+    display: grid;
+    gap: clamp(48px, 10vh, 96px);
+    padding: clamp(120px, 16vw, 180px) var(--gutter) 64px;
+    text-align: center;
+  }
+  .frame {
+    margin: 0;
+    display: grid;
+    justify-items: center;
+    gap: 6px;
+  }
+  .small {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: clamp(18px, 2vw, 26px);
+    color: var(--muted);
+  }
+  .big {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(44px, 8vw, 120px);
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+  }
+  .accent {
+    color: var(--orange);
+  }
+  .huge {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.06em;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(76px, 18vw, 280px);
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    color: var(--orange);
+  }
+  .ch {
+    display: inline-block;
+  }
+  .sub {
+    font-size: clamp(18px, 1.8vw, 24px);
+    color: var(--muted);
+    max-width: 34ch;
+    margin-top: 12px;
+  }
+  .cue {
+    display: none;
+  }
+
+  /* Animated mode (added by the script): a tall section with a sticky stage */
+  .intro.is-animated {
+    height: 380vh;
+  }
+  .is-animated .stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    padding: 0 var(--gutter);
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  .is-animated .frame {
+    grid-area: 1 / 1;
+  }
+  .is-animated .cue {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    translate: -50% 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+
+  /* ── Calm part ── */
+  .first {
+    border-top: 1px solid var(--border);
+  }
+  .alt {
+    background: var(--bg-2);
+    border-block: 1px solid var(--border);
+  }
+  .head {
+    display: grid;
+    gap: 12px;
+    margin-bottom: clamp(28px, 4vw, 44px);
+    max-width: 720px;
+  }
+  .tracks {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .track {
+    padding: clamp(22px, 3vw, 32px);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--orange);
+    border-radius: var(--radius-lg);
+  }
+  .track:nth-child(2) {
+    border-top-color: var(--blue);
+  }
+  .track h3 {
+    font-size: 26px;
+  }
+  .track-lead {
+    margin: 6px 0 14px;
+    font-weight: 700;
+  }
+  .track ul {
+    padding-left: 1.1em;
+    display: grid;
+    gap: 8px;
+    color: var(--muted);
+  }
+  .track li::marker {
+    color: var(--orange);
+  }
+  .further {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 clamp(24px, 4vw, 56px);
+  }
+  .further li {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 14px;
+    padding: 22px 0;
+    border-top: 1.5px solid var(--text);
+  }
+  .further .n {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 26px;
+    line-height: 1;
+    color: var(--orange);
+  }
+  .further h3 {
+    font-size: 22px;
+    margin-bottom: 6px;
+  }
+  .further p {
+    color: var(--muted);
+  }
+  .further .eg {
+    margin-top: 8px;
+    font-size: 16px;
+    padding-left: 14px;
+    border-left: 3px solid var(--orange-soft);
+  }
+  .led {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(24px, 5vw, 64px);
+    align-items: start;
+  }
+  .led-text {
+    display: grid;
+    gap: 14px;
+    color: var(--muted);
+  }
+  .led-text ul {
+    padding-left: 1.1em;
+    display: grid;
+    gap: 8px;
+  }
+  .led-text li::marker {
+    color: var(--orange);
+  }
+  @media (max-width: 900px) {
+    .tracks,
+    .further,
+    .led {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

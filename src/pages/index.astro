@@ -8,7 +8,8 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Timeline from '../components/Timeline.astro';
 import HorizontalGallery from '../components/HorizontalGallery.astro';
-import FluidBackground from '../components/FluidBackground.astro';
+import SprintSteps from '../components/SprintSteps.astro';
+import JoinBox from '../components/JoinBox.astro';
 import Icon from '../components/Icon.astro';
 import { site } from '../site.config';
 import { sortMilestones, sortProjects, yearLabel } from '../lib/meta';
@@ -29,7 +30,7 @@ const sprints = happened.filter((m) => m.data.type === 'sprint').length;
 const showcases = happened.filter((m) => m.data.type === 'showcase');
 const latestYear = [...new Set(projects.map((p) => p.data.academicYear))].sort().at(-1)!;
 const latestProjects = projects.filter((p) => p.data.academicYear === latestYear);
-const builders = new Set(latestProjects.flatMap((p) => p.data.team)).size;
+const builders = new Set(latestProjects.flatMap((p) => p.data.team.map((n) => n.replace(/\s*\(.*\)$/, '')))).size;
 const lastShowcase = showcases.at(-1);
 // Milestones with only a known month are stored as the 1st; show those as "Mar 2026".
 const fmt = (d: Date) =>
@@ -40,32 +41,19 @@ const fmt = (d: Date) =>
     timeZone: 'UTC',
   });
 
-/* How a sprint works, each step shown through what the Smart Dustbin team did. */
-const steps = [
+/* The club's two kinds of project, each with a real example. */
+const tracks = [
   {
-    title: 'Pick a project',
-    text: "Think of a problem you want to solve or something you've seen and want to build. It has to be realistic to finish before the BA Showcase.",
-    example: 'Adwitya, Ananya and Mihika wanted a bin nobody has to touch with dirty hands.',
+    label: 'Software',
+    text: 'Websites that digitise school systems and fix everyday problems.',
+    example: 'A searchable version of the Pathfinder behaviour charts',
+    href: '/projects/pathfinder/',
   },
   {
-    title: 'Plan it',
-    text: "Make a parts list and a circuit diagram to check you're ordering the right parts, and work out the tools and steps. Anything you don't understand, the club leads teach you.",
-    example: 'Their plan caught that the distance sensor outputs 5 V but the ESP32 only takes 3.3 V, so they added a voltage divider before wiring anything.',
-  },
-  {
-    title: 'Order and build',
-    text: 'Order your parts, bring them to school and build in BA periods. Club leads help with wiring, and teachers supervise sawing, drilling and soldering.',
-    example: 'Parts ordered on 10 August. The sensor circuit was wired and bench-tested first, then the servo and lid.',
-  },
-  {
-    title: 'Present at the BA Showcase',
-    text: 'Every sprint ends with the BA Showcase. The whole school comes, including the principal.',
-    example: 'Presented on 4 November 2026, next to three other Sprint 2 projects.',
-  },
-  {
-    title: 'Take it further',
-    text: 'After the showcase the project is yours: take it outside school, enter it in competitions or write a research paper on it.',
-    example: "Next on their list: a second sensor that tells you when the bin is full.",
+    label: 'Robotics',
+    text: 'Robots and sensors that solve problems around school.',
+    example: 'A touch-free smart dustbin',
+    href: '/projects/smart-dustbin/',
   },
 ];
 ---
@@ -73,34 +61,36 @@ const steps = [
 <Base>
   <!-- ═════════ HERO ═════════ -->
   <section class:list={['hero', { 'hero-photo': site.heroPhoto }]}>
-    {
-      site.heroPhoto ? (
-        <img class="hero-bg" src={site.heroPhoto} alt={site.heroPhotoAlt} fetchpriority="high" />
-      ) : (
-        <FluidBackground />
-      )
-    }
+    {site.heroPhoto && <img class="hero-bg" src={site.heroPhoto} alt={site.heroPhotoAlt} fetchpriority="high" />}
     <div class="container hero-grid">
       <div class="hero-copy">
         <p class="hero-kicker">{site.school} · student-led since {site.founded}</p>
-        <h1 class="hero-title">Build a robot <span class="grad">you picked yourself</span>, then show it to the whole school.</h1>
+        <h1 class="hero-title">Build something your school can <span class="grad">actually use</span>.</h1>
         <p class="hero-lede">
-          {site.name} is Inventure Academy's student-led robotics and tech club. You choose a project, we teach you the
-          electronics and code it needs, and you present it at the BA Showcase.
+          {site.name} is {site.school}'s student-led tech club. Members build websites and robots that solve real
+          problems around school, then present them at the BA Showcase.
         </p>
         <div class="hero-cta">
-          <a href="#join" class="btn btn-primary">How to join <Icon name="arrow" size={18} /></a>
+          <a href="/why-join/" class="btn btn-primary">Why join? <Icon name="arrow" size={18} /></a>
           <a href="#built" class="btn btn-ghost">See what members built</a>
         </div>
         <p class="hero-note">Sign-ups run through BA and are first come, first served.</p>
       </div>
-      {
-        !site.heroPhoto && (
-          <div class="hero-visual" data-hero-visual>
-            <canvas data-hero3d aria-hidden="true" />
-          </div>
-        )
-      }
+      <ul class="tracks" aria-label="What members build">
+        {
+          tracks.map((t) => (
+            <li>
+              <a href={t.href} class="track">
+                <span class="track-label">{t.label}</span>
+                <span class="track-text">{t.text}</span>
+                <span class="track-eg">
+                  e.g. {t.example} <Icon name="arrow" size={15} />
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </section>
 
@@ -110,8 +100,8 @@ const steps = [
       <div class="head">
         <h2 class="h2">What members have built</h2>
         <p class="lede">
-          {builders} students built {latestProjects.length} projects in {yearLabel(latestYear)}. For most of them it was
-          their first electronics project.
+          {builders} students built {latestProjects.length} projects in {yearLabel(latestYear)}: websites, robots and
+          sensor systems, most of them made for the school.
         </p>
       </div>
       <HorizontalGallery projects={strip} total={projects.length} />
@@ -124,8 +114,7 @@ const steps = [
       <div class="head">
         <h2 class="h2">Results so far</h2>
         <p class="lede">
-          {projects.length} projects, {sprints} sprints and {showcases.length} BA Showcases since the club started in
-          September {site.founded}.
+          {projects.length} projects, {sprints} sprints and {showcases.length} BA Showcases since September {site.founded}.
         </p>
       </div>
       <ul class="log">
@@ -133,12 +122,17 @@ const steps = [
           lastShowcase && (
             <li>
               <span class="log-date">{fmt(lastShowcase.data.date)}</span>
-              <span>
-                {latestProjects.length} projects presented at the BA Showcase, to the whole school and the principal.
-              </span>
+              <span>Sprint 2 projects presented at the BA Showcase, to the whole school and the principal.</span>
             </li>
           )
         }
+        <li>
+          <span class="log-date">Live now</span>
+          <span>
+            <a href="/projects/pathfinder/">Searchable Pathfinder</a>, the school's behaviour charts as a website, with
+            positive feedback from a teacher.
+          </span>
+        </li>
         {
           nrl && nrl.data.results.length > 0 && (
             <li>
@@ -155,7 +149,7 @@ const steps = [
           showcases[0] && showcases[0] !== lastShowcase && (
             <li>
               <span class="log-date">{fmt(showcases[0].data.date)}</span>
-              <span>First BA Showcase, at the end of Sprint 1, when every member had built the same line follower.</span>
+              <span>First BA Showcase, at the end of Sprint 1.</span>
             </li>
           )
         }
@@ -168,26 +162,9 @@ const steps = [
     <div class="container">
       <div class="head">
         <h2 class="h2">How a sprint works</h2>
-        <p class="lede">You don't need any experience. Here's one real sprint, followed through the Smart Dustbin team.</p>
+        <p class="lede">You don't need any experience. Each step shows what a real team did.</p>
       </div>
-      <ol class="steps">
-        {
-          steps.map((s, i) => (
-            <li class="step" data-reveal>
-              <span class="step-n">{i + 1}</span>
-              <div>
-                <h3>{s.title}</h3>
-                <p>{s.text}</p>
-              </div>
-              <p class="step-eg">
-                <span>Smart Dustbin</span>
-                {s.example}
-              </p>
-            </li>
-          ))
-        }
-      </ol>
-      <a class="more-link" href="/projects/smart-dustbin/">Read the Smart Dustbin project page <Icon name="arrow" size={16} /></a>
+      <SprintSteps />
     </div>
   </section>
 
@@ -244,23 +221,7 @@ const steps = [
   <!-- ═════════ JOIN ═════════ -->
   <section class="section" id="join">
     <div class="container">
-      <div class="join">
-        <div>
-          <h2 class="h2">Joining</h2>
-          <p class="lede">Sign up when the school opens Beyond Academics (BA) sign-ups. Spots go fast.</p>
-          <div class="join-cta">
-            <a href="/join/" class="btn btn-primary">Full details and FAQ <Icon name="arrow" size={18} /></a>
-            <a href="/join/#contacts" class="btn btn-ghost">Ask a question</a>
-          </div>
-        </div>
-        <dl class="facts">
-          <div><dt>Sign-ups</dt><dd>BA sign-ups, first come, first served</dd></div>
-          <div><dt>When</dt><dd>{site.meeting.when}</dd></div>
-          <div><dt>Where</dt><dd>{site.meeting.where}</dd></div>
-          <div><dt>Cost</dt><dd>You buy the parts for your own project, after planning exactly what you need</dd></div>
-          <div><dt>Experience</dt><dd>None needed</dd></div>
-        </dl>
-      </div>
+      <JoinBox />
     </div>
   </section>
 
@@ -276,53 +237,38 @@ const steps = [
   </section>
 </Base>
 
-<script>
-  import { reducedMotion } from '../scripts/motion';
-
-  // Load the 3D gears once the page is idle (only when there's no hero photo).
-  const canvas = document.querySelector<HTMLCanvasElement>('[data-hero3d]');
-  if (canvas && !reducedMotion) {
-    const go = () => import('../scripts/hero3d').then((m) => m.initHero3D(canvas));
-    if ('requestIdleCallback' in window) window.requestIdleCallback(go, { timeout: 1200 });
-    else setTimeout(go, 400);
-  }
-</script>
-
 <style>
   /* ── Hero ── */
   .hero {
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    min-height: min(92svh, 860px);
-    display: grid;
-    align-items: center;
-    padding-top: 100px;
-    padding-bottom: 56px;
+    padding-top: clamp(120px, 14vw, 170px);
+    padding-bottom: clamp(56px, 7vw, 96px);
     border-bottom: 1px solid var(--border);
   }
   .hero-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    align-items: center;
+    grid-template-columns: 1.25fr 0.75fr;
+    gap: clamp(32px, 5vw, 72px);
+    align-items: end;
   }
   .hero-kicker {
     font-weight: 700;
     color: var(--orange-glow);
   }
   .hero-title {
-    font-size: clamp(36px, 4.6vw, 60px);
+    font-size: clamp(38px, 5vw, 64px);
     font-weight: 800;
     line-height: 1.04;
     letter-spacing: -0.03em;
     margin: 14px 0 20px;
-    max-width: 16ch;
+    max-width: 15ch;
   }
   .hero-lede {
     font-size: clamp(18px, 1.5vw, 20px);
     color: var(--muted);
-    max-width: 46ch;
+    max-width: 50ch;
   }
   .hero-cta {
     display: flex;
@@ -335,18 +281,44 @@ const steps = [
     font-size: 15px;
     color: var(--muted);
   }
-  .hero-visual {
-    position: relative;
-    width: 100%;
-    max-width: 680px;
-    aspect-ratio: 1;
-    justify-self: end;
+  .tracks {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 12px;
   }
-  .hero-visual canvas {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+  .track {
+    display: grid;
+    gap: 6px;
+    padding: 18px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--orange);
+    border-radius: var(--radius);
+    transition: border-color 0.2s;
+  }
+  .tracks li:nth-child(2) .track {
+    border-left-color: var(--blue);
+  }
+  .track:hover {
+    border-color: var(--text);
+  }
+  .track-label {
+    font-family: var(--font-display);
+    font-weight: 750;
+    font-size: 20px;
+  }
+  .track-text {
+    color: var(--muted);
+    font-size: 16px;
+  }
+  .track-eg {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--orange-glow);
   }
   /* Photo hero: photo fills the section, text sits on a dark scrim. */
   .hero-bg {
@@ -357,15 +329,17 @@ const steps = [
     height: 100%;
     object-fit: cover;
   }
+  .hero-photo {
+    min-height: min(88svh, 820px);
+    display: grid;
+    align-items: end;
+  }
   .hero-photo::before {
     content: '';
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(90deg, rgba(20, 16, 12, 0.78) 0%, rgba(20, 16, 12, 0.45) 55%, rgba(20, 16, 12, 0.1) 100%);
-  }
-  .hero-photo .hero-grid {
-    grid-template-columns: 1fr;
+    background: linear-gradient(90deg, rgba(20, 16, 12, 0.8) 0%, rgba(20, 16, 12, 0.5) 55%, rgba(20, 16, 12, 0.15) 100%);
   }
   .hero-photo .hero-copy,
   .hero-photo .hero-lede,
@@ -382,6 +356,9 @@ const steps = [
   .hero-photo .btn-ghost {
     border-color: #fff;
     color: #fff;
+  }
+  .hero-photo .track {
+    background: rgba(255, 253, 249, 0.94);
   }
 
   /* ── Shared section heads ── */
@@ -428,55 +405,6 @@ const steps = [
     color: var(--orange-glow);
     text-decoration: underline;
     text-underline-offset: 3px;
-  }
-
-  /* ── Sprint steps ── */
-  .steps {
-    list-style: none;
-    padding: 0;
-    border-top: 1px solid var(--border-strong);
-  }
-  .step {
-    display: grid;
-    grid-template-columns: 48px 1fr 1fr;
-    gap: 20px;
-    padding: 22px 0;
-    border-bottom: 1px solid var(--border-strong);
-    align-items: start;
-  }
-  .step-n {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 28px;
-    line-height: 1;
-    color: var(--orange);
-  }
-  .step h3 {
-    font-size: 22px;
-    margin-bottom: 6px;
-  }
-  .step p {
-    color: var(--muted);
-  }
-  .step-eg {
-    font-size: 16px;
-    padding-left: 18px;
-    border-left: 3px solid var(--orange-soft);
-  }
-  .step-eg span {
-    display: block;
-    font-weight: 700;
-    font-size: 14px;
-    color: var(--text);
-    margin-bottom: 2px;
-  }
-  .more-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 22px;
-    font-weight: 700;
-    color: var(--orange-glow);
   }
 
   /* ── Quotes ── */
@@ -556,71 +484,15 @@ const steps = [
     font-weight: 700;
   }
 
-  /* ── Join ── */
-  .join {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: clamp(28px, 5vw, 64px);
-    padding: clamp(24px, 4vw, 44px);
-    background: var(--surface);
-    border: 1.5px solid var(--text);
-    border-radius: var(--radius-lg);
-  }
-  .join .lede {
-    margin-top: 10px;
-  }
-  .join-cta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 22px;
-  }
-  .facts {
-    margin: 0;
-    display: grid;
-  }
-  .facts div {
-    display: grid;
-    grid-template-columns: 110px 1fr;
-    gap: 14px;
-    padding: 11px 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .facts div:last-child {
-    border-bottom: 0;
-  }
-  .facts dt {
-    font-weight: 700;
-  }
-  .facts dd {
-    margin: 0;
-    color: var(--muted);
-  }
-
   /* ── Responsive ── */
   @media (max-width: 900px) {
     .hero-grid,
     .results,
-    .led,
-    .join {
+    .led {
       grid-template-columns: 1fr;
     }
-    .hero-visual {
-      position: absolute;
-      z-index: -1;
-      top: auto;
-      bottom: -30%;
-      right: -45%;
-      width: 100vw;
-      max-width: none;
-      opacity: 0.22;
-      pointer-events: none;
-    }
-    .step {
-      grid-template-columns: 36px 1fr;
-    }
-    .step-eg {
-      grid-column: 2;
+    .hero-grid {
+      align-items: start;
     }
     .quotes {
       grid-template-columns: 1fr;
@@ -630,8 +502,7 @@ const steps = [
     }
   }
   @media (max-width: 520px) {
-    .log li,
-    .facts div {
+    .log li {
       grid-template-columns: 1fr;
       gap: 4px;
     }

@@ -1,8 +1,6 @@
 /*
  * DESIGN TOKENS: change the site's colors, fonts and spacing here.
  * Every component reads from these variables, so edits apply everywhere.
- * (The liquid background and 3D gear keep their own copies of the colors
- *  in src/scripts/fluid.ts and src/scripts/hero3d.ts.)
  */
 :root {
   /* Paper-like light theme */

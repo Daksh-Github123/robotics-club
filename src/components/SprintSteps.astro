@@ -1,0 +1,126 @@
+---
+/**
+ * The five steps of a sprint, each with a real example from a club project
+ * (Smart Dustbin for robotics, Searchable Pathfinder for software).
+ * Used on the homepage and the Why Join page.
+ */
+import Icon from './Icon.astro';
+
+const steps = [
+  {
+    title: 'Pick a project',
+    text: "Choose a problem around school worth solving, or something you've seen and want to build: a robot, a website, or both. It has to be realistic to finish before the BA Showcase.",
+    project: 'Searchable Pathfinder',
+    example: "Reyansh and Aayush found the school's paper behaviour charts slow to use, so they set out to put them online.",
+  },
+  {
+    title: 'Plan it',
+    text: "For a robot, that means a parts list and a circuit diagram. For a website, the pages, the data and who will use it. Anything you don't understand, the club leads teach you.",
+    project: 'Smart Dustbin',
+    example: 'Their plan caught that the distance sensor outputs 5 V but the ESP32 only takes 3.3 V, so they added a voltage divider before wiring anything.',
+  },
+  {
+    title: 'Build it',
+    text: 'Build in BA periods. Club leads help with wiring and code, and teachers supervise sawing, drilling and soldering. Robotics members order their own parts.',
+    project: 'Searchable Pathfinder',
+    example: 'Instead of typing out every offence by hand, Reyansh used OCR to pull the text straight from the charts.',
+  },
+  {
+    title: 'Present at the BA Showcase',
+    text: 'Every sprint ends with the BA Showcase. The whole school comes, including the principal.',
+    project: 'Smart Dustbin',
+    example: 'Presented on 4 November 2026, next to three other Sprint 2 projects.',
+  },
+  {
+    title: 'Take it further',
+    text: 'After the showcase the project is yours: get the school using it, enter it in competitions, write a research paper or build an organisation around it.',
+    project: 'Searchable Pathfinder',
+    example: "It's already live, a teacher has given positive feedback, and the team is planning posters and video ads to get the whole school using it.",
+  },
+];
+---
+
+<ol class="steps">
+  {
+    steps.map((s, i) => (
+      <li class="step">
+        <span class="step-n">{i + 1}</span>
+        <div>
+          <h3>{s.title}</h3>
+          <p>{s.text}</p>
+        </div>
+        <p class="step-eg">
+          <span>{s.project}</span>
+          {s.example}
+        </p>
+      </li>
+    ))
+  }
+</ol>
+<p class="more">
+  <a href="/projects/smart-dustbin/">Smart Dustbin <Icon name="arrow" size={15} /></a>
+  <a href="/projects/pathfinder/">Searchable Pathfinder <Icon name="arrow" size={15} /></a>
+</p>
+
+<style>
+  .steps {
+    list-style: none;
+    padding: 0;
+    border-top: 1px solid var(--border-strong);
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 48px 1fr 1fr;
+    gap: 20px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--border-strong);
+    align-items: start;
+  }
+  .step-n {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 28px;
+    line-height: 1;
+    color: var(--orange);
+  }
+  .step h3 {
+    font-size: 22px;
+    margin-bottom: 6px;
+  }
+  .step p {
+    color: var(--muted);
+  }
+  .step-eg {
+    font-size: 16px;
+    padding-left: 18px;
+    border-left: 3px solid var(--orange-soft);
+  }
+  .step-eg span {
+    display: block;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .more {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    margin-top: 22px;
+  }
+  .more a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    color: var(--orange-glow);
+  }
+  @media (max-width: 900px) {
+    .step {
+      grid-template-columns: 36px 1fr;
+    }
+    .step-eg {
+      grid-column: 2;
+    }
+  }
+</style>
