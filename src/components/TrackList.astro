@@ -1,0 +1,88 @@
+---
+/** The club's two kinds of project (software, robotics), each with a real example. */
+import Icon from './Icon.astro';
+
+const tracks = [
+  {
+    label: 'Software',
+    text: 'Websites that digitise school systems and fix everyday problems.',
+    example: 'A searchable version of the Pathfinder behaviour charts',
+    href: '/projects/pathfinder/',
+  },
+  {
+    label: 'Robotics',
+    text: 'Robots and sensors that solve problems around school.',
+    example: 'A touch-free smart dustbin',
+    href: '/projects/smart-dustbin/',
+  },
+];
+---
+
+<ul class="tracks" aria-label="What members build">
+  {
+    tracks.map((t) => (
+      <li>
+        <a href={t.href} class="track">
+          <span class="track-label">{t.label}</span>
+          <span class="track-text">{t.text}</span>
+          <span class="track-eg">
+            e.g. {t.example} <Icon name="arrow" size={15} />
+          </span>
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .tracks {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+  }
+  .track {
+    height: 100%;
+    display: grid;
+    gap: 6px;
+    align-content: start;
+    padding: 18px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--orange);
+    border-radius: var(--radius);
+    transition: border-color 0.2s;
+  }
+  .tracks li:nth-child(2) .track {
+    border-left-color: var(--blue);
+  }
+  .track:hover {
+    border-color: var(--text);
+  }
+  .track-label {
+    font-family: var(--font-display);
+    font-weight: 750;
+    font-size: 20px;
+  }
+  .track-text {
+    color: var(--muted);
+    font-size: 16px;
+  }
+  .track-eg {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--orange-glow);
+  }
+  /* Side by side when shown in the band under a photo hero */
+  :global(.tracks-band) .tracks {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media (max-width: 700px) {
+    :global(.tracks-band) .tracks {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

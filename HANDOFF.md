@@ -19,7 +19,7 @@ Every time you push a change to the `main` branch on GitHub, Vercel rebuilds and
 | Edit the FAQ                       | `src/data/faq.ts`                           |
 | Change colors or fonts             | `src/styles/tokens.css`                     |
 | Show the Sponsors page             | set `showSponsors: true` in `src/site.config.ts` |
-| Put a photo behind the homepage    | `heroPhoto` in `src/site.config.ts`         |
+| Put a photo behind the homepage    | photo in `src/assets/` + `heroPhoto` in `src/site.config.ts` |
 | Add a member quote                 | new file in `src/content/quotes/`           |
 | Change the 3 homepage projects     | `featured: true` + `outcome:` in project files |
 
@@ -102,14 +102,14 @@ Write anything here in normal Markdown.
 
 ## Homepage photo and member quotes
 
-**Photo behind the homepage.** Put a wide photo (members building or presenting, at least 1800 px wide) in `public/media/`, then in `src/site.config.ts` set:
+**Photo behind the homepage.** Put a wide photo (members building or presenting, at least 1800 px wide) in `src/assets/`, then in `src/site.config.ts` set:
 
 ```ts
-heroPhoto: '/media/hero.jpg',
-heroPhotoAlt: 'Members testing the smart dustbin before the BA Showcase',
+heroPhoto: 'hero.jpg',
+heroPhotoAlt: 'Two members soldering wires on a robot car',
 ```
 
-The photo replaces the 3D gears and the mist. Leave `heroPhoto: ''` to bring them back.
+The site resizes and compresses it automatically. Faces work best in the upper half of the photo, because the headline sits at the bottom-left. Leave `heroPhoto: ''` for a plain hero.
 
 **Member quotes.** Each quote is a file in `src/content/quotes/`. The homepage shows the first three by `order`. Replace the placeholder files:
 
@@ -161,8 +161,6 @@ npm run dev      # opens a live preview at http://localhost:4321
 - **Astro**: turns the content files into fast static pages.
 - **GSAP + ScrollTrigger**: scroll animations (timeline line, sideways project strip, reveals).
 - **Lenis**: smooth scrolling.
-- **WebGL fluid sim** (`src/scripts/fluid.ts`): the mist in the homepage hero that follows the cursor (only when there's no hero photo). Tweak `CONFIG` at the top to change how long the ink lasts or how strong it is.
-- **Three.js** (`src/scripts/hero3d.ts`): the spinning 3D gears in the homepage hero (only when there's no hero photo).
 
 Everything respects the "reduce motion" accessibility setting: visitors who turn it on get a calm, static version.
 

@@ -16,13 +16,13 @@ export const site = {
     'Tech for Change is the fully student-led robotics and tech club at Inventure Academy, where students choose their own project, learn what it needs, build it in school and present it at the BA Showcase.',
 
   /**
-   * Homepage hero photo, e.g. '/media/hero.jpg' (put the file in public/media/).
-   * A wide photo of members building or presenting works best.
-   * Leave '' to show the 3D gears and the mist effect instead.
+   * Homepage hero photo: the file name of an image in src/assets/ (e.g. 'hero.jpg').
+   * It is resized and compressed automatically. A wide photo of members building
+   * or presenting works best. Leave '' for a plain hero with no photo.
    */
-  heroPhoto: '',
+  heroPhoto: 'hero.jpg',
   /** One line describing the hero photo, for screen readers. */
-  heroPhotoAlt: '',
+  heroPhotoAlt: 'Two members in school uniform, one soldering wires on a robot car while the other watches',
 
   meeting: {
     when: 'Twice a week, in two separate BA periods',

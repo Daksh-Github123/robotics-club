@@ -5,14 +5,21 @@
  * so they stay correct as projects and milestones are added.
  */
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import Base from '../layouts/Base.astro';
 import Timeline from '../components/Timeline.astro';
 import HorizontalGallery from '../components/HorizontalGallery.astro';
 import SprintSteps from '../components/SprintSteps.astro';
 import JoinBox from '../components/JoinBox.astro';
 import Icon from '../components/Icon.astro';
+import TrackList from '../components/TrackList.astro';
 import { site } from '../site.config';
 import { sortMilestones, sortProjects, yearLabel } from '../lib/meta';
+
+// Hero photo: a file in src/assets/ named by site.heroPhoto (optimised automatically).
+const assetImages = import.meta.glob<{ default: ImageMetadata }>('../assets/*.{jpg,jpeg,png,webp}', { eager: true });
+const heroImg = site.heroPhoto ? assetImages[`../assets/${site.heroPhoto}`]?.default : undefined;
 
 const milestones = sortMilestones(await getCollection('milestones'));
 const projects = sortProjects(await getCollection('projects'));
@@ -41,27 +48,26 @@ const fmt = (d: Date) =>
     timeZone: 'UTC',
   });
 
-/* The club's two kinds of project, each with a real example. */
-const tracks = [
-  {
-    label: 'Software',
-    text: 'Websites that digitise school systems and fix everyday problems.',
-    example: 'A searchable version of the Pathfinder behaviour charts',
-    href: '/projects/pathfinder/',
-  },
-  {
-    label: 'Robotics',
-    text: 'Robots and sensors that solve problems around school.',
-    example: 'A touch-free smart dustbin',
-    href: '/projects/smart-dustbin/',
-  },
-];
 ---
 
 <Base>
   <!-- ═════════ HERO ═════════ -->
-  <section class:list={['hero', { 'hero-photo': site.heroPhoto }]}>
-    {site.heroPhoto && <img class="hero-bg" src={site.heroPhoto} alt={site.heroPhotoAlt} fetchpriority="high" />}
+  <section class:list={['hero', { 'hero-photo': heroImg }]}>
+    {
+      heroImg && (
+        <Image
+          class="hero-bg"
+          src={heroImg}
+          alt={site.heroPhotoAlt}
+          widths={[800, 1400, 2000]}
+          sizes="100vw"
+          format="webp"
+          quality={78}
+          loading="eager"
+          fetchpriority="high"
+        />
+      )
+    }
     <div class="container hero-grid">
       <div class="hero-copy">
         <p class="hero-kicker">{site.school} · student-led since {site.founded}</p>
@@ -76,23 +82,18 @@ const tracks = [
         </div>
         <p class="hero-note">Sign-ups run through BA and are first come, first served.</p>
       </div>
-      <ul class="tracks" aria-label="What members build">
-        {
-          tracks.map((t) => (
-            <li>
-              <a href={t.href} class="track">
-                <span class="track-label">{t.label}</span>
-                <span class="track-text">{t.text}</span>
-                <span class="track-eg">
-                  e.g. {t.example} <Icon name="arrow" size={15} />
-                </span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
+      {!heroImg && <TrackList />}
     </div>
   </section>
+  {
+    heroImg && (
+      <div class="tracks-band">
+        <div class="container">
+          <TrackList />
+        </div>
+      </div>
+    )
+  }
 
   <!-- ═════════ WHAT MEMBERS BUILT ═════════ -->
   <section class="section" id="built">
@@ -281,84 +282,43 @@ const tracks = [
     font-size: 15px;
     color: var(--muted);
   }
-  .tracks {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    gap: 12px;
-  }
-  .track {
-    display: grid;
-    gap: 6px;
-    padding: 18px 20px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-left: 4px solid var(--orange);
-    border-radius: var(--radius);
-    transition: border-color 0.2s;
-  }
-  .tracks li:nth-child(2) .track {
-    border-left-color: var(--blue);
-  }
-  .track:hover {
-    border-color: var(--text);
-  }
-  .track-label {
-    font-family: var(--font-display);
-    font-weight: 750;
-    font-size: 20px;
-  }
-  .track-text {
-    color: var(--muted);
-    font-size: 16px;
-  }
-  .track-eg {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--orange-glow);
-  }
-  /* Photo hero: photo fills the section, text sits on a dark scrim. */
+  /* Photo hero: the photo fills the right side and fades into the paper on the
+     left, where the text sits, so faces are never covered. */
   .hero-bg {
     position: absolute;
-    inset: 0;
+    top: 0;
+    right: 0;
     z-index: -2;
-    width: 100%;
+    width: 64%;
     height: 100%;
     object-fit: cover;
+    object-position: 40% 12%;
   }
   .hero-photo {
-    min-height: min(88svh, 820px);
+    min-height: min(86svh, 800px);
     display: grid;
-    align-items: end;
+    align-items: center;
   }
   .hero-photo::before {
     content: '';
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(90deg, rgba(20, 16, 12, 0.8) 0%, rgba(20, 16, 12, 0.5) 55%, rgba(20, 16, 12, 0.15) 100%);
+    background: linear-gradient(90deg, var(--bg) 36%, rgba(245, 241, 234, 0.85) 44%, rgba(245, 241, 234, 0) 58%);
   }
-  .hero-photo .hero-copy,
-  .hero-photo .hero-lede,
-  .hero-photo .hero-note {
-    color: #fff;
+  .hero-photo .hero-grid {
+    grid-template-columns: 1fr;
   }
-  .hero-photo .hero-kicker {
-    color: #ffc79e;
+  .hero-photo .hero-copy {
+    max-width: 480px;
   }
-  .hero-photo .grad {
-    background: none;
-    color: #ffb27a;
+  .hero-photo .hero-title {
+    font-size: clamp(36px, 4.2vw, 56px);
   }
-  .hero-photo .btn-ghost {
-    border-color: #fff;
-    color: #fff;
-  }
-  .hero-photo .track {
-    background: rgba(255, 253, 249, 0.94);
+  .tracks-band {
+    padding-block: 20px;
+    background: var(--bg-2);
+    border-bottom: 1px solid var(--border);
   }
 
   /* ── Shared section heads ── */
@@ -493,6 +453,23 @@ const tracks = [
     }
     .hero-grid {
       align-items: start;
+    }
+    /* Phones/tablets: photo on top, text underneath on paper */
+    .hero-photo {
+      min-height: 0;
+      padding-top: calc(min(62vw, 420px) + 92px);
+    }
+    .hero-bg {
+      width: 100%;
+      height: min(62vw, 420px);
+      top: 64px;
+      object-position: 45% 30%;
+    }
+    .hero-photo::before {
+      background: linear-gradient(180deg, rgba(245, 241, 234, 0) calc(min(62vw, 420px) + 10px), var(--bg) calc(min(62vw, 420px) + 64px));
+    }
+    .hero-photo .hero-copy {
+      max-width: none;
     }
     .quotes {
       grid-template-columns: 1fr;
