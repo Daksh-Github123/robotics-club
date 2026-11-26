@@ -2,6 +2,7 @@
 title: Study Buddy
 tagline: A mentoring website for Inventure Academy, where students sign up as a mentee to get help or as a mentor to help others.
 academicYear: "2026-27"
+stream: software
 date: 2026-11-01
 categories: [Software, Website]
 status: deployed

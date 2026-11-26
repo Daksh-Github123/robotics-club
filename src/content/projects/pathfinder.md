@@ -2,6 +2,7 @@
 title: Searchable Pathfinder
 tagline: A website version of the school's Pathfinder behaviour charts, so teachers and staff can search for any offence instead of reading paper charts.
 academicYear: "2026-27"
+stream: software
 date: 2026-11-01
 categories: [Software, Website]
 status: building

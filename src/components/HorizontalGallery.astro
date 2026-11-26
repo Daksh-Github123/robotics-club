@@ -24,6 +24,7 @@ const { projects, total } = Astro.props;
             <ProjectMedia project={p} />
           </div>
           <div class="hg-body">
+            <span class={`stream stream-${p.data.stream}`}>{p.data.stream === 'software' ? 'Software' : 'Robotics'}</span>
             <p class="hg-meta">
               {yearLabel(p.data.academicYear)} · {p.data.team.length === 1 ? p.data.team[0] : `Team of ${p.data.team.length}`}
             </p>
@@ -77,6 +78,9 @@ const { projects, total } = Astro.props;
     display: grid;
     gap: 8px;
     padding: 18px 20px 22px;
+  }
+  .hg-body .stream {
+    justify-self: start;
   }
   .hg-meta {
     font-size: 14px;

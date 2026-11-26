@@ -12,7 +12,7 @@ export const faq: { q: string; a: string }[] = [
   },
   {
     q: 'Who runs the club?',
-    a: 'Students. Tech for Change is fully student-led, one of the only student-led clubs at Inventure Academy. Daksh Singh is the student lead, and Aravind Saseendran and Suprity Bhattacharya are the supervising faculty.',
+    a: 'Students. Tech for Change is fully student-led, one of the only student-led clubs at Inventure Academy. Daksh Singh, who started the robotics branch, is the student lead, and Aravind Saseendran and Suprity Bhattacharya are the supervising faculty.',
   },
   {
     q: 'Do I need any experience?',
@@ -20,7 +20,11 @@ export const faq: { q: string; a: string }[] = [
   },
   {
     q: 'Can I pick my own project?',
-    a: 'Yes, that is how every sprint starts. You choose a problem to solve, a project idea, or something you have seen and want to build: a website, a robot, or both. It needs to be realistic to finish before the BA Showcase.',
+    a: 'Yes, that is how every sprint starts. You choose a problem to solve, a project idea, or something you have seen and want to build: a website or a robot, depending on your stream. It needs to be realistic to finish before the BA Showcase.',
+  },
+  {
+    q: 'What do I need to bring?',
+    a: 'A working laptop, every class. Every project, software or robotics, is planned, coded and tested on a laptop. You also need to actually want to build something: BA periods are for working on your project, not for games.',
   },
   {
     q: 'Does it cost anything?',

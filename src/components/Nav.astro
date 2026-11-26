@@ -5,8 +5,7 @@ const path = Astro.url.pathname;
 const links = [
   { href: '/projects/', label: 'Projects' },
   { href: '/why-join/', label: 'Why join' },
-  { href: '/team/', label: 'Team' },
-  { href: '/competitions/', label: 'Competitions' },
+  { href: '/about/', label: 'About' },
   ...(site.features.showSponsors ? [{ href: '/sponsors/', label: 'Sponsors' }] : []),
 ];
 const isActive = (href: string) => !href.includes('#') && path.startsWith(href.replace(/\/$/, ''));
@@ -50,7 +49,7 @@ const isActive = (href: string) => !href.includes('#') && path.startsWith(href.r
     }
     <li style={`--i:${links.length}`}><a href="/join/" class="grad">Join the club →</a></li>
   </ul>
-  <p class="mono muted mm-foot">{site.school} · est. {site.founded}</p>
+  <p class="mono muted mm-foot">{site.school}</p>
 </div>
 
 <script>

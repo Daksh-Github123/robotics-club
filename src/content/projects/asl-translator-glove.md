@@ -2,6 +2,7 @@
 title: ASL Translator Glove
 tagline: A glove with a flex sensor on each finger that reads American Sign Language letters and shows them on a phone.
 academicYear: "2026-27"
+stream: robotics
 date: 2026-11-04
 categories: [Hardware, Assistive Tech]
 status: building

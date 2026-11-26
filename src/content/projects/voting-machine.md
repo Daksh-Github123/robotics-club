@@ -2,6 +2,7 @@
 title: Electronic Voting Machine
 tagline: A button-per-candidate voting machine with an RFID lock that stops anyone voting twice, built to replace paper ballots at school.
 academicYear: "2025-26"
+stream: robotics
 date: 2026-03-01
 categories: [Hardware, Software]
 status: complete

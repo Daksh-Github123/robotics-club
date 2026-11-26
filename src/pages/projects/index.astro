@@ -29,6 +29,9 @@ const categories = [...new Set(projects.flatMap((p) => p.data.categories))].sort
   <section class="container projects">
     <div class="filters" role="group" aria-label="Filter projects" data-reveal>
       <button class="filter" data-filter="all" aria-pressed="true">All</button>
+      <button class="filter" data-filter="stream:software" aria-pressed="false">Software</button>
+      <button class="filter" data-filter="stream:robotics" aria-pressed="false">Robotics</button>
+      <span class="filter-sep" aria-hidden="true"></span>
       {
         years.map((y) => (
           <button class="filter" data-filter={`year:${y}`} aria-pressed="false">
@@ -82,6 +85,7 @@ const categories = [...new Set(projects.flatMap((p) => p.data.categories))].sort
         if (card.dataset.always !== undefined) return;
         const show =
           kind === 'all' ||
+          (kind === 'stream' && card.dataset.stream === value) ||
           (kind === 'year' && card.dataset.year === value) ||
           (kind === 'cat' && (card.dataset.cats || '').split('|').includes(value!));
         card.hidden = !show;

@@ -364,3 +364,19 @@ ol {
     scroll-behavior: auto !important;
   }
 }
+
+/* ───────── Stream tag (Software / Robotics) ───────── */
+.stream {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 5px;
+  color: #fff;
+  background: var(--orange);
+}
+.stream-robotics {
+  background: var(--blue);
+}

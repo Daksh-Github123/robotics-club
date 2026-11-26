@@ -8,7 +8,6 @@ import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import Base from '../layouts/Base.astro';
-import Timeline from '../components/Timeline.astro';
 import HorizontalGallery from '../components/HorizontalGallery.astro';
 import SprintSteps from '../components/SprintSteps.astro';
 import JoinBox from '../components/JoinBox.astro';
@@ -72,7 +71,7 @@ const fmt = (d: Date) =>
     }
     <div class="container hero-grid">
       <div class="hero-copy">
-        <p class="hero-kicker">{site.school} · student-led since {site.founded}</p>
+        <p class="hero-kicker">{site.school} · student-led</p>
         <h1 class="hero-title">Build something your school can <span class="grad">actually use</span>.</h1>
         <p class="hero-lede">
           {site.name} is {site.school}'s student-led tech club. Members build websites and robots that solve real
@@ -117,8 +116,9 @@ const fmt = (d: Date) =>
       <div class="head">
         <h2 class="h2">Results so far</h2>
         <p class="lede">
-          {projects.length} projects, {sprints} sprints and {showcases.length} BA Showcases since September {site.founded}.
+          {projects.length} projects so far, and {showcases.length} BA Showcases since the robotics branch started in September {site.founded}.
         </p>
+        <a class="history-link" href="/about/#history">See the club's full history <Icon name="arrow" size={15} /></a>
       </div>
       <ul class="log">
         {
@@ -142,7 +142,7 @@ const fmt = (d: Date) =>
               <span class="log-date">NRL {nrl.data.results[0]!.year}</span>
               <span>
                 {nrl.data.results.map((r) => r.result.replace(/^One /, 'one ')).join(', ').replace(/^one/, 'One')} from our
-                school. <a href="/competitions/">School teams</a> are run by other teachers; club members get
+                school. <a href="/about/#competitions">School teams</a> are run by other teachers; club members get
                 recommendations to join them.
               </span>
             </li>
@@ -235,16 +235,6 @@ const fmt = (d: Date) =>
     </div>
   </section>
 
-  <!-- ═════════ TIMELINE ═════════ -->
-  <section class="section" id="journey">
-    <div class="container">
-      <div class="head">
-        <h2 class="h2">The club so far</h2>
-        <p class="lede">From the first meeting in September {site.founded} to now.</p>
-      </div>
-      <Timeline milestones={milestones} />
-    </div>
-  </section>
 </Base>
 
 <style>
@@ -369,6 +359,13 @@ const fmt = (d: Date) =>
     font-size: 14px;
     color: var(--orange-glow);
     padding-top: 3px;
+  }
+  .history-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    color: var(--orange-glow);
   }
   .log a {
     color: var(--orange-glow);

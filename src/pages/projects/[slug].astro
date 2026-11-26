@@ -32,6 +32,7 @@ const { Content } = await render(project);
     <header class="container pd-head">
       <a href="/projects/" class="pd-back"><Icon name="arrowLeft" size={16} /> All projects</a>
       <div class="pd-meta" data-reveal>
+        <span class={`stream stream-${d.stream}`}>{d.stream === 'software' ? 'Software' : 'Robotics'}</span>
         <span class={`chip status status-${d.status}`}>{statusLabel[d.status]}</span>
         <span class="chip">{yearLabel(d.academicYear)}</span>
         <span class="chip"><time datetime={d.date.toISOString()}>{formatDate(d.date)}</time></span>

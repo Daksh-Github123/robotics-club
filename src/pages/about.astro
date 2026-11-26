@@ -1,0 +1,345 @@
+---
+/**
+ * About page: who we are, the club's history (timeline), the people who run it,
+ * and how the club relates to competitions. Replaces the old Team and
+ * Competitions pages (/team/ and /competitions/ redirect here).
+ */
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import MemberCard from '../components/MemberCard.astro';
+import Timeline from '../components/Timeline.astro';
+import TrackList from '../components/TrackList.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../site.config';
+import { sortMembers, sortMilestones } from '../lib/meta';
+
+const milestones = sortMilestones(await getCollection('milestones'));
+
+const all = sortMembers(await getCollection('members'));
+const leads = all.filter((m) => m.data.status === 'current');
+const faculty = all.filter((m) => m.data.status === 'faculty');
+const alumni = all
+  .filter((m) => m.data.status === 'alumni')
+  .sort((a, b) => (b.data.gradYear ?? 0) - (a.data.gradYear ?? 0) || a.data.order - b.data.order);
+
+const comps = (await getCollection('competitions')).sort((a, b) => a.data.order - b.data.order);
+const groups = [
+  {
+    kind: 'club',
+    title: 'Done with the club',
+    sub: 'Independent competitions are done with the club. Members plan, build and prepare their entries together.',
+  },
+  {
+    kind: 'school-team',
+    title: 'School teams, run by other teachers',
+    sub: "The school's competition teams are managed by other teachers, and their details are shared separately. Club members get recommendations to join them straight away, and each team schedules its own after-school practices.",
+  },
+] as const;
+
+const tabs = [
+  { id: 'who', label: 'Who we are' },
+  { id: 'history', label: 'History' },
+  { id: 'people', label: 'People' },
+  { id: 'competitions', label: 'Competitions' },
+];
+---
+
+<Base
+  title="About"
+  description="Who runs Tech for Change at Inventure Academy, how the club started, and how it connects to competitions."
+>
+  <PageHeader
+    title='About <span class="grad">Tech for Change</span>'
+    sub={`${site.school}'s student-led tech club, with two streams: software and robotics.`}
+  />
+
+  <nav class="tabs" aria-label="On this page">
+    <div class="container">
+      <ul>{tabs.map((t) => <li><a href={`#${t.id}`}>{t.label}</a></li>)}</ul>
+    </div>
+  </nav>
+
+  <!-- ═════════ WHO WE ARE ═════════ -->
+  <section class="section" id="who">
+    <div class="container who">
+      <div class="who-text">
+        <h2 class="h2">Who we are</h2>
+        <p>
+          {site.name} started as a software club, building websites that make school run better. In September 2025 a
+          robotics branch started, and the two now run as one club with two streams. Each member picks one.
+        </p>
+        <p>
+          The club is fully student-led, one of the only student-led clubs at {site.school}. Students run the sessions
+          and teach each other, and faculty supervise.
+        </p>
+      </div>
+      <TrackList />
+    </div>
+  </section>
+
+  <!-- ═════════ HISTORY ═════════ -->
+  <section class="section alt" id="history">
+    <div class="container">
+      <div class="head">
+        <h2 class="h2">History</h2>
+        <p class="lede">Every sprint, showcase and first since the robotics branch started in September 2025.</p>
+      </div>
+      <Timeline milestones={milestones} />
+    </div>
+  </section>
+
+  <!-- ═════════ PEOPLE ═════════ -->
+  <section class="section" id="people">
+    <div class="container people">
+      <div class="head">
+        <h2 class="h2">People</h2>
+        <p class="lede">The students running the club, the teachers who supervise it, and past members.</p>
+      </div>
+
+      {
+        leads.length > 0 && (
+          <div class="block">
+            <h3 class="sub">Student leads</h3>
+            <div class="grid">
+              {leads.map((m) => (
+                <MemberCard member={m} />
+              ))}
+            </div>
+          </div>
+        )
+      }
+
+      {
+        faculty.length > 0 && (
+          <div class="block">
+            <h3 class="sub">Supervising faculty</h3>
+            <p class="muted">Faculty supervise the club and oversee anything that needs a teacher, like sawing, drilling and soldering.</p>
+            <div class="grid">
+              {faculty.map((m) => (
+                <MemberCard member={m} />
+              ))}
+            </div>
+          </div>
+        )
+      }
+
+      <div class="block">
+        <h3 class="sub">Past members</h3>
+        {
+          alumni.length > 0 ? (
+            <div class="grid">
+              {alumni.map((m) => (
+                <MemberCard member={m} />
+              ))}
+            </div>
+          ) : (
+            <p class="muted">No alumni yet. The first leads graduate soon.</p>
+          )
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ COMPETITIONS ═════════ -->
+  <section class="section alt" id="competitions">
+    <div class="container">
+      <div class="head">
+        <h2 class="h2">Competitions</h2>
+        <p class="lede">
+          The club is about building projects, not competitions. Some competitions are done with the club; the school's
+          competition teams are run by other teachers.
+        </p>
+      </div>
+      {
+        groups.map((g) => {
+          const list = comps.filter((c) => c.data.kind === g.kind);
+          return (
+            list.length > 0 && (
+              <div class="comp-group">
+                <h3 class="sub">{g.title}</h3>
+                <p class="muted">{g.sub}</p>
+                <div class="comps">
+                  {list.map((c) => (
+                    <article class="comp">
+                      <span class="chip">{c.data.level}</span>
+                      <h4>{c.data.name}</h4>
+                      <p class="comp-desc">{c.data.description}</p>
+                      {c.data.results.length > 0 && (
+                        <div class="comp-results">
+                          <p class="comp-label">
+                            <Icon name="trophy" size={14} /> {g.kind === 'school-team' ? 'School results' : 'Results'}
+                          </p>
+                          <ul>
+                            {c.data.results.map((r) => (
+                              <li>
+                                <span class="mono">{r.year}</span> {r.result}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {c.data.website && (
+                        <a class="comp-link" href={c.data.website} target="_blank" rel="noopener">
+                          Official site <Icon name="external" size={14} />
+                        </a>
+                      )}
+                    </article>
+                  ))}
+                </div>
+              </div>
+            )
+          );
+        })
+      }
+      <a href="/join/#contacts" class="btn btn-ghost ask">Questions about competitions? Ask us <Icon name="arrow" size={18} /></a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tabs {
+    position: sticky;
+    top: 68px;
+    z-index: 20;
+    background: rgba(245, 241, 234, 0.95);
+    border-block: 1px solid var(--border);
+  }
+  .tabs ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs a {
+    display: block;
+    padding: 12px 14px;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--muted);
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+  }
+  .tabs a:hover {
+    color: var(--text);
+    border-bottom-color: var(--orange);
+  }
+  .section[id] {
+    scroll-margin-top: 130px;
+  }
+  .alt {
+    background: var(--bg-2);
+    border-block: 1px solid var(--border);
+  }
+  .head {
+    display: grid;
+    gap: 12px;
+    margin-bottom: clamp(28px, 4vw, 44px);
+    max-width: 720px;
+  }
+  .who {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: clamp(28px, 5vw, 64px);
+    align-items: start;
+  }
+  .who-text {
+    display: grid;
+    gap: 14px;
+  }
+  .who-text p {
+    color: var(--muted);
+  }
+  .people {
+    display: grid;
+  }
+  .block {
+    display: grid;
+    gap: 14px;
+    margin-bottom: clamp(36px, 5vw, 56px);
+  }
+  .sub {
+    font-size: 22px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .comp-group {
+    display: grid;
+    gap: 10px;
+    margin-bottom: clamp(32px, 4vw, 48px);
+  }
+  .comps {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-top: 8px;
+  }
+  .comp {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 24px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .comp h4 {
+    font-size: 22px;
+  }
+  .comp-desc {
+    color: var(--muted);
+    font-size: 16px;
+  }
+  .comp-results {
+    width: 100%;
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .comp-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--yellow);
+    margin-bottom: 6px;
+  }
+  .comp-results ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 4px;
+    font-size: 16px;
+  }
+  .comp-results .mono {
+    color: var(--orange-glow);
+    margin-right: 8px;
+  }
+  .comp-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--blue-glow);
+  }
+  .ask {
+    margin-top: 8px;
+  }
+  @media (max-width: 900px) {
+    .who {
+      grid-template-columns: 1fr;
+    }
+    .tabs {
+      top: 74px;
+    }
+  }
+</style>

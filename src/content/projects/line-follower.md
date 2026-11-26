@@ -2,6 +2,7 @@
 title: Line Follower
 tagline: The robot every member built in Sprint 1 while learning the basics of sensors, motors and code.
 academicYear: "2025-26"
+stream: robotics
 date: 2025-12-15
 categories: [Hardware, Software]
 status: complete

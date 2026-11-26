@@ -20,11 +20,13 @@ const d = project.data;
   class:list={['pc-wrap', `size-${d.size}`]}
   data-card
   data-year={d.academicYear}
+  data-stream={d.stream}
   data-cats={d.categories.map((c) => c.toLowerCase()).join('|')}
 >
   <article class="pc">
     <div class="pc-media"><ProjectMedia project={project} /></div>
     <div class="pc-body">
+      <span class={`stream stream-${d.stream}`}>{d.stream === 'software' ? 'Software' : 'Robotics'}</span>
       <p class="pc-meta">
         <span class={`status status-${d.status}`}>{statusLabel[d.status]}</span>
         <span>{yearLabel(d.academicYear)}</span>
@@ -92,6 +94,9 @@ const d = project.data;
     display: grid;
     gap: 8px;
     padding: 18px 20px 20px;
+  }
+  .pc-body .stream {
+    justify-self: start;
   }
   .pc-meta {
     display: flex;

@@ -2,6 +2,7 @@
 title: Reunited
 tagline: An online lost and found for Inventure Academy. Search for what you lost, claim it, and collect it from the Lost & Found desk with a code.
 academicYear: "2026-27"
+stream: software
 date: 2026-11-01
 categories: [Software, Website]
 status: deployed

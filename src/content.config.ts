@@ -27,6 +27,8 @@ const projects = defineCollection({
     tagline: z.string(),
     /** School year the project belongs to, written like "2025-26". */
     academicYear: z.string().regex(/^\d{4}-\d{2}$/, 'Write the academic year like "2025-26"'),
+    /** Which stream the project was built in: software or robotics. */
+    stream: z.enum(['software', 'robotics']),
     date: z.coerce.date(),
     categories: z.array(z.string()).default([]),
     status: z.enum(['concept', 'building', 'complete', 'deployed']).default('building'),

@@ -2,6 +2,7 @@
 title: Classroom Energy Audit
 tagline: A sensor kit that logs when a classroom's lights are left on with nobody inside, so the school can see how much energy it wastes.
 academicYear: "2026-27"
+stream: robotics
 date: 2026-11-04
 categories: [Sustainability, IoT]
 status: building

@@ -2,6 +2,7 @@
 title: Race Timer
 tagline: A camera-based race timer that uses computer vision to detect when runners cross the finish line.
 academicYear: "2026-27"
+stream: robotics
 date: 2026-11-04
 categories: [Software, Computer Vision]
 status: building
