@@ -18,31 +18,35 @@ placeholder: true
 
 > **To fill in:** the exact date, the academic year (assumed 2026–27) and a screenshot for the cover.
 
+*Written by Reyansh Sen.*
+
 ## The problem
 
-The school's Pathfinder behaviour charts only existed on paper, which made them slow and annoying to use.
+We built this because the paper Pathfinder charts are annoying to use. A website is more convenient, more detailed and easier to use than paper.
 
 ## What it does
 
-Searchable Pathfinder is a website version of the charts, made for teachers and staff.
+Searchable Pathfinder is a website version of the school's Pathfinder behaviour charts, for teachers and staff.
 
 - Search for any offence.
-- Click an offence to open a pop-up with more detail.
+- Click an offence to get a pop-up with more detail.
 - No login needed.
 
-It's more convenient and more detailed than the paper charts, and it's already live on a Google Site.
+I did the coding, and Aayush did the design and marketing. It's mostly done, and it's already live on a Google Site.
 
-## Challenges
+## Challenges and how we got past them
 
-- **Getting the data in.** Typing out every offence from the charts would have taken ages, so once the base of the site was built, Reyansh used OCR to pull the text straight from the charts.
-- **Cropping the icons.** Some were cropped automatically and some by hand.
-- In general, the team worked through problems with trial and error and help from AI tools.
+- **Getting the data in.** Typing every offence out from the charts would have taken ages. Once the base of the site was built, I used OCR to pull the text straight from the charts.
+- **Cropping the icons.** Some were automated and some I did by hand.
+- In general, we worked through problems with trial and error and help from AI tools.
 
 ## How it went
 
-Reyansh was excited when the project started, and it went fairly smoothly with no real frustrating moments. The most satisfying moment was getting positive feedback from a teacher, and the team is proud of how it turned out.
+I was excited when the project started. There weren't really any frustrating moments, and it went fairly smoothly. The most satisfying moment was getting positive feedback from a teacher. Now I'm proud of how it turned out.
 
 ## What's next
+
+We definitely plan to keep working on it:
 
 - Add a section showing the consequences for each level.
 - Polish the design.
