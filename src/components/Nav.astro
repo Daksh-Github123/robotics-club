@@ -63,6 +63,8 @@ const isActive = (href: string) => !href.includes('#') && path.startsWith(href.r
     const y = window.scrollY;
     nav.classList.toggle('scrolled', y > 24);
     if (menu.hidden) nav.classList.toggle('tucked', y > lastY && y > 320);
+    // Lets sticky bars elsewhere (About tabs) move up while the nav is hidden
+    document.documentElement.classList.toggle('nav-tucked', nav.classList.contains('tucked'));
     lastY = y;
   };
   window.addEventListener('scroll', onScroll, { passive: true });
