@@ -23,7 +23,7 @@ const d = project.data;
   data-stream={d.stream}
   data-cats={d.categories.map((c) => c.toLowerCase()).join('|')}
 >
-  <article class="pc">
+  <article class={`pc pc-${d.stream}`}>
     <div class="pc-media"><ProjectMedia project={project} /></div>
     <div class="pc-body">
       <span class={`stream stream-${d.stream}`}>{d.stream === 'software' ? 'Software' : 'Robotics'}</span>
@@ -65,21 +65,24 @@ const d = project.data;
     display: flex;
     flex-direction: column;
     height: 100%;
-    border-radius: var(--radius-lg);
+    border-radius: 4px;
     overflow: hidden;
     border: 1px solid var(--border);
+    border-top: 6px solid var(--orange);
     background: var(--surface);
-    transition:
-      border-color 0.2s,
-      transform 0.2s;
+    transition: border-color 0.2s;
+  }
+  .pc-robotics {
+    border-top-color: var(--blue);
   }
   .pc:hover {
-    border-color: var(--text);
-    transform: translateY(-2px);
+    border-color: var(--navy);
+    border-top-color: var(--navy);
   }
   .pc:focus-within {
-    outline: 2px solid var(--orange);
-    outline-offset: 3px;
+    outline: 3px solid var(--navy);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--yellow-kit);
   }
   .pc-media {
     position: relative;
@@ -103,7 +106,7 @@ const d = project.data;
     flex-wrap: wrap;
     align-items: center;
     gap: 4px 14px;
-    font-size: 14px;
+    font-size: 15px;
     color: var(--muted);
   }
   .pc-meta .status {
@@ -144,16 +147,16 @@ const d = project.data;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 6px 11px;
-    border-radius: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
     font-size: 14px;
     font-weight: 700;
-    color: var(--blue-glow);
-    background: #e6eefb;
+    color: var(--navy);
+    background: var(--bg-2);
     transition: background 0.2s;
   }
   .pc-mlinks a:hover {
-    background: #d3e1f8;
+    background: var(--surface-2);
   }
   @media (max-width: 640px) {
     .size-wide,

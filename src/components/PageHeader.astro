@@ -1,5 +1,8 @@
 ---
-/** Header at the top of every sub-page. `title` may contain one <span class="grad">…</span> highlight. */
+/**
+ * Header at the top of every sub-page: title on white, closed off by a strip
+ * of classroom blue (the same blue as the band on the homepage).
+ */
 interface Props {
   eyebrow?: string;
   title: string;
@@ -8,9 +11,26 @@ interface Props {
 const { eyebrow, title, sub } = Astro.props;
 ---
 
-<header class="page-header container">
-  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-  <h1 class="display" set:html={title} />
-  {sub && <p class="lede">{sub}</p>}
-  <slot />
+<header class="page-header">
+  <div class="container ph-inner">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h1 class="display" set:html={title} />
+    {sub && <p class="lede">{sub}</p>}
+    <slot />
+  </div>
 </header>
+
+<style>
+  .page-header {
+    border-bottom: 10px solid var(--blue);
+  }
+  .ph-inner {
+    display: grid;
+    gap: 18px;
+    justify-items: start;
+  }
+  .ph-inner .display {
+    margin: 0;
+    max-width: 20ch;
+  }
+</style>

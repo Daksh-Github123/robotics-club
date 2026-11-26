@@ -55,22 +55,21 @@ const items = [
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    font-size: 13px;
-    padding: 6px 11px;
+    font-size: 14px;
+    padding: 6px 12px;
     border-radius: 999px;
-    border: 1px solid var(--border-strong);
-    color: var(--muted);
+    background: var(--bg-2);
+    color: var(--text);
     overflow-wrap: anywhere;
     transition:
       color 0.2s,
       border-color 0.2s;
   }
   .cl a:hover {
-    color: var(--text);
-    border-color: var(--orange);
+    background: var(--surface-2);
   }
   .cl :global(svg) {
     flex-shrink: 0;
-    color: var(--orange-glow);
+    color: var(--blue);
   }
 </style>

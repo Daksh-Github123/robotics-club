@@ -1,5 +1,5 @@
 ---
-/** Eyebrow + big title + optional subtitle. `title` may contain <span class="grad">…</span>. */
+/** Section title with an optional subtitle. */
 interface Props {
   eyebrow?: string;
   title: string;
@@ -10,15 +10,15 @@ const { eyebrow, title, sub, align = 'left' } = Astro.props;
 ---
 
 <div class:list={['sh', `sh-${align}`]}>
-  {eyebrow && <p class="eyebrow" data-reveal>{eyebrow}</p>}
-  <h2 class="h2" data-reveal set:html={title} />
-  {sub && <p class="lede" data-reveal>{sub}</p>}
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  <h2 class="h2" set:html={title} />
+  {sub && <p class="lede">{sub}</p>}
 </div>
 
 <style>
   .sh {
     display: grid;
-    gap: 18px;
+    gap: 12px;
   }
   .sh-center {
     text-align: center;

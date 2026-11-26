@@ -251,7 +251,7 @@ ol {
   border: 1px solid var(--border);
   border-radius: var(--radius);
 }
-/* [data-glow] used to add a cursor glow; it's now just a positioning hook. */
+/* Positioning hook kept for older markup. */
 [data-glow] {
   position: relative;
 }
@@ -331,11 +331,8 @@ ol {
 
 /* ───────── Shared page header (sub-pages) ───────── */
 .page-header {
-  padding-top: clamp(120px, 15vw, 180px);
-  padding-bottom: clamp(36px, 5vw, 64px);
-}
-.page-header .display {
-  margin: 12px 0 20px;
+  padding-top: clamp(112px, 12vw, 160px);
+  padding-bottom: clamp(36px, 5vw, 60px);
 }
 
 @keyframes spin {

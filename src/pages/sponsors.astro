@@ -15,9 +15,9 @@ const sponsors: { name: string; logo?: string; url?: string; tier?: string }[] =
 ];
 
 const uses = [
-  { icon: 'cpu', title: 'Parts & electronics', text: 'Microcontrollers, motors, sensors and batteries for every sprint team.' },
-  { icon: 'trophy', title: 'Competition fees', text: 'Registration and travel for school competition teams.' },
-  { icon: 'wrench', title: 'Tools & 3D printing', text: 'Filament, soldering stations and the tools that turn ideas into robots.' },
+  { title: 'Parts & electronics', text: 'Microcontrollers, motors, sensors and batteries for every sprint team.' },
+  { title: 'Competition fees', text: 'Registration and travel for school competition teams.' },
+  { title: 'Tools & 3D printing', text: 'Filament, soldering stations and the tools that turn ideas into robots.' },
 ];
 const contact = site.socials.email ? `mailto:${site.socials.email}` : '/join/#contacts';
 ---
@@ -28,20 +28,17 @@ const contact = site.socials.email ? `mailto:${site.socials.email}` : '/join/#co
   noindex={!site.features.showSponsors}
 >
   <PageHeader
-    title='Fuel the <span class="grad">next build.</span>'
+    title="Fuel the next build."
     sub="Every dollar goes straight into parts, tools and competition entries for students building real software and robots."
   >
-    <a href={contact} class="btn btn-primary header-cta">Become a sponsor <Icon name="arrow" size={18} /></a>
+    <a href={contact} class="btn btn-primary header-cta">Become a sponsor</a>
   </PageHeader>
 
-  <section class="container">
-    <div class="uses" data-reveal-group>
+  <section class="container uses-section">
+    <div class="uses">
       {
         uses.map((u) => (
           <div class="use">
-            <span class="use-icon">
-              <Icon name={u.icon} size={26} />
-            </span>
             <h3>{u.title}</h3>
             <p>{u.text}</p>
           </div>
@@ -54,7 +51,7 @@ const contact = site.socials.email ? `mailto:${site.socials.email}` : '/join/#co
     <SectionHeading title='Our supporters' />
     {
       sponsors.length > 0 ? (
-        <ul class="logos" data-reveal-group>
+        <ul class="logos">
           {sponsors.map((s) => (
             <li>
               <a href={s.url} target="_blank" rel="noopener" class="logo-card">
@@ -65,7 +62,7 @@ const contact = site.socials.email ? `mailto:${site.socials.email}` : '/join/#co
           ))}
         </ul>
       ) : (
-        <a href={contact} class="empty" data-reveal>
+        <a href={contact} class="empty">
           <span class="empty-icon">
             <Icon name="plus" size={30} />
           </span>
@@ -81,7 +78,10 @@ const contact = site.socials.email ? `mailto:${site.socials.email}` : '/join/#co
 
 <style>
   .header-cta {
-    margin-top: 32px;
+    margin-top: 8px;
+  }
+  .uses-section {
+    padding-top: clamp(40px, 5vw, 64px);
   }
   .uses {
     display: grid;
@@ -92,21 +92,8 @@ const contact = site.socials.email ? `mailto:${site.socials.email}` : '/join/#co
     display: grid;
     gap: 14px;
     align-content: start;
-    padding: clamp(26px, 3vw, 36px);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border);
-    background: var(--surface);
-    overflow: hidden;
-  }
-  .use-icon {
-    width: 58px;
-    height: 58px;
-    display: grid;
-    place-items: center;
-    border-radius: 18px;
-    color: var(--green);
-    background: #dcf1e5;
-    border: 1px solid var(--green);
+    padding-top: 18px;
+    border-top: 2px solid var(--navy);
   }
   .use h3 {
     font-size: 24px;
@@ -128,9 +115,8 @@ const contact = site.socials.email ? `mailto:${site.socials.email}` : '/join/#co
     gap: 12px;
     min-height: 160px;
     padding: 24px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    background: var(--surface);
+    border-radius: 4px;
+    background: var(--bg-2);
     font-family: var(--font-display);
     font-weight: 700;
   }
@@ -144,13 +130,14 @@ const contact = site.socials.email ? `mailto:${site.socials.email}` : '/join/#co
     gap: 24px;
     margin-top: 40px;
     padding: clamp(28px, 4vw, 48px);
-    border-radius: var(--radius-lg);
-    border: 1px dashed var(--border-strong);
+    border-radius: 4px;
+    background: var(--bg-2);
+    border-top: 6px solid var(--navy);
     overflow: hidden;
-    transition: border-color 0.3s;
+    transition: background 0.2s;
   }
   .empty:hover {
-    border-color: var(--green);
+    background: var(--surface-2);
   }
   .empty > span:last-child {
     display: grid;
@@ -166,25 +153,13 @@ const contact = site.socials.email ? `mailto:${site.socials.email}` : '/join/#co
     height: 70px;
     display: grid;
     place-items: center;
-    border-radius: 50%;
-    background: var(--green);
-    color: #fff;
+    border-radius: 4px;
+    background: var(--orange);
+    color: var(--navy);
   }
   @media (max-width: 900px) {
     .uses {
       grid-template-columns: 1fr;
     }
-  }
-/* Plain numbered list (no cards, no icons) */
-  .use {
-    background: none;
-    border: 0;
-    border-top: 1.5px solid var(--text);
-    border-radius: 0;
-    padding: 16px 0 0;
-    box-shadow: none;
-  }
-  .use-icon {
-    display: none;
   }
 </style>

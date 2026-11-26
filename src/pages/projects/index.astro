@@ -22,12 +22,12 @@ const categories = [...new Set(projects.flatMap((p) => p.data.categories))].sort
 
 <Base title="Projects" description="Every website, robot and build from the club, by academic year.">
   <PageHeader
-    title='All <span class="grad">projects</span>'
+    title="All projects"
     sub="Each project has its own page with the team, the problem it solves and how it works. Filter by academic year or category."
   />
 
   <section class="container projects">
-    <div class="filters" role="group" aria-label="Filter projects" data-reveal>
+    <div class="filters" role="group" aria-label="Filter projects">
       <button class="filter" data-filter="all" aria-pressed="true">All</button>
       <button class="filter" data-filter="stream:software" aria-pressed="false">Software</button>
       <button class="filter" data-filter="stream:robotics" aria-pressed="false">Robotics</button>
@@ -47,10 +47,10 @@ const categories = [...new Set(projects.flatMap((p) => p.data.categories))].sort
           </button>
         ))
       }
-      <span class="filter-count mono" aria-live="polite" data-count-label>{projects.length} projects</span>
+      <span class="filter-count" aria-live="polite" data-count-label>{projects.length} projects</span>
     </div>
 
-    <div class="bento" data-bento data-reveal-group>
+    <div class="bento" data-bento>
       {ordered.map((p) => <ProjectCard project={p} />)}
       <div class="pc-wrap" data-card data-always>
         <a href="/join/" class="pitch">
@@ -107,6 +107,7 @@ const categories = [...new Set(projects.flatMap((p) => p.data.categories))].sort
 
 <style>
   .projects {
+    padding-top: clamp(32px, 4vw, 48px);
     padding-bottom: clamp(80px, 10vw, 140px);
   }
   .filters {
@@ -117,11 +118,12 @@ const categories = [...new Set(projects.flatMap((p) => p.data.categories))].sort
     margin-bottom: 28px;
   }
   .filter {
-    padding: 8px 14px;
-    border-radius: 6px;
-    border: 1px solid var(--border-strong);
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 2px solid var(--border);
     background: var(--surface);
-    font-size: 14px;
+    font-size: 15px;
+    font-weight: 600;
     color: var(--muted);
     transition:
       color 0.2s,
@@ -131,13 +133,22 @@ const categories = [...new Set(projects.flatMap((p) => p.data.categories))].sort
   }
   .filter:hover {
     color: var(--text);
-    border-color: var(--muted);
+    border-color: var(--navy);
   }
   .filter[aria-pressed='true'] {
-    background: var(--text);
-    border-color: var(--text);
-    color: var(--bg);
+    background: var(--navy);
+    border-color: var(--navy);
+    color: #fff;
     font-weight: 700;
+  }
+  .filter[data-filter='stream:software'][aria-pressed='true'] {
+    background: var(--orange);
+    border-color: var(--orange);
+    color: var(--navy);
+  }
+  .filter[data-filter='stream:robotics'][aria-pressed='true'] {
+    background: var(--blue);
+    border-color: var(--blue);
   }
   .filter-sep {
     width: 1px;
@@ -147,17 +158,16 @@ const categories = [...new Set(projects.flatMap((p) => p.data.categories))].sort
   }
   .filter-count {
     margin-left: auto;
-    font-size: 12px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--faint);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--muted);
   }
   .bento {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-auto-flow: dense;
     align-items: start;
-    gap: 20px;
+    gap: 16px;
   }
   .pitch {
     height: 100%;
@@ -166,30 +176,22 @@ const categories = [...new Set(projects.flatMap((p) => p.data.categories))].sort
     flex-direction: column;
     justify-content: space-between;
     padding: 26px;
-    border-radius: var(--radius-lg);
-    border: 1px dashed var(--border-strong);
-    transition: border-color 0.3s;
+    border-radius: 4px;
+    background: var(--bg-2);
+    border-top: 6px solid var(--navy);
+    transition: background 0.2s;
   }
   .pitch:hover {
-    border-color: var(--orange);
+    background: var(--surface-2);
   }
   .pitch-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    border-radius: 4px;
     display: grid;
     place-items: center;
-    border: 1px solid var(--border-strong);
-    color: var(--orange-glow);
-    transition:
-      transform 0.5s var(--ease-out),
-      background 0.3s,
-      color 0.3s;
-  }
-  .pitch:hover .pitch-icon {
-    transform: rotate(90deg);
     background: var(--orange);
-    color: #fff;
+    color: var(--navy);
   }
   .pitch h3 {
     font-size: 22px;

@@ -20,178 +20,182 @@ const alumniContacts = members.filter((m) => m.data.status === 'alumni');
 
 const steps = [
   {
-    icon: 'calendar',
     title: 'Watch for BA sign-ups',
     text: "Tech for Change is part of the school's Beyond Academics (BA) program. Sign-ups open through the school.",
   },
   {
-    icon: 'bolt',
     title: 'Sign up fast',
     text: "Spots are first come, first served. Choose Tech for Change as soon as sign-ups open. You don't need any experience.",
   },
   {
-    icon: 'pin',
     title: 'Check your venue',
     text: `This sprint we meet in ${site.meeting.where}. Come to the first BA period and start thinking about your project.`,
   },
 ];
 
 const facts = [
-  { icon: 'bolt', label: 'Sign-ups', value: 'BA sign-ups, first come, first served' },
-  { icon: 'pin', label: 'Where', value: site.meeting.where },
-  { icon: 'calendar', label: 'When', value: site.meeting.when },
-  { icon: 'spark', label: 'Experience', value: 'None needed' },
+  { label: 'Sign-ups', value: 'BA sign-ups, first come, first served' },
+  { label: 'Where', value: site.meeting.where },
+  { label: 'When', value: site.meeting.when },
+  { label: 'Experience', value: 'None needed' },
 ];
 ---
 
 <Base title="Join / FAQ" description="How to join Tech for Change, what to expect, and who to ask.">
-  <PageHeader
-    title='Come build <span class="grad">with us.</span>'
-    sub={site.applyInfo}
-  >
+  <PageHeader title="Come build with us." sub={site.applyInfo}>
     <SignupStatus />
   </PageHeader>
 
-  <section class="container">
-    <ol class="steps" data-reveal-group>
-      {
-        steps.map((s, i) => (
-          <li class="step">
-            <span class="step-k mono">STEP 0{i + 1}</span>
-            <Icon name={s.icon} size={28} />
-            <h3>{s.title}</h3>
-            <p>{s.text}</p>
-          </li>
-        ))
-      }
-    </ol>
+  <!-- ═════════ STEPS ═════════ -->
+  <section class="section steps-section">
+    <div class="container">
+      <h2 class="h2">How to join</h2>
+      <ol class="steps">
+        {
+          steps.map((s, i) => (
+            <li class="step">
+              <span class="step-n">{i + 1}</span>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
 
-    <dl class="facts" data-reveal-group>
+  <!-- ═════════ FACTS: the blue band ═════════ -->
+  <div class="facts-band">
+    <dl class="container facts">
       {
         facts.map((f) => (
           <div class="fact">
-            <dt class="mono">
-              <Icon name={f.icon} size={15} /> {f.label}
-            </dt>
+            <dt>{f.label}</dt>
             <dd>{f.value}</dd>
           </div>
         ))
       }
     </dl>
+  </div>
+
+  <!-- ═════════ FAQ ═════════ -->
+  <section class="section">
+    <div class="container faq-section">
+      <div class="faq-head">
+        <SectionHeading title="Common questions" />
+      </div>
+      <div class="faq">
+        {
+          faq.map((item, i) => (
+            <details class="qa" open={i === 0}>
+              <summary>
+                <span>{item.q}</span>
+                <span class="qa-icon" aria-hidden="true">
+                  <Icon name="plus" size={20} />
+                </span>
+              </summary>
+              <p>{item.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
   </section>
 
-  <section class="section container faq-section">
-    <div class="faq-head">
-      <SectionHeading title='Common questions' />
-    </div>
-    <div class="faq" data-reveal-group>
+  <!-- ═════════ CONTACTS ═════════ -->
+  <section class="section contacts-section" id="contacts">
+    <div class="container">
+      <SectionHeading
+        title="Questions? Email us."
+        sub="Reach out to the student lead or either of the supervising faculty."
+      />
       {
-        faq.map((item, i) => (
-          <details class="qa" open={i === 0}>
-            <summary>
-              <span>{item.q}</span>
-              <span class="qa-icon" aria-hidden="true">
-                <Icon name="plus" size={20} />
-              </span>
-            </summary>
-            <p>{item.a}</p>
-          </details>
-        ))
-      }
-    </div>
-  </section>
-
-  <section class="section container" id="contacts">
-    <SectionHeading
-      title='Questions? Email us.'
-      sub="Reach out to the student lead or either of the supervising faculty."
-    />
-    {
-      currentContacts.length > 0 && (
-        <div class="contacts" data-reveal-group>
-          {currentContacts.map((m) => (
-            <MemberCard member={m} />
-          ))}
-        </div>
-      )
-    }
-    {
-      alumniContacts.length > 0 && (
-        <>
-          <h3 class="sub-h mono">Past members</h3>
-          <div class="contacts" data-reveal-group>
-            {alumniContacts.map((m) => (
+        currentContacts.length > 0 && (
+          <div class="contacts">
+            {currentContacts.map((m) => (
               <MemberCard member={m} />
             ))}
           </div>
-        </>
-      )
-    }
+        )
+      }
+      {
+        alumniContacts.length > 0 && (
+          <>
+            <h3 class="sub-h">Past members</h3>
+            <div class="contacts">
+              {alumniContacts.map((m) => (
+                <MemberCard member={m} />
+              ))}
+            </div>
+          </>
+        )
+      }
+    </div>
   </section>
 </Base>
 
 <style>
+  /* ── Steps: a real sequence, so big blue numerals ── */
   .steps {
     list-style: none;
     padding: 0;
+    margin-top: clamp(24px, 3vw, 36px);
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+    gap: clamp(20px, 3vw, 40px);
   }
   .step {
     display: grid;
-    gap: 14px;
+    gap: 10px;
     align-content: start;
-    padding: clamp(26px, 3vw, 36px);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border);
-    background: var(--surface);
-    overflow: hidden;
+    padding-top: 18px;
+    border-top: 2px solid var(--navy);
   }
-  .step :global(svg) {
-    color: var(--orange-glow);
-  }
-  .step-k {
-    font-size: 12px;
-    letter-spacing: 0.14em;
-    color: var(--faint);
+  .step-n {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 64px;
+    line-height: 0.85;
+    color: var(--blue);
   }
   .step h3 {
-    font-size: clamp(22px, 2.2vw, 28px);
+    font-size: clamp(22px, 2.2vw, 26px);
   }
   .step p {
     color: var(--muted);
   }
+
+  /* ── Facts band ── */
+  .facts-band {
+    background: var(--blue);
+    color: #fff;
+    padding-block: clamp(28px, 4vw, 40px);
+  }
   .facts {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    margin: 16px 0 0;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    background: var(--surface);
+    margin-block: 0;
   }
   .fact {
-    padding: 22px 24px;
-    border-right: 1px solid var(--border);
+    padding: 4px clamp(16px, 2vw, 28px);
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
   }
-  .fact:last-child {
-    border-right: 0;
+  .fact:first-child {
+    border-left: 0;
+    padding-left: 0;
   }
   .fact dt {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 11.5px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--orange-glow);
-    margin-bottom: 8px;
+    font-weight: 800;
+    font-size: 20px;
+    margin-bottom: 6px;
   }
   .fact dd {
     margin: 0;
-    font-size: 15.5px;
+    font-size: 16px;
+    color: #dbe4f5;
   }
+
+  /* ── FAQ ── */
   .faq-section {
     display: grid;
     grid-template-columns: 0.8fr 1.2fr;
@@ -203,10 +207,10 @@ const facts = [
     top: 120px;
   }
   .faq {
-    border-top: 1px solid var(--border);
+    border-top: 2px solid var(--navy);
   }
   .qa {
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border-strong);
   }
   .qa summary {
     list-style: none;
@@ -214,7 +218,7 @@ const facts = [
     justify-content: space-between;
     align-items: center;
     gap: 20px;
-    padding: 24px 0;
+    padding: 22px 0;
     cursor: pointer;
     font-family: var(--font-display);
     font-weight: 700;
@@ -226,61 +230,64 @@ const facts = [
     display: none;
   }
   .qa summary:hover {
-    color: var(--orange-glow);
+    color: var(--blue);
   }
   .qa-icon {
     flex-shrink: 0;
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     display: grid;
     place-items: center;
-    border-radius: 50%;
-    border: 1px solid var(--border-strong);
+    border-radius: 4px;
+    background: var(--bg-2);
     transition:
-      transform 0.4s var(--ease-out),
-      background 0.3s,
-      color 0.3s;
+      transform 0.3s var(--ease-out),
+      background 0.2s,
+      color 0.2s;
   }
   .qa[open] .qa-icon {
     transform: rotate(45deg);
-    background: var(--orange);
-    border-color: var(--orange);
+    background: var(--navy);
     color: #fff;
   }
   .qa p {
     color: var(--muted);
-    padding: 0 56px 26px 0;
+    padding: 0 56px 24px 0;
     max-width: 64ch;
+  }
+
+  /* ── Contacts ── */
+  .contacts-section {
+    background: var(--bg-2);
   }
   .contacts {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 16px;
-    margin-top: clamp(32px, 4vw, 48px);
+    margin-top: clamp(28px, 4vw, 40px);
   }
   .sub-h {
     margin-top: 56px;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--faint);
+    font-size: 22px;
   }
   .sub-h + .contacts {
     margin-top: 20px;
   }
+
   @media (max-width: 900px) {
     .steps {
       grid-template-columns: 1fr;
     }
+    .step-n {
+      font-size: 48px;
+    }
     .facts {
       grid-template-columns: 1fr 1fr;
+      gap: 22px 0;
     }
-    .fact:nth-child(2) {
-      border-right: 0;
-    }
-    .fact:nth-child(-n + 2) {
-      border-bottom: 1px solid var(--border);
+    .fact:nth-child(3) {
+      border-left: 0;
+      padding-left: 0;
     }
     .faq-section {
       grid-template-columns: 1fr;
@@ -294,23 +301,11 @@ const facts = [
       grid-template-columns: 1fr;
     }
     .fact {
-      border-right: 0;
-      border-bottom: 1px solid var(--border);
+      border-left: 0;
+      padding-left: 0;
     }
     .qa p {
       padding-right: 0;
     }
-  }
-/* Plain numbered list (no cards, no icons) */
-  .step {
-    background: none;
-    border: 0;
-    border-top: 1.5px solid var(--text);
-    border-radius: 0;
-    padding: 16px 0 0;
-    box-shadow: none;
-  }
-  .step > :global(svg) {
-    display: none;
   }
 </style>

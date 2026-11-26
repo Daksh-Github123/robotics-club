@@ -99,7 +99,7 @@ const further = [
       <div class="tracks">
         {
           tracks.map((t) => (
-            <article class="track" data-reveal>
+            <article class={`track track-${t.name.toLowerCase()}`}>
               <h3>{t.name}</h3>
               <p class="track-lead">{t.lead}</p>
               <ul>
@@ -145,14 +145,11 @@ const further = [
       </div>
       <ol class="further">
         {
-          further.map((f, i) => (
-            <li data-reveal>
-              <span class="n">{i + 1}</span>
-              <div>
-                <h3>{f.title}</h3>
-                <p>{f.text}</p>
-                {f.eg && <p class="eg">{f.eg}</p>}
-              </div>
+          further.map((f) => (
+            <li>
+              <h3>{f.title}</h3>
+              <p>{f.text}</p>
+              {f.eg && <p class="eg">{f.eg}</p>}
             </li>
           ))
         }
@@ -280,10 +277,11 @@ const further = [
     font-weight: 800;
     font-size: clamp(44px, 8vw, 120px);
     line-height: 0.98;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.035em;
   }
+  /* Robotics is always classroom blue on this site */
   .accent {
-    color: var(--orange);
+    color: var(--blue);
   }
   .huge {
     display: block;
@@ -293,8 +291,8 @@ const further = [
     font-weight: 800;
     font-size: clamp(76px, 18vw, 280px);
     line-height: 0.9;
-    letter-spacing: -0.05em;
-    color: var(--orange);
+    letter-spacing: -0.045em;
+    color: var(--blue);
   }
   .ch {
     display: inline-block;
@@ -341,11 +339,10 @@ const further = [
 
   /* ── Calm part ── */
   .first {
-    border-top: 1px solid var(--border);
+    border-top: 10px solid var(--blue);
   }
   .alt {
     background: var(--bg-2);
-    border-block: 1px solid var(--border);
   }
   .head {
     display: grid;
@@ -353,36 +350,51 @@ const further = [
     margin-bottom: clamp(28px, 4vw, 44px);
     max-width: 720px;
   }
+  /* Stream panels: uniform orange for software, classroom blue for robotics */
   .tracks {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 16px;
   }
   .track {
-    padding: clamp(22px, 3vw, 32px);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-top: 4px solid var(--orange);
-    border-radius: var(--radius-lg);
+    padding: clamp(24px, 3vw, 36px);
+    border-radius: 4px;
+    background: var(--orange);
+    color: var(--navy);
   }
-  .track:nth-child(2) {
-    border-top-color: var(--blue);
+  .track-robotics {
+    background: var(--blue);
+    color: #fff;
   }
   .track h3 {
-    font-size: 26px;
+    font-size: clamp(28px, 3vw, 36px);
   }
   .track-lead {
-    margin: 6px 0 14px;
+    margin: 8px 0 16px;
     font-weight: 700;
+    font-size: 19px;
   }
   .track ul {
-    padding-left: 1.1em;
+    list-style: none;
+    padding: 0;
     display: grid;
-    gap: 8px;
-    color: var(--muted);
+    gap: 10px;
   }
-  .track li::marker {
-    color: var(--orange);
+  .track li {
+    position: relative;
+    padding-left: 22px;
+  }
+  .track li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 9px;
+    height: 9px;
+    background: currentColor;
+  }
+  .track-robotics ul {
+    color: #dbe4f5;
   }
   .further {
     list-style: none;
@@ -392,31 +404,22 @@ const further = [
     gap: 0 clamp(24px, 4vw, 56px);
   }
   .further li {
-    display: grid;
-    grid-template-columns: 40px 1fr;
-    gap: 14px;
     padding: 22px 0;
-    border-top: 1.5px solid var(--text);
-  }
-  .further .n {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 26px;
-    line-height: 1;
-    color: var(--orange);
+    border-top: 2px solid var(--navy);
   }
   .further h3 {
-    font-size: 22px;
+    font-size: 23px;
     margin-bottom: 6px;
   }
   .further p {
     color: var(--muted);
   }
   .further .eg {
-    margin-top: 8px;
+    margin-top: 10px;
     font-size: 16px;
-    padding-left: 14px;
-    border-left: 3px solid var(--orange-soft);
+    padding: 12px 16px;
+    background: var(--surface);
+    border-radius: 3px;
   }
   .led {
     display: grid;
@@ -430,12 +433,23 @@ const further = [
     color: var(--muted);
   }
   .led-text ul {
-    padding-left: 1.1em;
+    list-style: none;
+    padding: 0;
     display: grid;
-    gap: 8px;
+    gap: 10px;
   }
-  .led-text li::marker {
-    color: var(--orange);
+  .led-text li {
+    position: relative;
+    padding-left: 22px;
+  }
+  .led-text li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 9px;
+    height: 9px;
+    background: var(--blue);
   }
   .needs {
     display: grid;
@@ -454,19 +468,19 @@ const further = [
   }
   .need-list li {
     display: grid;
-    grid-template-columns: 44px 1fr;
-    gap: 14px;
-    padding: 20px 22px;
+    grid-template-columns: 64px 1fr;
+    gap: 16px;
+    padding: 22px 24px;
     background: var(--surface);
-    border: 1.5px solid var(--text);
-    border-radius: var(--radius-lg);
+    border-left: 6px solid var(--orange);
+    border-radius: 4px;
   }
   .need-list .n {
     font-family: var(--font-display);
     font-weight: 800;
-    font-size: 30px;
-    line-height: 1;
-    color: var(--orange);
+    font-size: 52px;
+    line-height: 0.85;
+    color: var(--blue);
   }
   .need-list h3 {
     font-size: 22px;

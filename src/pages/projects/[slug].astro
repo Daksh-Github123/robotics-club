@@ -31,24 +31,24 @@ const { Content } = await render(project);
   <article>
     <header class="container pd-head">
       <a href="/projects/" class="pd-back"><Icon name="arrowLeft" size={16} /> All projects</a>
-      <div class="pd-meta" data-reveal>
+      <div class="pd-meta">
         <span class={`stream stream-${d.stream}`}>{d.stream === 'software' ? 'Software' : 'Robotics'}</span>
         <span class={`chip status status-${d.status}`}>{statusLabel[d.status]}</span>
         <span class="chip">{yearLabel(d.academicYear)}</span>
         <span class="chip"><time datetime={d.date.toISOString()}>{formatDate(d.date)}</time></span>
         {d.placeholder && <span class="ph-pill">placeholder</span>}
       </div>
-      <h1 class="display pd-title" data-reveal>{d.title}</h1>
-      <p class="lede" data-reveal>{d.tagline}</p>
+      <h1 class="display pd-title">{d.title}</h1>
+      <p class="lede">{d.tagline}</p>
     </header>
 
     <div class="container">
-      <div class="pd-media" data-reveal>
+      <div class={`pd-media pd-media-${d.stream}`}>
         <ProjectMedia project={project} eager />
       </div>
       {
         d.media.length > 0 && (
-          <ul class="pd-mlinks" aria-label="More photos and videos" data-reveal>
+          <ul class="pd-mlinks" aria-label="More photos and videos">
             {d.media.map((m) => (
               <li>
                 <a href={m.url} target="_blank" rel="noopener" class="btn btn-ghost btn-sm">
@@ -63,7 +63,7 @@ const { Content } = await render(project);
     </div>
 
     <div class="container pd-grid">
-      <aside class="pd-side" data-reveal>
+      <aside class="pd-side">
         {
           d.team.length > 0 && (
             <section>
@@ -125,14 +125,14 @@ const { Content } = await render(project);
           )
         }
       </aside>
-      <div class="prose" data-reveal>
+      <div class="prose">
         <Content />
       </div>
     </div>
 
     {
       d.gallery.length > 0 && (
-        <section class="container pd-gallery" aria-label="Gallery" data-reveal-group>
+        <section class="container pd-gallery" aria-label="Gallery">
           {d.gallery.map((src, i) => (
             <img src={src} alt={`${d.title}, photo ${i + 1}`} loading="lazy" decoding="async" />
           ))}
@@ -142,11 +142,11 @@ const { Content } = await render(project);
 
     <nav class="container pd-nav" aria-label="More projects">
       <a href={`/projects/${prev.id}/`} class="pd-nav-link">
-        <span class="mono pd-nav-k"><Icon name="arrowLeft" size={14} /> Previous</span>
+        <span class="pd-nav-k"><Icon name="arrowLeft" size={14} /> Previous</span>
         <span class="pd-nav-t">{prev.data.title}</span>
       </a>
       <a href={`/projects/${next.id}/`} class="pd-nav-link pd-nav-next">
-        <span class="mono pd-nav-k">Next <Icon name="arrow" size={14} /></span>
+        <span class="pd-nav-k">Next <Icon name="arrow" size={14} /></span>
         <span class="pd-nav-t">{next.data.title}</span>
       </a>
     </nav>
@@ -162,13 +162,14 @@ const { Content } = await render(project);
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    font-size: 14px;
+    font-size: 15px;
+    font-weight: 700;
     color: var(--muted);
     margin-bottom: 28px;
     transition: color 0.2s;
   }
   .pd-back:hover {
-    color: var(--orange-glow);
+    color: var(--blue);
   }
   .pd-meta {
     display: flex;
@@ -183,10 +184,12 @@ const { Content } = await render(project);
   .pd-media {
     position: relative;
     aspect-ratio: 16 / 8;
-    border-radius: var(--radius-lg);
+    border-radius: 4px;
     overflow: hidden;
-    border: 1px solid var(--border);
-    box-shadow: 0 12px 28px -18px rgba(26, 22, 17, 0.35);
+    border-bottom: 10px solid var(--orange);
+  }
+  .pd-media-robotics {
+    border-bottom-color: var(--blue);
   }
   .pd-media :global(.pm-video) {
     opacity: 1;
@@ -200,7 +203,7 @@ const { Content } = await render(project);
     margin-top: 18px;
   }
   .pd-mlinks :global(svg) {
-    color: var(--blue-glow);
+    color: var(--blue);
   }
   .pd-mlinks a:hover :global(svg) {
     transform: none;
@@ -222,13 +225,15 @@ const { Content } = await render(project);
     display: flex;
     align-items: center;
     gap: 8px;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--orange-glow);
-    margin-bottom: 14px;
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: 0;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .pd-label :global(svg) {
+    color: var(--blue);
   }
   .pd-team,
   .pd-links {
@@ -241,8 +246,12 @@ const { Content } = await render(project);
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    font-weight: 700;
     color: var(--text);
-    border-bottom: 1px solid var(--border-strong);
+    text-decoration: underline;
+    text-decoration-color: var(--orange);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
   }
   .pd-tags {
     display: flex;
@@ -259,8 +268,7 @@ const { Content } = await render(project);
     width: 100%;
     aspect-ratio: 4 / 3;
     object-fit: cover;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
+    border-radius: 4px;
   }
   .pd-nav {
     display: grid;
@@ -271,27 +279,25 @@ const { Content } = await render(project);
   .pd-nav-link {
     display: grid;
     gap: 10px;
-    padding: 28px;
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border);
-    background: var(--surface);
+    padding: 26px 28px;
+    border-radius: 4px;
+    background: var(--bg-2);
+    border-top: 6px solid var(--navy);
     overflow: hidden;
-    transition: border-color 0.3s;
+    transition: background 0.2s;
   }
   .pd-nav-link:hover {
-    border-color: var(--orange);
+    background: var(--surface-2);
   }
   .pd-nav-next {
     text-align: right;
-    --accent: var(--blue);
   }
   .pd-nav-k {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-size: 12px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: 700;
     color: var(--muted);
   }
   .pd-nav-next .pd-nav-k {
@@ -299,8 +305,8 @@ const { Content } = await render(project);
   }
   .pd-nav-t {
     font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(18px, 2vw, 26px);
+    font-weight: 800;
+    font-size: clamp(19px, 2vw, 26px);
   }
   @media (max-width: 860px) {
     .pd-grid {

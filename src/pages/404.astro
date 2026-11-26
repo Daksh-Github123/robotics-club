@@ -1,14 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
-import Icon from '../components/Icon.astro';
 ---
 
 <Base title="Page not found" noindex>
   <section class="nf container">
-    <h1 class="display">This page <span class="grad">took a wrong turn.</span></h1>
+    <h1 class="display">This page took a wrong turn.</h1>
     <p class="lede">The page you're looking for doesn't exist or has moved.</p>
     <div class="nf-actions">
-      <a href="/" class="btn btn-primary">Back to base <Icon name="arrow" size={18} /></a>
+      <a href="/" class="btn btn-primary">Back to base</a>
       <a href="/projects/" class="btn btn-ghost">See projects</a>
     </div>
   </section>
@@ -19,9 +18,15 @@ import Icon from '../components/Icon.astro';
     min-height: 80vh;
     display: grid;
     align-content: center;
+    justify-items: start;
     gap: 26px;
     padding-top: 140px;
     padding-bottom: 80px;
+  }
+  .nf .display {
+    max-width: 14ch;
+    padding-bottom: 18px;
+    border-bottom: 10px solid var(--blue);
   }
   .nf-actions {
     display: flex;
