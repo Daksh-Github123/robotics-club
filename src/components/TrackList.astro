@@ -1,6 +1,10 @@
 ---
 /** The club's two kinds of project (software, robotics), each with a real example. */
-import Icon from './Icon.astro';
+interface Props {
+  /** "band": white text for the blue band on the homepage. */
+  variant?: 'default' | 'band';
+}
+const { variant = 'default' } = Astro.props;
 
 const tracks = [
   {
@@ -18,16 +22,14 @@ const tracks = [
 ];
 ---
 
-<ul class="tracks" aria-label="What members build">
+<ul class:list={['tracks', { 'on-band': variant === 'band' }]} aria-label="What members build">
   {
     tracks.map((t) => (
       <li>
         <a href={t.href} class="track">
           <span class="track-label">{t.label}</span>
           <span class="track-text">{t.text}</span>
-          <span class="track-eg">
-            e.g. {t.example} <Icon name="arrow" size={15} />
-          </span>
+          <span class="track-eg">For example: {t.example}</span>
         </a>
       </li>
     ))
@@ -49,8 +51,8 @@ const tracks = [
     padding: 18px 20px;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-left: 4px solid var(--orange);
-    border-radius: var(--radius);
+    border-left: 5px solid var(--orange);
+    border-radius: 3px;
     transition: border-color 0.2s;
   }
   .tracks li:nth-child(2) .track {
@@ -61,28 +63,65 @@ const tracks = [
   }
   .track-label {
     font-family: var(--font-display);
-    font-weight: 750;
-    font-size: 20px;
+    font-weight: 800;
+    font-stretch: 125%;
+    font-size: 21px;
   }
   .track-text {
     color: var(--muted);
     font-size: 16px;
   }
   .track-eg {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
     font-size: 15px;
     font-weight: 700;
     color: var(--orange-glow);
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
-  /* Side by side when shown in the band under a photo hero */
-  :global(.tracks-band) .tracks {
+
+  /* On the blue band: no boxes, columns split by thin rules */
+  .on-band {
     grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .on-band .track {
+    background: none;
+    border: 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 0;
+    padding: 4px clamp(16px, 2.4vw, 32px);
+    color: #fff;
+  }
+  .on-band li:first-child .track {
+    border-left: 0;
+    padding-left: 0;
+  }
+  .on-band li:nth-child(2) .track {
+    border-left-color: rgba(255, 255, 255, 0.3);
+  }
+  .on-band .track-label {
+    font-size: clamp(24px, 2.4vw, 30px);
+  }
+  .on-band .track-text {
+    color: #dbe4f5;
+  }
+  .on-band .track-eg {
+    color: #fff;
+    text-decoration-color: var(--orange);
+    text-decoration-thickness: 2px;
+  }
+  .on-band .track:hover .track-eg {
+    text-decoration-color: #fff;
   }
   @media (max-width: 700px) {
-    :global(.tracks-band) .tracks {
+    .on-band {
       grid-template-columns: 1fr;
+      gap: 22px;
+    }
+    .on-band .track,
+    .on-band li:first-child .track {
+      border-left: 0;
+      padding: 0;
     }
   }
 </style>

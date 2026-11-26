@@ -26,7 +26,8 @@ body {
   color: var(--text);
   font-family: var(--font-body);
   font-size: 18px;
-  line-height: 1.6;
+  line-height: 1.55;
+  font-stretch: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: clip;
@@ -55,10 +56,11 @@ h2,
 h3,
 h4 {
   font-family: var(--font-display);
-  line-height: 1.08;
+  line-height: 1.04;
   margin: 0;
-  letter-spacing: -0.02em;
-  font-weight: 700;
+  letter-spacing: -0.01em;
+  font-weight: 800;
+  font-stretch: 125%;
 }
 p {
   margin: 0;
@@ -71,13 +73,14 @@ ol {
   display: none !important;
 }
 ::selection {
-  background: var(--orange-soft);
+  background: var(--yellow-kit);
   color: var(--text);
 }
+/* Kit-yellow ring with a navy edge, visible on white, blue, navy and orange */
 :focus-visible {
-  outline: 2px solid var(--orange);
-  outline-offset: 3px;
-  border-radius: 4px;
+  outline: 3px solid var(--navy);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--yellow-kit);
 }
 
 /* ───────── Utilities ───────── */
@@ -100,7 +103,7 @@ ol {
   background: var(--text);
   color: var(--bg);
   padding: 10px 14px;
-  border-radius: 8px;
+  border-radius: 4px;
   font-weight: 700;
 }
 .skip:focus {
@@ -117,7 +120,7 @@ ol {
   position: relative;
 }
 .mono {
-  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }
 .muted {
   color: var(--muted);
@@ -130,27 +133,24 @@ ol {
   color: var(--orange-glow);
 }
 .display {
-  font-size: clamp(36px, 5.4vw, 68px);
+  font-size: clamp(34px, 5vw, 62px);
   font-weight: 800;
-  line-height: 1;
-  letter-spacing: -0.03em;
+  line-height: 1.02;
+  letter-spacing: -0.015em;
 }
 .h2 {
-  font-size: clamp(28px, 3.4vw, 44px);
-  font-weight: 750;
-  line-height: 1.05;
-  letter-spacing: -0.025em;
+  font-size: clamp(27px, 3.2vw, 42px);
+  font-weight: 800;
+  line-height: 1.04;
 }
 .lede {
   font-size: clamp(18px, 1.5vw, 20px);
   color: var(--muted);
   max-width: 60ch;
 }
-/* Highlighter-pen mark behind a key word (used once or twice per page). */
+/* Used to highlight one word; the new design keeps headings plain. */
 .grad {
   color: inherit;
-  background: linear-gradient(transparent 58%, var(--orange-soft) 58%, var(--orange-soft) 92%, transparent 92%);
-  padding-inline: 0.06em;
 }
 .outline-text {
   color: transparent;
@@ -162,8 +162,8 @@ ol {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 14px 22px;
-  border-radius: 8px;
+  padding: 15px 24px;
+  border-radius: 999px;
   font-weight: 700;
   font-size: 16px;
   line-height: 1;
@@ -171,29 +171,21 @@ ol {
   transition:
     background 0.2s,
     border-color 0.2s,
-    color 0.2s,
-    transform 0.2s;
+    color 0.2s;
 }
-.btn svg {
-  transition: transform 0.25s var(--ease-out);
-}
-.btn:hover svg {
-  transform: translateX(3px);
-}
+/* Navy text on uniform orange passes contrast; white on orange does not */
 .btn-primary {
   background: var(--orange);
-  color: #fff;
-  box-shadow: 0 2px 0 var(--orange-deep);
+  color: var(--navy);
+  border: 2px solid var(--orange);
 }
 .btn-primary:hover {
-  background: var(--orange-glow);
-}
-.btn-primary:active {
-  transform: translateY(2px);
-  box-shadow: none;
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
 }
 .btn-ghost {
-  border: 1.5px solid var(--text);
+  border: 2px solid var(--text);
   background: transparent;
   color: var(--text);
 }
@@ -212,7 +204,7 @@ ol {
   font-size: 13px;
   font-weight: 700;
   padding: 4px 10px;
-  border-radius: 6px;
+  border-radius: 999px;
   border: 1px solid var(--border-strong);
   color: var(--muted);
   background: var(--surface);
@@ -223,7 +215,7 @@ ol {
   font-size: 13px;
   color: var(--muted);
   padding: 3px 9px;
-  border-radius: 6px;
+  border-radius: 3px;
   background: var(--surface-2);
 }
 .status::before {
@@ -286,7 +278,7 @@ ol {
 .prose {
   font-size: 18px;
   line-height: 1.75;
-  color: #2e2922;
+  color: #26304f;
   max-width: 68ch;
 }
 .prose > * + * {
@@ -327,8 +319,8 @@ ol {
 .prose blockquote {
   margin-inline: 0;
   padding: 14px 18px;
-  border-left: 3px solid var(--yellow);
-  background: #fbf1dc;
+  border-left: 4px solid var(--blue);
+  background: var(--bg-2);
   color: var(--muted);
 }
 .prose img {
@@ -368,15 +360,15 @@ ol {
 /* ───────── Stream tag (Software / Robotics) ───────── */
 .stream {
   display: inline-block;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  padding: 3px 8px;
-  border-radius: 5px;
-  color: #fff;
+  line-height: 1.3;
+  padding: 2px 9px;
+  border-radius: 3px;
+  color: var(--navy);
   background: var(--orange);
 }
 .stream-robotics {
+  color: #fff;
   background: var(--blue);
 }

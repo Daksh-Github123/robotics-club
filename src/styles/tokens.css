@@ -1,48 +1,52 @@
 /*
- * DESIGN TOKENS: change the site's colors, fonts and spacing here.
- * Every component reads from these variables, so edits apply everywhere.
+ * DESIGN TOKENS: change the site's colours, fonts and spacing here.
+ *
+ * Direction: "Uniform". Colours come from the club's real world: the orange
+ * Inventure polo, navy uniform trousers, and the royal-blue stripe painted
+ * along the classroom walls under white plaster.
  */
 :root {
-  /* Paper-like light theme */
-  --bg: #f5f1ea;
-  --bg-2: #efe9df;
-  --surface: #fffdf9;
-  --surface-2: #ece5d9;
-  --border: #e0d8ca;
-  --border-strong: #c9bfae;
+  /* Planes */
+  --bg: #ffffff; /* wall white */
+  --bg-2: #eef1f6; /* mist: quiet panels */
+  --surface: #ffffff;
+  --surface-2: #e4e9f1;
+  --border: #d9dfea;
+  --border-strong: #b7c1d3;
 
-  /* School colors. --orange fills buttons; --orange-glow / --blue-glow are the
-     darker shades used for small text so it stays readable on the light background. */
-  --orange: #d9590b;
-  --orange-glow: #b2470a;
-  --orange-deep: #8f3906;
-  --orange-soft: #f6dcc8;
-  --blue: #2f6fe0;
-  --blue-glow: #1f56b8;
-  --blue-deep: #173f86;
+  /* School colours */
+  --orange: #f26a1b; /* uniform orange: software, primary buttons */
+  --orange-glow: #c24e0a; /* darker orange for small text on white */
+  --orange-deep: #a8430a;
+  --orange-soft: #fde4d4;
+  --blue: #1d4fa0; /* classroom wall blue: robotics, the band */
+  --blue-glow: #1d4fa0;
+  --blue-deep: #143a78;
+  --navy: #172347; /* uniform trousers: text, dark bands */
+  --yellow-kit: #ffc72c; /* robot-kit wheels: focus ring only */
 
-  /* Status accents (dark enough for text on paper) */
-  --green: #1d8a57;
-  --yellow: #a86b00;
+  /* Status accents */
+  --green: #17804f;
+  --yellow: #9a6300;
 
   /* Text */
-  --text: #1a1611;
-  --muted: #5c554b;
-  --faint: #8d8476;
+  --text: #172347;
+  --muted: #4c5775;
+  --faint: #7d87a1;
 
   /* Kept for components that still reference them */
-  --grad: linear-gradient(90deg, var(--orange), var(--orange));
-  --grad-solid: linear-gradient(135deg, var(--orange) 0%, var(--blue) 100%);
+  --grad: none;
+  --grad-solid: var(--navy);
 
-  /* Type */
-  --font-display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
-  --font-body: 'Atkinson Hyperlegible', 'Segoe UI', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', monospace;
+  /* Type: one family, two widths */
+  --font-display: 'Archivo', 'Arial Narrow', system-ui, sans-serif;
+  --font-body: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Archivo', system-ui, sans-serif;
 
   /* Shape & layout */
-  --radius: 10px;
-  --radius-lg: 14px;
-  --container: 1180px;
+  --radius: 6px;
+  --radius-lg: 10px;
+  --container: 1200px;
   --gutter: clamp(16px, 4vw, 40px);
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
 }

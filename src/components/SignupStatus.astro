@@ -4,12 +4,14 @@ import { site } from '../site.config';
 
 interface Props {
   class?: string;
+  /** "band": white text for the blue band on the homepage. */
+  tone?: 'default' | 'band';
 }
-const { class: cls } = Astro.props;
+const { class: cls, tone = 'default' } = Astro.props;
 const { open, message } = site.signups;
 ---
 
-<p class:list={['signup', open ? 'is-open' : 'is-closed', cls]} role="status">
+<p class:list={['signup', open ? 'is-open' : 'is-closed', { 'on-band': tone === 'band' }, cls]} role="status">
   <strong>{open ? 'Sign-ups are open' : 'Sign-up status'}</strong>
   <span>{message}</span>
 </p>
@@ -18,10 +20,10 @@ const { open, message } = site.signups;
   .signup {
     display: grid;
     gap: 2px;
-    padding: 14px 16px;
-    border-radius: var(--radius);
+    padding: 14px 18px;
+    border-radius: 3px;
     border-left: 5px solid var(--blue);
-    background: #e6eefb;
+    background: var(--bg-2);
     color: var(--text);
     font-size: 16px;
     max-width: 62ch;
@@ -31,6 +33,30 @@ const { open, message } = site.signups;
     background: var(--orange-soft);
   }
   .signup strong {
-    font-size: 15px;
+    font-size: 16px;
+  }
+  .on-band {
+    padding: 4px 0 4px clamp(16px, 2.4vw, 32px);
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 0;
+    background: none;
+    color: #dbe4f5;
+  }
+  .on-band strong {
+    color: #fff;
+    font-family: var(--font-display);
+    font-stretch: 125%;
+    font-size: clamp(20px, 1.8vw, 22px);
+    margin-bottom: 4px;
+  }
+  .on-band.is-open strong {
+    color: var(--orange);
+  }
+  @media (max-width: 900px) {
+    .on-band {
+      padding: 22px 0 0;
+      border-left: 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.3);
+    }
   }
 </style>
