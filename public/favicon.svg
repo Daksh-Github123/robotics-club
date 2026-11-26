@@ -1,10 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#FF7A1A"/>
-      <stop offset="1" stop-color="#2F7BFF"/>
-    </linearGradient>
-  </defs>
-  <polygon points="16,3 48,3 63,32 48,61 16,61 1,32" fill="url(#g)"/>
-  <text x="32" y="41" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="17" fill="#fff">TfC</text>
+  <rect x="2" y="4" width="60" height="56" rx="5" fill="#172347"/>
+  <rect x="2" y="50" width="60" height="10" fill="#F26A1B"/>
+  <text x="32" y="38" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="20" fill="#fff">TFC</text>
 </svg>

@@ -8,7 +8,7 @@ export const site = {
   /** Full club name, shown in the nav, footer and browser tab. */
   name: 'Tech for Change',
   /** 2–3 letters for the hexagon logo badge. */
-  shortName: 'TfC',
+  shortName: 'TFC',
   school: 'Inventure Academy',
   founded: 2025,
 
