@@ -13,6 +13,7 @@ import SprintSteps from '../components/SprintSteps.astro';
 import JoinBox from '../components/JoinBox.astro';
 import Icon from '../components/Icon.astro';
 import TrackList from '../components/TrackList.astro';
+import SignupStatus from '../components/SignupStatus.astro';
 import { site } from '../site.config';
 import { sortMilestones, sortProjects, yearLabel } from '../lib/meta';
 
@@ -81,7 +82,7 @@ const fmt = (d: Date) =>
           <a href="/why-join/" class="btn btn-primary">Why join? <Icon name="arrow" size={18} /></a>
           <a href="#built" class="btn btn-ghost">See what members built</a>
         </div>
-        <p class="hero-note">Sign-ups run through BA and are first come, first served.</p>
+        <SignupStatus class="hero-note" />
       </div>
       {!heroImg && <TrackList />}
     </div>
@@ -125,7 +126,7 @@ const fmt = (d: Date) =>
           lastShowcase && (
             <li>
               <span class="log-date">{fmt(lastShowcase.data.date)}</span>
-              <span>Sprint 2 projects presented at the BA Showcase, to the whole school and the principal.</span>
+              <span>Projects presented at the BA Showcase, to the whole school and the principal.</span>
             </li>
           )
         }
@@ -209,7 +210,7 @@ const fmt = (d: Date) =>
           graduate.
         </p>
         <ul class="also">
-          <li>Every project gets its own page on this site, which you can link in applications.</li>
+          <li>Every project gets its own page on this site, which you can link in college and university applications.</li>
           <li>Members get recommendations for the school's competition teams.</li>
           <li>Independent competitions, like the Blue Ocean Entrepreneurship Competition, are done with the club.</li>
         </ul>

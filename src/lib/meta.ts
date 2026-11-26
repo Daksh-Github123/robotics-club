@@ -24,6 +24,13 @@ export const statusLabel: Record<ProjectStatus, string> = {
 /** "2025-26" → "2025–26" (with a proper en dash). */
 export const yearLabel = (academicYear: string) => academicYear.replace('-', '–');
 
+/** Team as readable names: "Reyansh Sen (coding)" → "Reyansh Sen"; joined with commas and "and". */
+export function teamNames(team: string[]) {
+  const names = team.map((n) => n.replace(/\s*\(.*\)$/, ''));
+  if (names.length <= 1) return names[0] ?? '';
+  return `${names.slice(0, -1).join(', ')} and ${names.at(-1)}`;
+}
+
 /** Icon for each kind of media link on a project. */
 export const mediaIcon: Record<string, string> = {
   photos: 'image',

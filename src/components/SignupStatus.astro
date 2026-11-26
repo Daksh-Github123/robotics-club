@@ -1,0 +1,36 @@
+---
+/** The current sign-up status, from `signups` in src/site.config.ts. */
+import { site } from '../site.config';
+
+interface Props {
+  class?: string;
+}
+const { class: cls } = Astro.props;
+const { open, message } = site.signups;
+---
+
+<p class:list={['signup', open ? 'is-open' : 'is-closed', cls]} role="status">
+  <strong>{open ? 'Sign-ups are open' : 'Sign-up status'}</strong>
+  <span>{message}</span>
+</p>
+
+<style>
+  .signup {
+    display: grid;
+    gap: 2px;
+    padding: 14px 16px;
+    border-radius: var(--radius);
+    border-left: 5px solid var(--blue);
+    background: #e6eefb;
+    color: var(--text);
+    font-size: 16px;
+    max-width: 62ch;
+  }
+  .signup.is-open {
+    border-left-color: var(--orange);
+    background: var(--orange-soft);
+  }
+  .signup strong {
+    font-size: 15px;
+  }
+</style>

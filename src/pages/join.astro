@@ -6,6 +6,7 @@ import SectionHeading from '../components/SectionHeading.astro';
 import MemberCard from '../components/MemberCard.astro';
 import Icon from '../components/Icon.astro';
 import { site } from '../site.config';
+import SignupStatus from '../components/SignupStatus.astro';
 import { faq } from '../data/faq';
 import { sortMembers } from '../lib/meta';
 
@@ -31,7 +32,7 @@ const steps = [
   {
     icon: 'pin',
     title: 'Check your venue',
-    text: 'The school assigns the room. Watch for the announcement, then come to the first BA period and start thinking about your project.',
+    text: `This sprint we meet in ${site.meeting.where}. Come to the first BA period and start thinking about your project.`,
   },
 ];
 
@@ -47,7 +48,9 @@ const facts = [
   <PageHeader
     title='Come build <span class="grad">with us.</span>'
     sub={site.applyInfo}
-  />
+  >
+    <SignupStatus />
+  </PageHeader>
 
   <section class="container">
     <ol class="steps" data-reveal-group>

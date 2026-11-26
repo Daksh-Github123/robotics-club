@@ -8,7 +8,7 @@ export const faq: { q: string; a: string }[] = [
   },
   {
     q: 'When and where do we meet?',
-    a: 'Twice a week, in two separate BA periods. The school assigns the venue, so watch for the announcement.',
+    a: 'Twice a week, in two separate BA periods. Right now we meet in Classroom 11A (Sprint 2 of the 2026–27 school year).',
   },
   {
     q: 'Who runs the club?',
@@ -24,14 +24,14 @@ export const faq: { q: string; a: string }[] = [
   },
   {
     q: 'What do I need to bring?',
-    a: 'A working laptop, every class. Every project, software or robotics, is planned, coded and tested on a laptop. You also need to actually want to build something: BA periods are for working on your project, not for games.',
+    a: 'A working laptop, every class. Every project, software or robotics, is planned, coded and tested on a laptop. You also need to actually want to build something: BA periods are for working on your project, not for wasting time.',
   },
   {
     q: 'Does it cost anything?',
     a: 'Software projects usually cost nothing. For a robotics project you buy your own parts, after making a parts list and a circuit diagram so you know exactly what to order.',
   },
   {
-    q: 'Will this help my college applications?',
+    q: 'Will this help my college and university applications?',
     a: "Yes. Every project gets its own page on this site listing the team, what you built and how it works. That's a link you can put straight into an application.",
   },
   {

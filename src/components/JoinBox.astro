@@ -2,6 +2,7 @@
 /** The practical "how to join" box. Used on the homepage and the Why Join page. */
 import Icon from './Icon.astro';
 import { site } from '../site.config';
+import SignupStatus from './SignupStatus.astro';
 
 interface Props {
   title?: string;
@@ -13,6 +14,7 @@ const { title = 'Joining' } = Astro.props;
   <div>
     <h2 class="h2">{title}</h2>
     <p class="lede">Sign up when the school opens Beyond Academics (BA) sign-ups. Spots are first come, first served.</p>
+    <SignupStatus class="join-status" />
     <div class="join-cta">
       <a href="/join/" class="btn btn-primary">Full details and FAQ <Icon name="arrow" size={18} /></a>
       <a href="/join/#contacts" class="btn btn-ghost">Ask a question</a>
@@ -43,6 +45,9 @@ const { title = 'Joining' } = Astro.props;
   }
   .lede {
     margin-top: 10px;
+  }
+  :global(.join-status) {
+    margin-top: 16px;
   }
   .join-cta {
     display: flex;

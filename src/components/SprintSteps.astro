@@ -6,18 +6,24 @@
  */
 import Icon from './Icon.astro';
 
+interface Props {
+  /** Hide the last step ("Take it further") when the page covers it separately. */
+  skipLast?: boolean;
+}
+const { skipLast = false } = Astro.props;
+
 const steps = [
   {
     title: 'Pick a project',
     text: "Choose a problem around school worth solving, or something you've seen and want to build: a website or a robot, depending on your stream. It has to be realistic to finish before the BA Showcase.",
     project: 'Searchable Pathfinder',
-    example: "Reyansh and Aayush found the school's paper behaviour charts slow to use, so they set out to put them online.",
+    example: "Two students found the school's paper behaviour charts slow to use, so they set out to put them online.",
   },
   {
     title: 'Plan it',
     text: "For a robot, that means a parts list and a circuit diagram. For a website, the pages, the data and who will use it. Anything you don't understand, the club leads teach you.",
     project: 'Smart Dustbin',
-    example: 'Their plan caught that the distance sensor outputs 5 V but the ESP32 only takes 3.3 V, so they added a voltage divider before wiring anything.',
+    example: "The team's plan caught that the distance sensor outputs 5 V but the ESP32 only takes 3.3 V, so they added a voltage divider before wiring anything.",
   },
   {
     title: 'Build it',
@@ -29,7 +35,7 @@ const steps = [
     title: 'Present at the BA Showcase',
     text: 'Every sprint ends with the BA Showcase. The whole school comes, including the principal.',
     project: 'Smart Dustbin',
-    example: 'Presented on 4 November 2026, next to three other Sprint 2 projects.',
+    example: 'Presented on 4 November 2026, next to three other projects.',
   },
   {
     title: 'Take it further',
@@ -38,11 +44,12 @@ const steps = [
     example: "It's already live, a teacher has given positive feedback, and the team is planning posters and video ads to get the whole school using it.",
   },
 ];
+const shown = skipLast ? steps.slice(0, -1) : steps;
 ---
 
 <ol class="steps">
   {
-    steps.map((s, i) => (
+    shown.map((s, i) => (
       <li class="step">
         <span class="step-n">{i + 1}</span>
         <div>

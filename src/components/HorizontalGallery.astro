@@ -6,7 +6,7 @@
 import type { CollectionEntry } from 'astro:content';
 import ProjectMedia from './ProjectMedia.astro';
 import Icon from './Icon.astro';
-import { yearLabel } from '../lib/meta';
+import { yearLabel, teamNames } from '../lib/meta';
 
 interface Props {
   projects: CollectionEntry<'projects'>[];
@@ -17,23 +17,36 @@ const { projects, total } = Astro.props;
 
 <ul class="hg" aria-label="Highlighted projects">
   {
-    projects.map((p) => (
-      <li class="hg-slot">
-        <a class="hg-card" href={`/projects/${p.id}/`}>
-          <div class="hg-media">
-            <ProjectMedia project={p} />
-          </div>
-          <div class="hg-body">
-            <span class={`stream stream-${p.data.stream}`}>{p.data.stream === 'software' ? 'Software' : 'Robotics'}</span>
-            <p class="hg-meta">
-              {yearLabel(p.data.academicYear)} · {p.data.team.length === 1 ? p.data.team[0] : `Team of ${p.data.team.length}`}
-            </p>
-            <h3>{p.data.title}</h3>
-            <p class="hg-outcome">{p.data.outcome ?? p.data.tagline}</p>
-          </div>
-        </a>
-      </li>
-    ))
+    projects.map((p) => {
+      // Software projects link straight to the live site
+      const live = p.data.stream === 'software' ? p.data.links[0] : undefined;
+      return (
+        <li class="hg-slot">
+          <article class="hg-card">
+            <div class="hg-media">
+              <ProjectMedia project={p} />
+            </div>
+            <div class="hg-body">
+              <span class={`stream stream-${p.data.stream}`}>{p.data.stream === 'software' ? 'Software' : 'Robotics'}</span>
+              <p class="hg-meta">
+                {yearLabel(p.data.academicYear)} · {teamNames(p.data.team)}
+              </p>
+              <h3>
+                <a class="hg-link" href={`/projects/${p.id}/`}>
+                  {p.data.title}
+                </a>
+              </h3>
+              <p class="hg-outcome">{p.data.outcome ?? p.data.tagline}</p>
+              {live && (
+                <a class="hg-live" href={live.url} target="_blank" rel="noopener">
+                  {live.label} <Icon name="external" size={14} />
+                </a>
+              )}
+            </div>
+          </article>
+        </li>
+      );
+    })
   }
   <li class="hg-slot hg-slot-more">
     <a class="hg-more" href="/projects/">
@@ -81,6 +94,30 @@ const { projects, total } = Astro.props;
   }
   .hg-body .stream {
     justify-self: start;
+  }
+  .hg-card {
+    position: relative;
+  }
+  /* The title link covers the whole card; the live-site link sits above it */
+  .hg-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  .hg-live {
+    position: relative;
+    z-index: 2;
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--orange-glow);
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
   .hg-meta {
     font-size: 14px;

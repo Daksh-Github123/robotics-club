@@ -7,7 +7,7 @@
 import type { CollectionEntry } from 'astro:content';
 import ProjectMedia from './ProjectMedia.astro';
 import Icon from './Icon.astro';
-import { statusLabel, yearLabel, mediaIcon } from '../lib/meta';
+import { statusLabel, yearLabel, mediaIcon, teamNames } from '../lib/meta';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -30,7 +30,7 @@ const d = project.data;
       <p class="pc-meta">
         <span class={`status status-${d.status}`}>{statusLabel[d.status]}</span>
         <span>{yearLabel(d.academicYear)}</span>
-        {d.team.length > 0 && <span>{d.team.length === 1 ? d.team[0] : `Team of ${d.team.length}`}</span>}
+        {d.team.length > 0 && <span>{teamNames(d.team)}</span>}
       </p>
       <h3><a href={`/projects/${project.id}/`} class="pc-link">{d.title}</a></h3>
       <p class="pc-tagline">{d.tagline}</p>

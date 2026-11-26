@@ -25,8 +25,8 @@ const d = member.data;
     </p>
     <h3>{d.name}</h3>
     {d.gradYear && <p class="mc-year mono">{d.status === 'alumni' ? 'Graduated' : 'Class of'} {d.gradYear}</p>}
-    {d.bio && <p class="mc-bio">{d.bio}</p>}
     <ContactLinks member={member} />
+    {d.bio && <p class="mc-bio">{d.bio}</p>}
     {d.placeholder && <span class="ph-pill">placeholder</span>}
   </div>
 </article>

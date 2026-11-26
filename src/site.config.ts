@@ -26,7 +26,19 @@ export const site = {
 
   meeting: {
     when: 'Twice a week, in two separate BA periods',
-    where: 'Assigned by the school. Watch for the announcement.',
+    /** Update each sprint. */
+    where: 'Classroom 11A (Sprint 2 of the 2026–27 school year)',
+  },
+
+  /**
+   * CURRENT SIGN-UP STATUS: update this each term.
+   * open: true shows it in orange as good news; false shows it as a notice.
+   * The message appears on the homepage, the Join page and the Why Join page.
+   */
+  signups: {
+    open: false,
+    message:
+      "Sign-ups through the BA form are closed right now, but there's still space in the BA. Email the school's BA coordinator to ask to enrol.",
   },
 
   /** How students join. Sign-ups run through the school's Beyond Academics (BA) program. */
