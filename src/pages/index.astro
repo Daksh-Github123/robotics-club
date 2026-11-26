@@ -20,6 +20,8 @@ import { sortMilestones, sortProjects, yearLabel } from '../lib/meta';
 // Hero photo: a file in src/assets/ named by site.heroPhoto (optimised automatically).
 const assetImages = import.meta.glob<{ default: ImageMetadata }>('../assets/*.{jpg,jpeg,png,webp}', { eager: true });
 const heroImg = site.heroPhoto ? assetImages[`../assets/${site.heroPhoto}`]?.default : undefined;
+// Photo for the "Run by students" section
+const atWork = assetImages['../assets/members-at-work.jpg']!.default;
 
 const milestones = sortMilestones(await getCollection('milestones'));
 const projects = sortProjects(await getCollection('projects'));
@@ -212,10 +214,17 @@ const fmt = (d: Date) =>
           <li>Independent competitions, like the Blue Ocean Entrepreneurship Competition, are done with the club.</li>
         </ul>
       </div>
-      <div class="led-photo" role="img" aria-label="Photo coming soon: members at work">
-        <span>Photo coming soon</span>
-        <span>Members at work in a BA period</span>
-      </div>
+      <figure class="led-photo">
+        <Image
+          src={atWork}
+          alt="Two members in school uniform assembling a line-following robot kit together"
+          widths={[600, 1000, 1400]}
+          sizes="(max-width: 900px) 100vw, 560px"
+          format="webp"
+          quality={78}
+        />
+        <figcaption>Assembling a line-following robot in a BA period.</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -428,20 +437,19 @@ const fmt = (d: Date) =>
     color: var(--orange);
   }
   .led-photo {
-    aspect-ratio: 4 / 3;
-    border-radius: var(--radius-lg);
-    display: grid;
-    place-content: center;
-    text-align: center;
-    gap: 4px;
-    color: var(--faint);
-    font-size: 15px;
-    background:
-      repeating-linear-gradient(-45deg, transparent 0 14px, rgba(26, 22, 17, 0.035) 14px 15px),
-      var(--surface-2);
+    margin: 0;
   }
-  .led-photo span:first-child {
-    font-weight: 700;
+  .led-photo img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+  }
+  .led-photo figcaption {
+    margin-top: 10px;
+    font-size: 15px;
+    color: var(--muted);
   }
 
   /* ── Responsive ── */
