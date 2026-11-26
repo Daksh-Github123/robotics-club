@@ -58,9 +58,8 @@ h4 {
   font-family: var(--font-display);
   line-height: 1.04;
   margin: 0;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   font-weight: 800;
-  font-stretch: 125%;
 }
 p {
   margin: 0;
@@ -136,7 +135,7 @@ ol {
   font-size: clamp(34px, 5vw, 62px);
   font-weight: 800;
   line-height: 1.02;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.025em;
 }
 .h2 {
   font-size: clamp(27px, 3.2vw, 42px);
